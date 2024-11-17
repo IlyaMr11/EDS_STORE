@@ -35,7 +35,7 @@ class   SignViewController: UIViewController {
     
     private lazy var borderView: UIView = {
         let view = UIView()
-        view.layer.borderWidth = 2
+        view.layer.borderWidth = 2.5
         view.layer.borderColor = UIColor.orange.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = borderRadius
@@ -83,6 +83,7 @@ class   SignViewController: UIViewController {
         button.backgroundColor = .orange
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = buttonsRadius
+        button.addTarget(self, action: #selector(toRegistration), for: .touchUpInside)
         return button
     }()
     
@@ -151,7 +152,7 @@ class   SignViewController: UIViewController {
         border.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor).isActive = true
         border.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25).isActive = true
         border.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        border.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.8).isActive = true
+        border.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.825).isActive = true
     }
     
     func setupFieldsStackView(_ stackView: UIStackView) {
@@ -159,14 +160,14 @@ class   SignViewController: UIViewController {
         stackView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 10).isActive = true
         stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -view.bounds.height * 0.3).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.72).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
     }
     
     func setupButtonsStackView(_ stackView: UIStackView) {
         view.addSubview(stackView)
         stackView.topAnchor.constraint(equalTo: fieldsStackView.bottomAnchor, constant: view.bounds.height * 0.05).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.72).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
         stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -10).isActive = true
     }
     
@@ -175,5 +176,7 @@ class   SignViewController: UIViewController {
         let registrationViewController = RegistrationViewController()
         self.navigationController?.pushViewController(registrationViewController, animated: true)
     }
+    
+    
 }
 
