@@ -11,8 +11,8 @@ class   SignViewController: UIViewController {
     
     //MARK: - CONSTANTS
     //radiuses
-    let borderRadius = CGFloat(15)
-    let buttonsRadius = CGFloat(13)
+    let borderRadius = CGFloat(25)
+    let buttonsRadius = CGFloat(15)
     
     //regex for password
     let pasRegex1 = try! NSRegularExpression(pattern: "[0-9]+")
@@ -35,9 +35,9 @@ class   SignViewController: UIViewController {
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
         label.text = "Войдите или зарегистрируйтесь"
+        label.textColor = .black
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 24)
-        label.textColor = .black
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -47,7 +47,7 @@ class   SignViewController: UIViewController {
     private lazy var borderView: UIView = {
         let view = UIView()
         view.layer.borderWidth = 2.5
-        view.layer.borderColor = UIColor.orange.cgColor
+        view.layer.borderColor = UIColor.black.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = borderRadius
         return view
@@ -60,7 +60,7 @@ class   SignViewController: UIViewController {
         textField.borderStyle = .none
         textField.layer.cornerRadius = buttonsRadius
         textField.layer.borderWidth = 1.5
-        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.borderColor = UIColor.orange.cgColor
         textField.keyboardType = .emailAddress
         textField.clearButtonMode = .whileEditing
         textField.delegate = self
@@ -73,7 +73,7 @@ class   SignViewController: UIViewController {
         textField.borderStyle = .none
         textField.layer.cornerRadius = buttonsRadius
         textField.layer.borderWidth = 1.5
-        textField.layer.borderColor = UIColor.black.cgColor
+        textField.layer.borderColor = UIColor.orange.cgColor
         textField.isSecureTextEntry = true
         textField.clearButtonMode = .whileEditing
         textField.delegate = self
@@ -168,7 +168,7 @@ class   SignViewController: UIViewController {
     func setupBorder(_ border: UIView) {
         view.addSubview(border)
         border.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor).isActive = true
-        border.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -25).isActive = true
+        border.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5).isActive = true
         border.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         border.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.825).isActive = true
     }
@@ -176,18 +176,18 @@ class   SignViewController: UIViewController {
     //MARK: SETUP StackViews
     func setupFieldsStackView(_ stackView: UIStackView) {
         view.addSubview(stackView)
-        stackView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 10).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -view.bounds.height * 0.3).isActive = true
+        stackView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 20).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.16).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
     }
     
     func setupButtonsStackView(_ stackView: UIStackView) {
         view.addSubview(stackView)
-        stackView.topAnchor.constraint(equalTo: fieldsStackView.bottomAnchor, constant: view.bounds.height * 0.05).isActive = true
+        stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.225).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -10).isActive = true
+        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -20).isActive = true
     }
     
     
