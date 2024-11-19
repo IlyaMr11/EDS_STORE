@@ -51,6 +51,7 @@ class RegistrationViewController: UIViewController {
         button.backgroundColor = .black
         button.layer.cornerRadius = buttonsRadius
         button.layer.borderWidth = 1.5
+        button.addTarget(self, action: #selector(endRegistration), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -70,6 +71,7 @@ class RegistrationViewController: UIViewController {
     private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.delegate = self
+        textField.keyboardType = .emailAddress
         textField.layer.cornerRadius = buttonsRadius
         textField.borderStyle = .none
         textField.placeholder = "Введите Почту"
@@ -164,7 +166,27 @@ class RegistrationViewController: UIViewController {
             logoImageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.14)])
     }
     
+    //MARK: - TARGETS
+    @objc func endRegistration() {
+        if checkingAll() {
+            let profileViewController = ProfileViewController()
+            self.navigationController?.pushViewController(profileViewController, animated: true)
+        }
+    }
+    
     //MARK: - CHECK ALL FIELDS
+    
+    func checkingAll() -> Bool {
+        let checkingArray = [checkUserName(userNameTextField.text),
+                             checkLogin(emailTextField.text),
+                             checkPassword(passwordTextField.text),
+                             checkEqualPasswords(passwordTextField.text, confinrmPasswordTextField.text)]
+        for b1 in checkingArray {
+            if !b1 { return  false}
+        }
+        return true
+    }
+    
     func checkUserName(_ text: String?) -> Bool {
         guard let text = text else { return false }
         let range = NSRange(location: 0, length: text.utf16.count)
