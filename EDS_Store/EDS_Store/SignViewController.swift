@@ -11,7 +11,7 @@ class   SignViewController: UIViewController {
     
     //MARK: - CONSTANTS
     //radiuses
-    let borderRadius = CGFloat(25)
+    let borderRadius = CGFloat(30)
     let buttonsRadius = CGFloat(15)
     
     //regex for password
@@ -151,9 +151,9 @@ class   SignViewController: UIViewController {
     func setupLogo(_ imageView: UIImageView) {
         view.addSubview(imageView)
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.45).isActive = true
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.125).isActive = true
     }
     
     //MARK: SETUP WELCOM

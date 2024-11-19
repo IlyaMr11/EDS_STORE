@@ -43,6 +43,18 @@ class RegistrationViewController: UIViewController {
         return imageView
     }()
     
+    //MARK: - REG BUTTON
+    private lazy var registrationButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Зарегистрироваться", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .black
+        button.layer.cornerRadius = buttonsRadius
+        button.layer.borderWidth = 1.5
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     //MARK: - TEXTS FEIELDS
     private lazy var userNameTextField: UITextField = {
         let textField = UITextField()
@@ -66,6 +78,7 @@ class RegistrationViewController: UIViewController {
         return textField
     }()
     
+    //MARK: - PASSWORD
     private lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.delegate = self
@@ -111,16 +124,17 @@ class RegistrationViewController: UIViewController {
     func setupAll(){
         setupLabel(welcomLabel)
         setupStackView(stackView)
+        setupRegButton(registrationButton)
         setupLogo()
     }
     
     //MARK: - SETUP LABEL
     func setupLabel(_ label: UILabel) {
         view.addSubview(label)
-        label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
         label.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.8).isActive = true
-        label.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        label.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.08).isActive = true
     }
     
     //MARK: - SETUP STACKVIEW
@@ -129,18 +143,25 @@ class RegistrationViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: welcomLabel.bottomAnchor, constant: 20),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.8),
-            stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.425)])
+            stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7),
+            stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.35)])
     }
     
+    func setupRegButton(_ button: UIButton) {
+        view.addSubview(button)
+        button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
+        button.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.07).isActive = true
+        button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
+    }
     //MARK: - SETUP LOGO
     func setupLogo() {
         view.addSubview(logoImageView)
         NSLayoutConstraint.activate([
-            logoImageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImageView.widthAnchor.constraint(equalToConstant: 200),
-            logoImageView.heightAnchor.constraint(equalToConstant: 150)])
+            logoImageView.bottomAnchor.constraint(equalTo: registrationButton.topAnchor, constant: -35),
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: view.bounds.width * 0.025),
+            logoImageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.45),
+            logoImageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.14)])
     }
     
     //MARK: - CHECK ALL FIELDS
