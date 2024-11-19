@@ -19,9 +19,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let signViewController = SignViewController()
+        let bagViewController = BagViewController()
+        let catalogViewController = CatalogViewController()
         let registrationNavigationController = UINavigationController(rootViewController: signViewController)
+        let bagNavigationController = UINavigationController(rootViewController: bagViewController)
+        let catalogNavigationController = UINavigationController(rootViewController: catalogViewController)
         let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [registrationNavigationController]
+        tabBarController.viewControllers = [bagNavigationController, catalogNavigationController, registrationNavigationController]
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
