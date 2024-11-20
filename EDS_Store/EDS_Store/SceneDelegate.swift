@@ -18,14 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let signViewController = SignViewController()
-        let bagViewController = BagViewController()
-        let catalogViewController = CatalogViewController()
-        let registrationNavigationController = UINavigationController(rootViewController: signViewController)
-        let bagNavigationController = UINavigationController(rootViewController: bagViewController)
-        let catalogNavigationController = UINavigationController(rootViewController: catalogViewController)
-        let tabBarController = UITabBarController()
-        tabBarController.viewControllers = [bagNavigationController, catalogNavigationController, registrationNavigationController]
+        let tabBarController = EdsTabBarController()
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }

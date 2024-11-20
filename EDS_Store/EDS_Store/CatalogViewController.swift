@@ -11,7 +11,6 @@ class CatalogViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Каталог"
         // Do any additional setup after loading the view.
     }
     
