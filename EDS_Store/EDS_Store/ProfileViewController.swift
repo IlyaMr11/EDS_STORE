@@ -13,6 +13,28 @@ class ProfileViewController: UIViewController {
     let cellsText = ["Ваши доставки", "Истрия заказов", "Настройки",
                      "Тех поддержка", "Способы оплаты", "Возврат тоавра", "Смторели недавно"]
     
+    private lazy var logoImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "logo7"))
+        return imageView
+    }()
+    
+    private lazy var warningLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Войдите или заргистрируйтесь, чтобы пользоваться всеми функциями EDStore"
+        label.textColor = .gray
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var toSignButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Войти или зарегистрироваться", for: .normal)
+        button.backgroundColor = .orange
+        button.layer.cornerRadius = 15
+        return button
+    }()
+    
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.layer.cornerRadius = 15
@@ -56,13 +78,22 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupAllViews()
+        setupNoUser()
         view.backgroundColor = .white
         title = "Профиль"
         
     }
     
+    func setupNoUser() {
+        setupLogo(logoImageView)
+        setupLabel(warningLabel)
+    }
+    
     func setupAllViews() {
+        setupAllProfile()
+    }
+    
+    func setupAllProfile() {
         setupGrayView(grayView)
         setupUserInfoButton(userInfoButton)
         setupNameLabel(nameLabel)
@@ -94,6 +125,18 @@ class ProfileViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([tableView.topAnchor.constraint(equalTo: grayView.bottomAnchor, constant: 35),
                                      tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), tableView.widthAnchor.constraint(equalToConstant: view.bounds.width), tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
+    }
+    
+    func setupLogo(_ imageView: UIImageView) {
+        view.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -view.bounds.height * 0.1), imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.4), imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.15)])
+    }
+    
+    func setupLabel(_ label: UILabel) {
+        view.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([label.centerXAnchor.constraint(equalTo: view.centerXAnchor), label.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 15), label.heightAnchor.constraint(equalToConstant: 60), label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.85)])
     }
 }
 
