@@ -12,7 +12,6 @@ class EdsTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         self.tabBar.tintColor = .orange
         self.viewControllers = createAllNavigationControllers()
         // Do any additional setup after loading the view.
@@ -20,8 +19,8 @@ class EdsTabBarController: UITabBarController {
     
 
     func createRegistationNavigationController() -> UINavigationController {
-        let signViewController = SignViewController()
-        let registrationNavigationController = UINavigationController(rootViewController: signViewController)
+        let profileViewController = SignViewController()
+        let registrationNavigationController = UINavigationController(rootViewController: profileViewController)
         registrationNavigationController.title = "Профиль"
         registrationNavigationController.tabBarItem.image = UIImage(systemName: "person")
         return registrationNavigationController
@@ -47,7 +46,7 @@ class EdsTabBarController: UITabBarController {
         let homeNavigationController = createHomeNavigationController()
         let bagNavigationController = createBagNavigationController()
         let registrationNavigationController = createRegistationNavigationController()
-        return [homeNavigationController, bagNavigationController, registrationNavigationController]
+        return [bagNavigationController, homeNavigationController, registrationNavigationController]
     }
     /*
      

@@ -13,11 +13,7 @@ class BagViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = "Корзина"
-
-        // Do any additional setup after loading the view.
     }
-    
-
     /*
     // MARK: - Navigation
 
