@@ -4,11 +4,13 @@
 //
 //  Created by Илья Морозов on 20.11.2024.
 //
+public var isSign = false
 
 import UIKit
 
 class EdsTabBarController: UITabBarController {
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

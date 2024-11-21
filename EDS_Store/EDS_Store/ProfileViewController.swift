@@ -32,6 +32,7 @@ class ProfileViewController: UIViewController {
         button.setTitle("Войти или зарегистрироваться", for: .normal)
         button.backgroundColor = .orange
         button.layer.cornerRadius = 15
+        button.addTarget(self, action: #selector(toSignVC), for: .touchUpInside)
         return button
     }()
     
@@ -78,19 +79,24 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNoUser()
+        setupViews()
         view.backgroundColor = .white
         title = "Профиль"
         
     }
     
+    func setupViews() {
+        if isSign {
+            setupAllProfile()
+        } else {
+            setupNoUser()
+        }
+    }
+    
     func setupNoUser() {
         setupLogo(logoImageView)
         setupLabel(warningLabel)
-    }
-    
-    func setupAllViews() {
-        setupAllProfile()
+        setupSignButton(toSignButton)
     }
     
     func setupAllProfile() {
@@ -130,13 +136,24 @@ class ProfileViewController: UIViewController {
     func setupLogo(_ imageView: UIImageView) {
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -view.bounds.height * 0.1), imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.4), imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.15)])
+        NSLayoutConstraint.activate([imageView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), imageView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor, constant: -view.bounds.height * 0.1), imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.4), imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.12)])
     }
     
     func setupLabel(_ label: UILabel) {
         view.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([label.centerXAnchor.constraint(equalTo: view.centerXAnchor), label.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 15), label.heightAnchor.constraint(equalToConstant: 60), label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.85)])
+    }
+    
+    func setupSignButton(_ button: UIButton) {
+        view.addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([button.centerXAnchor.constraint(equalTo: view.centerXAnchor), button.topAnchor.constraint(equalTo: warningLabel.bottomAnchor, constant: 15), button.heightAnchor.constraint(equalToConstant: 60), button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7)])
+    }
+    
+    @objc func toSignVC() {
+        let SignViewController = SignViewController()
+        navigationController?.pushViewController(SignViewController, animated: true)
     }
 }
 

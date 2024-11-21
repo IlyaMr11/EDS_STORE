@@ -198,6 +198,7 @@ class   SignViewController: UIViewController {
     }
     
     @objc func toProfile() {
+        isSign = true
         let b1 = checkLogin(loginTextField.text)
         let b2 = checkPassword(passwordTextField.text)
         if b1 && b2 {
