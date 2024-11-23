@@ -15,6 +15,7 @@ class EdsTabBarController: UITabBarController {
         super.viewDidLoad()
         
         self.tabBar.tintColor = .orange
+        self.tabBar.backgroundColor = .white
         self.viewControllers = createAllNavigationControllers()
         // Do any additional setup after loading the view.
     }
@@ -44,11 +45,20 @@ class EdsTabBarController: UITabBarController {
         return homeNavigationController
     }
     
-    func createAllNavigationControllers() -> [UINavigationController] {
+    func createAllNavigationControllers() -> [UIViewController] {
         let homeNavigationController = createHomeNavigationController()
         let bagNavigationController = createBagNavigationController()
         let registrationNavigationController = createRegistationNavigationController()
-        return [bagNavigationController, homeNavigationController, registrationNavigationController]
+        let bookViewController = createBookEdsPrivod()
+        return [homeNavigationController, bookViewController, bagNavigationController, registrationNavigationController]
+    }
+    
+    func createBookEdsPrivod() -> UINavigationController {
+        let bookVC = BookViewController()
+        let bookNavigationController = UINavigationController(rootViewController: bookVC)
+        bookNavigationController.tabBarItem.image = UIImage(systemName: "book")
+        bookNavigationController.title = "Каталог"
+        return bookNavigationController
     }
     /*
      

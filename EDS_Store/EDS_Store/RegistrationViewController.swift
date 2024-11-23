@@ -169,8 +169,7 @@ class RegistrationViewController: UIViewController {
     //MARK: - TARGETS
     @objc func endRegistration() {
         if checkingAll() {
-            let profileViewController = ProfileViewController()
-            self.navigationController?.pushViewController(profileViewController, animated: true)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
