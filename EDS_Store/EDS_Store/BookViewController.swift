@@ -10,13 +10,9 @@ import UIKit
 
 class BookViewController: UIViewController {
     
-   
+    let color1 = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     
-    let productName = ["Электро двигатели", "Червячные мотор-редукторы",
-                       "Соосно-цилиндрические мотор-редукторы", "Каническо-цилиндрические мотор-редукторы",
-                       "Планетарные редукторы", "Вариторы, мотор-вариаторы",
-                       "Цилиндрические мотор-редукторы", "Преобразователи частоты, утсройства плавного пуска"]
-    let productImage = ["AT90", "AT90", "AT90", "AT90", "AT90", "AT90", "AT90", "AT90"]
+    
         
     private lazy var headLabel: UILabel = {
         let label = UILabel()
@@ -33,12 +29,17 @@ class BookViewController: UIViewController {
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: 200, width: 375, height: 600), collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.backgroundColor = color1
+        collectionView.layer.cornerRadius = 20
         collectionView.register(BookCollectionViewCell.self, forCellWithReuseIdentifier: BookCollectionViewCell.identifier)
         return collectionView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.layer.cornerRadius = 10
+        view.backgroundColor = .white
+        title = "Справочник"
         setupAllViews()
         // Do any additional setup after loading the view.
     }
@@ -51,7 +52,7 @@ class BookViewController: UIViewController {
     func setupHeadLabel(_ label: UILabel) {
         view.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+        NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
                                      label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      label.heightAnchor.constraint(equalToConstant: 100),
                                      label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7)])
@@ -74,15 +75,12 @@ extension BookViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell =  collectionView.dequeueReusableCell(withReuseIdentifier: BookCollectionViewCell.identifier, for: indexPath) as! BookCollectionViewCell
-        cell.firstLabel.text = productName[indexPath.row]
-        cell.secondLabel.text = productName[indexPath.row]
-        cell.firstImageView.image = UIImage(named: productImage[indexPath.row])
-        cell.secondImageView.image = UIImage(named: productImage[indexPath.row])
+        cell.updateStackView(line: indexPath.row)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            return CGSize(width: 100, height: 150) // Укажите желаемый размер ячейки
+        return CGSize(width: view.bounds.width - 40, height: 250) // Укажите желаемый размер ячейки
         }
     
     

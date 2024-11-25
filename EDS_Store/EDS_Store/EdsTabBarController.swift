@@ -57,7 +57,7 @@ class EdsTabBarController: UITabBarController {
         let bookVC = BookViewController()
         let bookNavigationController = UINavigationController(rootViewController: bookVC)
         bookNavigationController.tabBarItem.image = UIImage(systemName: "book")
-        bookNavigationController.title = "Каталог"
+        bookNavigationController.title = "Справочник"
         return bookNavigationController
     }
     /*
