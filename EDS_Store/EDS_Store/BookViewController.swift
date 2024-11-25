@@ -10,10 +10,12 @@ import UIKit
 
 class BookViewController: UIViewController {
     
+    
+    //MARK: - CONSTATNS
     let color1 = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     
     
-        
+    //MARK: - HEAD LABEL
     private lazy var headLabel: UILabel = {
         let label = UILabel()
         label.text = "Выберети категорию товара чтобы узнать больше информации"
@@ -24,6 +26,7 @@ class BookViewController: UIViewController {
         return label
     }()
     
+    //MARK: - COLLECTION VIEW
     private lazy var bookCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: 200, width: 375, height: 600), collectionViewLayout: layout)
@@ -44,11 +47,13 @@ class BookViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //MARK: - SETUP VIEWS
     func setupAllViews() {
         setupHeadLabel(headLabel)
         setupBookCollectionView(bookCollectionView)
     }
     
+    //MARK: - SETUP LABEL
     func setupHeadLabel(_ label: UILabel) {
         view.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -58,6 +63,7 @@ class BookViewController: UIViewController {
                                      label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7)])
     }
     
+    //MARK: - SETUP COLLECTION VIEW
     func setupBookCollectionView(_ collectionView: UICollectionView) {
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,6 +74,8 @@ class BookViewController: UIViewController {
     }
 }
 
+
+//MARK: - EXTENSIONS
 extension BookViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         4

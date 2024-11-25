@@ -9,7 +9,12 @@ import UIKit
 
 class BookCollectionViewCell: UICollectionViewCell {
     
+    //MARK: - CONSTANTS
     static let identifier = "BookCollcetionViewCell"
+    //radiuses
+    let viewsRadius = CGFloat(15)
+    
+    //images names references
     let productName = [("Электро двигатели", "Червячные мотор редукторы"),
                        ("Соосно-цилиндрические мотор-редукторы", "Каническо-цилиндрические мотор редукторы"),
                        ("Планетарные редукторы", "Вариторы, мотор вариаторы"),
@@ -18,6 +23,10 @@ class BookCollectionViewCell: UICollectionViewCell {
     let productImage = [("motors", "motor-reducer"), ("coaxial", "conically"),
                         ("planet", "variators"), ("cylinder", "converter")]
     
+    let referencesOnWeb = ["http://eds-privod.ru/Catalogue/motors/", "http://eds-privod.ru/Catalogue/worm/",
+                        "http://eds-privod.ru/Catalogue/coaxial-helical/", "http://eds-privod.ru/Catalogue/bevel-helical/", "http://eds-privod.ru/Catalogue/planetary-gearbox/", "http://eds-privod.ru/Catalogue/variator/", "http://eds-privod.ru/Catalogue/helical/", "http://eds-privod.ru/Catalogue/inverter/"]
+    
+    //MARK: - LABELS
     lazy var firstLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -36,9 +45,11 @@ class BookCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    //MARK: - IMAGE BUTTONS
     lazy var firstImageButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(press), for: .touchUpInside)
         return button
     }()
     
@@ -49,10 +60,11 @@ class BookCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    //MARK: - VIEWS
     lazy var firstCellView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = viewsRadius
         view.layer.borderWidth = 1.5
         view.layer.borderColor = UIColor.orange.cgColor
         setupView(firstLabel, firstImageButton, view)
@@ -62,14 +74,14 @@ class BookCollectionViewCell: UICollectionViewCell {
     lazy var secondCellView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = viewsRadius
         view.layer.borderWidth = 1.5
         view.layer.borderColor = UIColor.orange.cgColor
         setupView(secondLabel, secondImageButton, view)
         return view
     }()
     
-    
+    //MARK: - STACKVIEWS
     lazy var cellStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [firstCellView, secondCellView])
         stackView.axis = .horizontal
@@ -87,13 +99,17 @@ class BookCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - SETUP VIEWS
     func updateStackView(line: Int) {
         firstLabel.text = productName[line].0
         secondLabel.text = productName[line].1
         firstImageButton.setImage(UIImage(named: productImage[line].0), for: .normal)
+        firstImageButton.tag = 2 * line
         secondImageButton.setImage(UIImage(named: productImage[line].1), for: .normal)
+        secondImageButton.tag = 2 * line + 1
     }
     
+    //MARK: - SETUP BUTT, LABL
     func setupView(_ label: UILabel, _ imageView: UIButton, _ view: UIView) {
         view.addSubview(label)
         view.addSubview(imageView)
@@ -112,6 +128,7 @@ class BookCollectionViewCell: UICollectionViewCell {
             label.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.25)])
     }
     
+    //MARK: - SETUPS ON STACKVIEW
     func setupStackView(_ stackView: UIStackView) {
         contentView.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +141,10 @@ class BookCollectionViewCell: UICollectionViewCell {
                                     
     }
     
-    @objc func press() {
-        print("hi")
+    //MARK: - ON WEBSITE
+    @objc func press(button: UIButton) {
+        if let url = URL(string: referencesOnWeb[button.tag]) {
+            UIApplication.shared.open(url)
+        }
     }
 }
