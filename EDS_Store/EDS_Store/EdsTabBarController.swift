@@ -20,7 +20,7 @@ class EdsTabBarController: UITabBarController {
         // Do any additional setup after loading the view.
     }
     
-
+    //MARK: - REG NAVIGATION CONTROL
     func createRegistationNavigationController() -> UINavigationController {
         let profileViewController = ProfileViewController()
         let registrationNavigationController = UINavigationController(rootViewController: profileViewController)
@@ -29,6 +29,7 @@ class EdsTabBarController: UITabBarController {
         return registrationNavigationController
     }
     
+    //MARK: - BAG NAVIGATION CONTROL
     func createBagNavigationController() -> UINavigationController {
         let bagViewController = BagViewController()
         let bagNavigationController = UINavigationController(rootViewController: bagViewController)
@@ -37,39 +38,30 @@ class EdsTabBarController: UITabBarController {
         return bagNavigationController
     }
     
+    //MARK: - HOME NAVIGATION CONTROL
     func createHomeNavigationController() -> UINavigationController {
-        let catalogViewController = CatalogViewController()
-        let homeNavigationController = UINavigationController(rootViewController: catalogViewController)
+        let homeViewController = HomeViewController()
+        let homeNavigationController = UINavigationController(rootViewController: homeViewController)
         homeNavigationController.tabBarItem.image = UIImage(systemName: "house")
         homeNavigationController.title = "Главная"
         return homeNavigationController
     }
     
-    func createAllNavigationControllers() -> [UIViewController] {
-        let homeNavigationController = createHomeNavigationController()
-        let bagNavigationController = createBagNavigationController()
-        let registrationNavigationController = createRegistationNavigationController()
-        let bookViewController = createBookEdsPrivod()
-        return [homeNavigationController, bookViewController, bagNavigationController, registrationNavigationController]
-    }
-    
-    func createBookEdsPrivod() -> UINavigationController {
+    //MARK: - BO0K NAVIGATION CONTROL
+    func createBookNavigationController() -> UINavigationController {
         let bookVC = BookViewController()
         let bookNavigationController = UINavigationController(rootViewController: bookVC)
         bookNavigationController.tabBarItem.image = UIImage(systemName: "book")
         bookNavigationController.title = "Справочник"
         return bookNavigationController
     }
-    /*
-     
-    // MARK: - Navigation
-     
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    //MARK: - CREATE ALL NAVIG C
+    func createAllNavigationControllers() -> [UIViewController] {
+        let homeNavigationController = createHomeNavigationController()
+        let bagNavigationController = createBagNavigationController()
+        let registrationNavigationController = createRegistationNavigationController()
+        let bookViewController = createBookNavigationController()
+        return [homeNavigationController, bookViewController, bagNavigationController, registrationNavigationController]
     }
-    */
-
 }
