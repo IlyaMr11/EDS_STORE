@@ -175,6 +175,10 @@ class ProfileViewController: UIViewController {
         let SignViewController = SignViewController()
         navigationController?.pushViewController(SignViewController, animated: true)
     }
+    
+    @objc func userInfoPress() {
+        
+    }
 }
 
 
@@ -197,5 +201,9 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         return 70
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let deliveryViewCntroller = DeliveryViewController()
+        self.navigationController?.pushViewController(deliveryViewCntroller, animated: true)
+    }
     
 }
