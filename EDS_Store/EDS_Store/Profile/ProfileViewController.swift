@@ -180,8 +180,8 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func userInfoVC() {
-        let UserInfoViewController = UserInfoViewController()
-        navigationController?.pushViewController(UserInfoViewController, animated: true)
+        let userInfoViewController = UserInfoViewController()
+        navigationController?.pushViewController(userInfoViewController, animated: true)
     }
 }
 

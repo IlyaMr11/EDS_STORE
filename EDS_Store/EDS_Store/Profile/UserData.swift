@@ -17,4 +17,4 @@ struct UserData {
 }
 
 
-let user1Data = UserData()
+var user1Data = UserData()

@@ -9,6 +9,7 @@ import UIKit
 
 class UserInfoViewController: UIViewController {
 
+    
     let color1 = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.95)
     let color2 = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 0.90)
     let userCellData = ["Имя", "Пол", "Телефон", "Почта", "Адреса", "Уведомления"]
@@ -23,7 +24,7 @@ class UserInfoViewController: UIViewController {
         return imageView
     }()
     
-    private lazy var userNameLabel: UILabel = {
+    var userNameLabel: UILabel = {
         let label = UILabel()
         if let userName = user1Data.name {
             label.text = userName
@@ -111,7 +112,13 @@ class UserInfoViewController: UIViewController {
 
 }
 
-extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate {
+extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, UpdateUserDataDelegate {
+    func didUpdateName(_ data: String?) {
+        if let name = data {
+            userNameLabel.text = name
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         6
     }
@@ -127,6 +134,13 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let nameVC =  UserNameViewController()
+        nameVC.modalPresentationStyle = .pageSheet
+        nameVC.delegate = self// Устанавливаем стиль представления
+        present(nameVC, animated: true, completion: nil) // Показываем второй контроллер
     }
     
 }
