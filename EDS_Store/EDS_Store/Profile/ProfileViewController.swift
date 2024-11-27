@@ -7,6 +7,7 @@
 import UIKit
 
 
+
 class ProfileViewController: UIViewController {
     
     //MARK: - CONSTANTS
@@ -14,6 +15,7 @@ class ProfileViewController: UIViewController {
     let buttonRadius = CGFloat(15)
     let cellsText = ["Ваши доставки", "Истрия заказов", "Настройки",
                      "Тех поддержка", "Способы оплаты", "Возврат тоавра", "Смторели недавно"]
+    
     
     //MARK: - LOGO
     private lazy var logoImageView: UIImageView = {
@@ -61,6 +63,7 @@ class ProfileViewController: UIViewController {
         button.setImage(image, for: .normal)
         button.backgroundColor = color1
         button.layer.cornerRadius = buttonRadius
+        button.addTarget(self, action: #selector(userInfoVC), for: .touchUpInside)
         return button
     }()
     
@@ -176,8 +179,9 @@ class ProfileViewController: UIViewController {
         navigationController?.pushViewController(SignViewController, animated: true)
     }
     
-    @objc func userInfoPress() {
-        
+    @objc func userInfoVC() {
+        let UserInfoViewController = UserInfoViewController()
+        navigationController?.pushViewController(UserInfoViewController, animated: true)
     }
 }
 
