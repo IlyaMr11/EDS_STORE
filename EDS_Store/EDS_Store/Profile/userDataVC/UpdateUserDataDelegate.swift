@@ -10,4 +10,6 @@ import Foundation
 
 protocol UpdateUserDataDelegate: AnyObject {
     func didUpdateName(_ data: String?)
+    
+    func didUpdateSex(_ data: String?)
 }

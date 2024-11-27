@@ -9,7 +9,6 @@ import UIKit
 
 class UserInfoViewController: UIViewController {
 
-    
     let color1 = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.95)
     let color2 = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 0.90)
     let userCellData = ["Имя", "Пол", "Телефон", "Почта", "Адреса", "Уведомления"]
@@ -35,7 +34,7 @@ class UserInfoViewController: UIViewController {
         return label
     }()
     
-    private lazy var userTableVIew: UITableView = {
+    private lazy var userTableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorColor = .black
         tableView.separatorStyle = .singleLine
@@ -66,7 +65,7 @@ class UserInfoViewController: UIViewController {
         setupUserPhoto(userPhotoImageView)
         setupUserName(userNameLabel)
         setupLogo(logoView)
-        setupTableView(userTableVIew)
+        setupTableView(userTableView)
     }
     
     func setupUserPhoto(_ imageView: UIImageView) {
@@ -74,7 +73,7 @@ class UserInfoViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35),
-            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant:  50),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant:  20),
             imageView.heightAnchor.constraint(equalToConstant: 160),
             imageView.widthAnchor.constraint(equalToConstant: 160)])
     }
@@ -113,6 +112,10 @@ class UserInfoViewController: UIViewController {
 }
 
 extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, UpdateUserDataDelegate {
+    func didUpdateSex(_ data: String?) {
+        //
+    }
+    
     func didUpdateName(_ data: String?) {
         if let name = data {
             userNameLabel.text = name
@@ -129,6 +132,7 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
         cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = color1
         cell.layer.cornerRadius = 10
+        cell.textLabel?.numberOfLines = 2
         return cell
     }
     
@@ -137,10 +141,25 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let nameVC =  UserNameViewController()
-        nameVC.modalPresentationStyle = .pageSheet
-        nameVC.delegate = self// Устанавливаем стиль представления
-        present(nameVC, animated: true, completion: nil) // Показываем второй контроллер
+        
+        let row = indexPath.row
+        switch row {
+            case 0:
+            let vc = UserNameViewController()
+            vc.delegate = self
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true)
+        case 1:
+            let vc = UserSexViewController()
+            vc.delegate = self
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true)
+        default:
+            print("trouble")
+        } // Показываем второй контроллер
+        
+        
+        
     }
     
 }

@@ -30,6 +30,7 @@ class UserNameViewController: UIViewController {
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Ваше имя"
+        textField.text = user1Data.name
         textField.delegate = self
         textField.textAlignment = .right
         return textField
@@ -57,6 +58,7 @@ class UserNameViewController: UIViewController {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
         button.setImage(UIImage(named: "back"), for: .normal)
+        button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
         return button
     }()
     
@@ -132,6 +134,10 @@ class UserNameViewController: UIViewController {
             user1Data.name = name
             delegate?.didUpdateName(name)
         }
+        dismiss(animated: true)
+    }
+    
+    @objc func closeView() {
         dismiss(animated: true)
     }
 }
