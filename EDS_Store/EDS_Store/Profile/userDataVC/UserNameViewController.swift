@@ -40,7 +40,7 @@ class UserNameViewController: UIViewController {
         let label = UILabel()
         label.text = "Имя:"
         label.textColor = .black
-        label.font = .boldSystemFont(ofSize: .init(15))
+        label.font = .systemFont(ofSize: 19)
         return label
     }()
     

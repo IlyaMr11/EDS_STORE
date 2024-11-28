@@ -11,7 +11,7 @@ class UserInfoViewController: UIViewController {
 
     let color1 = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.95)
     let color2 = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 0.90)
-    let userCellData = ["Имя", "Пол", "Телефон", "Почта", "Адреса", "Уведомления"]
+    let userCellData = ["Имя", "Пол", "Номер телефона", "Почта", "Адреса", "Уведомления"]
     let identifier = "userCell"
     
     private lazy var userPhotoImageView: UIImageView = {
@@ -154,6 +154,18 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
             vc.delegate = self
             vc.modalPresentationStyle = .pageSheet
             present(vc, animated: true)
+        case 2:
+            let vc = PhoneViewController()
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true, completion: nil)
+        case 3:
+            let vc = EmailViewController()
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true , completion: nil)
+        case 5:
+            let vc = NotificationViewController()
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true , completion: nil)
         default:
             print("trouble")
         } // Показываем второй контроллер
