@@ -22,7 +22,7 @@ class EdsTabBarController: UITabBarController {
     
     //MARK: - REG NAVIGATION CONTROL
     func createRegistationNavigationController() -> UINavigationController {
-        let profileViewController = UserInfoViewController()
+        let profileViewController = ProfileViewController()
         let registrationNavigationController = UINavigationController(rootViewController: profileViewController)
         registrationNavigationController.title = "Профиль"
         registrationNavigationController.tabBarItem.image = UIImage(systemName: "person")

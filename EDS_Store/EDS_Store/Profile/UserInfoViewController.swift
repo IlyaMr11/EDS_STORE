@@ -162,6 +162,10 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
             let vc = EmailViewController()
             vc.modalPresentationStyle = .pageSheet
             present(vc, animated: true , completion: nil)
+        case 4:
+            let vc = AddressViewController()
+            vc.modalPresentationStyle = .pageSheet
+            present(vc, animated: true, completion: nil)
         case 5:
             let vc = NotificationViewController()
             vc.modalPresentationStyle = .pageSheet

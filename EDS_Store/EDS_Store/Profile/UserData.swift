@@ -12,7 +12,7 @@ struct UserData {
     var sex: String?
     var phone: String?
     var email: String?
-    var address: [String]?
+    var address: [String] = []
     var notification: Bool?
 }
 
