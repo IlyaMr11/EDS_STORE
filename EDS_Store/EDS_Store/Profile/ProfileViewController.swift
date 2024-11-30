@@ -11,6 +11,7 @@ import UIKit
 class ProfileViewController: UIViewController {
     
     //MARK: - CONSTANTS
+    let viewControllers = [DeliveryViewController(), HistoryViewController()]
     let color1 = UIColor.init(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     let buttonRadius = CGFloat(15)
     let cellsText = ["Ваши доставки", "Истрия заказов", "Настройки",
@@ -89,21 +90,22 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         view.backgroundColor = .white
         title = "Профиль"
-        
     }
     
     //MARK: - CHOOSE VIEW
     func setupViews() {
-        if isSign {
+        setupAllProfile()
+        /*if isSign {
             setupAllProfile()
         } else {
             setupNoUser()
-        }
+        }*/
     }
     
     //MARK: - SETUP BEFORE SIGN
@@ -206,7 +208,8 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let deliveryViewCntroller = DeliveryViewController()
+        let deliveryViewCntroller = viewControllers[indexPath.row]
+        
         self.navigationController?.pushViewController(deliveryViewCntroller, animated: true)
     }
     
