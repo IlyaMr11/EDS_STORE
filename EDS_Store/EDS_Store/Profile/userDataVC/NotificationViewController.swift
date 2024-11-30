@@ -9,6 +9,7 @@ import UIKit
 
 class NotificationViewController: UIViewController {
     
+    //MARK: - NOTIFICATION VIEW
     private lazy var notificationView: UIView = {
         let sexView = UIView()
         sexView.backgroundColor = .white
@@ -16,6 +17,7 @@ class NotificationViewController: UIViewController {
         return sexView
     }()
     
+    //MARK: - TITLE LABEL
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Уведомления"
@@ -25,6 +27,7 @@ class NotificationViewController: UIViewController {
         return label
     }()
     
+    //MARK: - SAFE BUTTON
     private lazy var safeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 15
@@ -35,6 +38,7 @@ class NotificationViewController: UIViewController {
         return button
     }()
     
+    //MARK: - NOTIFC SWITCH
     private lazy var notifcSwitch: UISwitch = {
         let switcher = UISwitch()
         switcher.onTintColor = .orange
@@ -44,6 +48,7 @@ class NotificationViewController: UIViewController {
         return switcher
     }()
     
+    //MARK: - NOTIFICATION LABEL
     private lazy var notificationLabel: UILabel = {
         let label = UILabel()
         label.text = "Получать уведомления:"
@@ -52,6 +57,7 @@ class NotificationViewController: UIViewController {
         return label
     }()
     
+    //MARK: - CLOSE BUTTON
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
@@ -60,13 +66,15 @@ class NotificationViewController: UIViewController {
         return button
     }()
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSexView()
+        setupNotificView()
         setupAll()
     }
     
-    func setupSexView() {
+    //MARK: - SETUP NOTIFIC VIEW
+    func setupNotificView() {
         view.addSubview(notificationView)
         notificationView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([notificationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -75,6 +83,7 @@ class NotificationViewController: UIViewController {
                                     notificationView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.5)])
     }
     
+    //MARK: - SETUP ALL UI OBJ
     func setupAll() {
         setupTitleLabel(titleLabel)
         setupCloseButton(closeButton)
@@ -128,10 +137,12 @@ class NotificationViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: notificationView.widthAnchor, multiplier: 0.15)])
     }
     
+    //MARK: - TARGETS
     @objc func closeView() {
         dismiss(animated: true)
     }
 
+    //MARK: - SAFE NOTIFICATION PRESS
     @objc func safeNotification() {
         user1Data.notification = notifcSwitch.isOn
         dismiss(animated: true , completion: nil)

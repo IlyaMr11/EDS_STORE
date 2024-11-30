@@ -9,6 +9,7 @@ import UIKit
 
 class EmailViewController: UIViewController {
 
+    //MARK: - EMAIL VIEW
     private lazy var emailView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
@@ -16,6 +17,7 @@ class EmailViewController: UIViewController {
         return view
     }()
     
+    //MARK: - TITLE LABEL
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Почта"
@@ -25,6 +27,7 @@ class EmailViewController: UIViewController {
         return label
     }()
     
+    //MARK: - EMAIL TEXT FIELD
     private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите почту"
@@ -36,6 +39,7 @@ class EmailViewController: UIViewController {
         return textField
     }()
     
+    //MARK: - EMAIL LABEL
     private lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.text = "Почта:"
@@ -44,6 +48,7 @@ class EmailViewController: UIViewController {
         return label
     }()
     
+    //MARK: - SAFE BUTTON
     private lazy var safeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 15
@@ -54,6 +59,7 @@ class EmailViewController: UIViewController {
         return button
     }()
     
+    //MARK: - CLOSE BUTTON
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
@@ -62,6 +68,7 @@ class EmailViewController: UIViewController {
         return button
     }()
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         setupEmailView()
@@ -69,6 +76,7 @@ class EmailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //MARK: - SETUP EMIAL VIEW
     func setupEmailView() {
         view.addSubview(emailView)
         emailView.translatesAutoresizingMaskIntoConstraints = false
@@ -78,6 +86,7 @@ class EmailViewController: UIViewController {
                                      emailView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.5)])
     }
     
+    //MARK: - SETUP ALL UI OBJ
     func setupAll() {
         setupTitleLabel(titleLabel)
         setupCloseButton(closeButton)
@@ -133,6 +142,7 @@ class EmailViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: emailView.widthAnchor, multiplier: 0.15)])
     }
     
+    //MARK: - TARGETS
     @objc func safeEmail() {
         if let email = emailTextField.text {
             user1Data.email = email
@@ -140,12 +150,13 @@ class EmailViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    //MARK: - CLOSE VIEW
     @objc func closeView() {
         dismiss(animated: true)
     }
 }
 
-
+//MARK: - EXTENSIONS
 extension EmailViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

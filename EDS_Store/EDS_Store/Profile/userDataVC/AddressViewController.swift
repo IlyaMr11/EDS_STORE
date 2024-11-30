@@ -9,11 +9,12 @@ import UIKit
 
 class AddressViewController: UIViewController {
     
+    //MARK: - CONSTANTS
     let identifier = "addressCell"
     var rowCounter = 0
     
 
-    
+    //MARK: - ADD ROW BUTTON
     private lazy var addRowButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
@@ -22,6 +23,7 @@ class AddressViewController: UIViewController {
         return button
     }()
     
+    //MARK: - ADDRESS VIEW
     private lazy var addressView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
@@ -29,6 +31,7 @@ class AddressViewController: UIViewController {
         return view
     }()
     
+    //MARK: - TITLE LABEL
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Адреса"
@@ -38,6 +41,7 @@ class AddressViewController: UIViewController {
         return label
     }()
     
+    //MARK: - SAFE BUTTON
     private lazy var safeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 15
@@ -48,6 +52,7 @@ class AddressViewController: UIViewController {
         return button
     }()
     
+    //MARK: - CLOSE BUTTON
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
@@ -56,6 +61,7 @@ class AddressViewController: UIViewController {
         return button
     }()
     
+    //MARK: - ADRESS TABLE VIEW
     private lazy var addressTableView: UITableView = {
         let tableView = UITableView()
         rowCounter = user1Data.address.count
@@ -72,6 +78,7 @@ class AddressViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //MARK: - SETUP ADDRESS VIEW
     func setupAddressView() {
         view.addSubview(addressView)
         addressView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,6 +88,7 @@ class AddressViewController: UIViewController {
                                      addressView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.5)])
     }
     
+    //MARK: - SETUP ALL UI OBJ
     func setupAll() {
         setupTitleLabel(titleLabel)
         setupCloseButton(closeButton)
@@ -89,6 +97,7 @@ class AddressViewController: UIViewController {
         setupAddRowButton(addRowButton)
     }
 
+    
     func setupTitleLabel(_ label: UILabel) {
         addressView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -135,6 +144,7 @@ class AddressViewController: UIViewController {
                                      button.widthAnchor.constraint(equalToConstant: 40)])
     }
     
+    //MARK: - CREATE TABLE CELL
     func createTableCell(_ index: Int) -> UIView {
         print("hi")
         let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 70))
@@ -155,6 +165,7 @@ class AddressViewController: UIViewController {
         return view
     }
     
+    //MARK: - TARGETS
     @objc func addRow() {
         rowCounter += 1
         print(rowCounter)
@@ -170,6 +181,7 @@ class AddressViewController: UIViewController {
     }
 }
 
+//MARK: - EXTENSIONS
 extension AddressViewController: UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return rowCounter

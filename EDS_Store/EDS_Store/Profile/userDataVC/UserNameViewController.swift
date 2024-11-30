@@ -9,15 +9,19 @@ import UIKit
 
 class UserNameViewController: UIViewController {
 
+    //MARK: - DELEGATE AND CONSTANTS
     weak var delegate: UpdateUserDataDelegate?
+    let viewRadius = CGFloat(20)
     
+    //MARK: - NAME VIEW
     private lazy var nameView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = viewRadius
         view.backgroundColor = .white
         return view
     }()
     
+    //MARK: - TITLE LABEL
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Имя"
@@ -27,6 +31,7 @@ class UserNameViewController: UIViewController {
         return label
     }()
     
+    //MARK: - TEXT FIELD
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Ваше имя"
@@ -36,6 +41,7 @@ class UserNameViewController: UIViewController {
         return textField
     }()
     
+    //MARK: - NAME LABEL
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Имя:"
@@ -44,6 +50,7 @@ class UserNameViewController: UIViewController {
         return label
     }()
     
+    //MARK: - SAFE BUTTON
     private lazy var safeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 15
@@ -54,6 +61,7 @@ class UserNameViewController: UIViewController {
         return button
     }()
     
+    //MARK: - CLOSE BUTTON
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
@@ -62,18 +70,25 @@ class UserNameViewController: UIViewController {
         return button
     }()
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNameView()
+        setupAll()
+        // Do any additional setup after loading the view.
+    }
+    
+    //MARK: - SETUP NAME VIEW
+    func setupNameView() {
         view.addSubview(nameView)
         nameView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([nameView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      nameView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -25),
                                      nameView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9),
                                      nameView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.5)])
-        setupAll()
-        // Do any additional setup after loading the view.
     }
     
+    //MARK: - SETUP ALL UI OBJ
     func setupAll() {
         setupTitleLabel(titleLabel)
         setupCloseButton(closeButton)
@@ -129,6 +144,7 @@ class UserNameViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: nameView.widthAnchor, multiplier: 0.15)])
     }
     
+    //MARK: - TARGETS
     @objc func safeName() {
         if let name = nameTextField.text {
             user1Data.name = name
@@ -137,27 +153,16 @@ class UserNameViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    //MARK: - CLOSE VIEW PRESS
     @objc func closeView() {
         dismiss(animated: true)
     }
 }
 
+//MARK: - EXTENSION
 extension UserNameViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
 }
-
-/*class customNameView: UIView {
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
-}*/

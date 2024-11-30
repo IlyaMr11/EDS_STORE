@@ -9,15 +9,19 @@ import UIKit
 
 class UserSexViewController: UIViewController {
 
+    //MARK: - DELEGATE AND CONSTS
     weak var delegate: UpdateUserDataDelegate?
+    let viewRadius = CGFloat(20)
     
+    //MARK: - SEX VEIW
     private lazy var sexView: UIView = {
         let sexView = UIView()
         sexView.backgroundColor = .white
-        sexView.layer.cornerRadius = 20
+        sexView.layer.cornerRadius = viewRadius
         return sexView
     }()
     
+    //MARK: - TITLE LABEL
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Пол"
@@ -27,6 +31,7 @@ class UserSexViewController: UIViewController {
         return label
     }()
     
+    //MARK: - SEGMENTS
     private lazy var sexSegmentedControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["Мужской", "Женский"])
         segment.layer.cornerRadius = 15
@@ -42,6 +47,7 @@ class UserSexViewController: UIViewController {
         return segment
     }()
     
+    //MARK: - SAFE BUTTON
     private lazy var safeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 15
@@ -52,6 +58,7 @@ class UserSexViewController: UIViewController {
         return button
     }()
     
+    //MARK: - CLSOE BUTTON
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
@@ -60,13 +67,14 @@ class UserSexViewController: UIViewController {
         return button
     }()
     
-    
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSexView()
         setupAll()
     }
     
+    //MARK: - SETUP SEX VIEW
     func setupSexView() {
         view.addSubview(sexView)
         sexView.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +83,8 @@ class UserSexViewController: UIViewController {
                                      sexView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.9),
                                      sexView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.5)])
     }
-        
+      
+    //MARK: - SETUP ALL UI OBJ
     func setupAll() {
         setupTitleLabel(titleLabel)
         setupCloseButton(closeButton)
@@ -119,10 +128,12 @@ class UserSexViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: sexView.widthAnchor, multiplier: 0.15)])
     }
     
+    //MARK: - TARGETS
     @objc func closeView() {
         dismiss(animated: true)
     }
     
+    //MARK: - SAFE SEX PRESS
     @objc func safeSex() {
         switch sexSegmentedControl.selectedSegmentIndex {
         case 0:

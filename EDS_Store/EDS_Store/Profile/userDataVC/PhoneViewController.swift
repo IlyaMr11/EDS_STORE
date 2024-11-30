@@ -9,6 +9,7 @@ import UIKit
 
 class PhoneViewController: UIViewController {
 
+    //MARK: - PHONE VIEW
     private lazy var phoneView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 20
@@ -16,6 +17,7 @@ class PhoneViewController: UIViewController {
         return view
     }()
     
+    //MARK: - TITLE LABEL
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Номер телефона"
@@ -25,6 +27,7 @@ class PhoneViewController: UIViewController {
         return label
     }()
     
+    //MARK: - PHONE TEXT VIEW
     private lazy var phoneTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите телефон"
@@ -36,6 +39,7 @@ class PhoneViewController: UIViewController {
         return textField
     }()
     
+    //MARK: - PHONE LABEL
     private lazy var phoneLabel: UILabel = {
         let label = UILabel()
         label.text = "Телефон:"
@@ -44,6 +48,7 @@ class PhoneViewController: UIViewController {
         return label
     }()
     
+    //MARK: - SAFE BUTTON
     private lazy var safeButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 15
@@ -54,6 +59,7 @@ class PhoneViewController: UIViewController {
         return button
     }()
     
+    //MARK: - CLOSE BUTTON
     private lazy var closeButton: UIButton = {
         let button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
@@ -62,6 +68,7 @@ class PhoneViewController: UIViewController {
         return button
     }()
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         setupEmailView()
@@ -69,6 +76,7 @@ class PhoneViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //MARK: - SETUP EMAIL VIEW
     func setupEmailView() {
         view.addSubview(phoneView)
         phoneView.translatesAutoresizingMaskIntoConstraints = false
@@ -78,6 +86,7 @@ class PhoneViewController: UIViewController {
                                      phoneView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.5)])
     }
     
+    //MARK: - SETUP ALL UI OBJ
     func setupAll() {
         setupTitleLabel(titleLabel)
         setupCloseButton(closeButton)
@@ -131,6 +140,7 @@ class PhoneViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: phoneView.widthAnchor, multiplier: 0.15)])
     }
     
+    //MARK: - TARGETS
     @objc func safePhone() {
         if let phone = phoneTextField.text {
             user1Data.phone = phone
@@ -138,12 +148,13 @@ class PhoneViewController: UIViewController {
         dismiss(animated: true)
     }
     
+    //MARK: - CLOSE VIEW PRESS
     @objc func closeView() {
         dismiss(animated: true)
     }
 }
 
-
+//MARK: - EXTESNSIONS
 extension PhoneViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

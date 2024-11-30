@@ -9,11 +9,13 @@ import UIKit
 
 class UserInfoViewController: UIViewController {
 
+    //MARK: - CONSTANTS
     let color1 = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.95)
     let color2 = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 0.90)
     let userCellData = ["Имя", "Пол", "Номер телефона", "Почта", "Адреса", "Уведомления"]
     let identifier = "userCell"
     
+    //MARK: - USER PHOTO VIEW
     private lazy var userPhotoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -23,6 +25,7 @@ class UserInfoViewController: UIViewController {
         return imageView
     }()
     
+    //MARK: NAME LABEL
     var userNameLabel: UILabel = {
         let label = UILabel()
         if let userName = user1Data.name {
@@ -34,6 +37,7 @@ class UserInfoViewController: UIViewController {
         return label
     }()
     
+    //MARK: - USER TABLE VEIW
     private lazy var userTableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorColor = .black
@@ -46,6 +50,7 @@ class UserInfoViewController: UIViewController {
         return tableView
     }()
     
+    //MARK: - LOGO VIEW
     private lazy var logoView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -53,6 +58,7 @@ class UserInfoViewController: UIViewController {
         return imageView
     }()
     
+    //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Мои данные"
@@ -60,7 +66,7 @@ class UserInfoViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    
+    //MARK: - SETUP ALL UI OBJ
     func setupAll() {
         setupUserPhoto(userPhotoImageView)
         setupUserName(userNameLabel)
@@ -111,6 +117,7 @@ class UserInfoViewController: UIViewController {
 
 }
 
+//MARK: - EXTENSIONS
 extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, UpdateUserDataDelegate {
     func didUpdateSex(_ data: String?) {
         //
@@ -141,8 +148,8 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let row = indexPath.row
+        
         switch row {
             case 0:
             let vc = UserNameViewController()
@@ -172,10 +179,7 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
             present(vc, animated: true , completion: nil)
         default:
             print("trouble")
-        } // Показываем второй контроллер
-        
-        
-        
+        }
     }
     
 }
