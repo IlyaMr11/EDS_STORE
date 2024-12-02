@@ -23,6 +23,14 @@ class AddressViewController: UIViewController {
         return button
     }()
     
+    private lazy var editButton: UIButton = {
+        let button = UIButton()
+        button.imageView?.contentMode = .scaleAspectFit
+        button.setImage(UIImage(named: "edit"), for: .normal)
+        button.addTarget(self, action: #selector(editTable), for: .touchUpInside)
+        return button
+    }()
+    
     //MARK: - ADDRESS VIEW
     private lazy var addressView: UIView = {
         let view = UIView()
@@ -71,6 +79,14 @@ class AddressViewController: UIViewController {
         return tableView
     }()
     
+    private lazy var buttonStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [editButton, addRowButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAddressView()
@@ -94,7 +110,7 @@ class AddressViewController: UIViewController {
         setupCloseButton(closeButton)
         setupSafeButton(safeButton)
         setupTableView(addressTableView)
-        setupAddRowButton(addRowButton)
+        setupButtonStackView(buttonStackView)
     }
 
     
@@ -111,8 +127,8 @@ class AddressViewController: UIViewController {
     func setupCloseButton(_ button: UIButton) {
         addressView.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([button.leadingAnchor.constraint(equalTo: addressView.leadingAnchor, constant: 5),
-                                     button.topAnchor.constraint(equalTo: addressView.topAnchor, constant: 5),
+        NSLayoutConstraint.activate([button.leadingAnchor.constraint(equalTo: addressView.leadingAnchor, constant: 10),
+                                     button.topAnchor.constraint(equalTo: addressView.topAnchor, constant: 7),
                                      button.heightAnchor.constraint(equalToConstant: 40),
                                      button.widthAnchor.constraint(equalToConstant: 40)])
     }
@@ -135,27 +151,26 @@ class AddressViewController: UIViewController {
                                      tableView.bottomAnchor.constraint(equalTo: safeButton.topAnchor)])
     }
     
-    func setupAddRowButton(_ button: UIButton) {
-        addressView.addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([button.trailingAnchor.constraint(equalTo: addressView.trailingAnchor, constant: -5),
-                                     button.topAnchor.constraint(equalTo: addressView.topAnchor, constant: 5),
-                                     button.heightAnchor.constraint(equalToConstant: 40),
-                                     button.widthAnchor.constraint(equalToConstant: 40)])
+    func setupButtonStackView(_ stackView: UIStackView) {
+        addressView.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([stackView.trailingAnchor.constraint(equalTo: addressView.trailingAnchor, constant: -10),
+                                     stackView.topAnchor.constraint(equalTo: addressView.topAnchor, constant: 7),
+                                     stackView.heightAnchor.constraint(equalToConstant: 40),
+                                     stackView.widthAnchor.constraint(equalToConstant: 90)])
     }
     
     //MARK: - CREATE TABLE CELL
     func createTableCell(_ index: Int) -> UIView {
         print("hi")
         let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 70))
-        view.layer.cornerRadius = 15
         let label = UILabel(frame: CGRect(x: 5, y: 0, width: 90, height: 70))
         label.text = "Адрес №\(index+1)"
         label.textColor = .black
         view.addSubview(label)
-        let textField = UITextField(frame: CGRect(x: 150, y: 0, width: view.bounds.width - 200, height: 70))
+        let textField = UITextField(frame: CGRect(x: 145, y: 0, width: view.bounds.width - 250, height: 70))
         textField.placeholder = "Введите адрес"
-        textField.textAlignment = .right
+        textField.textAlignment = .left
         textField.delegate = self
         textField.tag = index
         if user1Data.address.count > index {
@@ -166,8 +181,13 @@ class AddressViewController: UIViewController {
     }
     
     //MARK: - TARGETS
+    @objc func editTable() {
+        addressTableView.isEditing.toggle()
+    }
+    
     @objc func addRow() {
         rowCounter += 1
+        user1Data.address.append("")
         print(rowCounter)
         addressTableView.reloadData()
     }
@@ -195,6 +215,22 @@ extension AddressViewController: UITextFieldDelegate, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        user1Data.address.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            user1Data.address.remove(at: indexPath.row)
+            rowCounter -= 1
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            //tableView.reloadData()
+        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

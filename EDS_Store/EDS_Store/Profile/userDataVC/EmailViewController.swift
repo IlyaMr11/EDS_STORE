@@ -144,12 +144,19 @@ class EmailViewController: UIViewController {
     
     //MARK: - TARGETS
     @objc func safeEmail() {
-        if let email = emailTextField.text {
-            user1Data.email = email
+        if checkAll.checkEmail(emailTextField.text) {
+            if let email = emailTextField.text {
+                user1Data.email = email
+            }
+        } else {
+            showAlert(alert: allAlerts.emailAlert)
         }
         dismiss(animated: true)
     }
     
+    func showAlert(alert: UIAlertController) {
+        present(alert, animated: true)
+    }
     //MARK: - CLOSE VIEW
     @objc func closeView() {
         dismiss(animated: true)

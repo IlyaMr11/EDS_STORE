@@ -104,7 +104,6 @@ class UserNameViewController: UIViewController {
                                      label.topAnchor.constraint(equalTo: nameView.topAnchor, constant: 5),
                                      label.heightAnchor.constraint(equalToConstant: 30),
                                      label.widthAnchor.constraint(equalToConstant: 100)])
-        
     }
     
     func setupCloseButton(_ button: UIButton) {
@@ -146,11 +145,19 @@ class UserNameViewController: UIViewController {
     
     //MARK: - TARGETS
     @objc func safeName() {
-        if let name = nameTextField.text {
-            user1Data.name = name
-            delegate?.didUpdateName(name)
+        if checkAll.checkUserName(nameTextField.text) {
+            if let name = nameTextField.text {
+                user1Data.name = name
+                delegate?.didUpdateName(name)
+                dismiss(animated: true)
+            }
+        } else {
+            showAlert(alert: allAlerts.userNameAlert)
         }
-        dismiss(animated: true)
+    }
+    
+    func showAlert(alert: UIAlertController) {
+        present(alert, animated: true)
     }
     
     //MARK: - CLOSE VIEW PRESS
