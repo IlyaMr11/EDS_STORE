@@ -100,12 +100,11 @@ class ProfileViewController: UIViewController {
     
     //MARK: - CHOOSE VIEW
     func setupViews() {
-        setupAllProfile()
-        /*if isSign {
+        if isSign {
             setupAllProfile()
         } else {
             setupNoUser()
-        }*/
+        }
     }
     
     //MARK: - SETUP BEFORE SIGN

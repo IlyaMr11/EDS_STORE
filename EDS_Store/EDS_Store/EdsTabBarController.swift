@@ -21,12 +21,12 @@ class EdsTabBarController: UITabBarController {
     }
     
     //MARK: - REG NAVIGATION CONTROL
-    func createRegistationNavigationController() -> UINavigationController {
+    func createProfileNavigationController() -> UINavigationController {
         let profileViewController = ProfileViewController()
-        let registrationNavigationController = UINavigationController(rootViewController: profileViewController)
-        registrationNavigationController.title = "Профиль"
-        registrationNavigationController.tabBarItem.image = UIImage(systemName: "person")
-        return registrationNavigationController
+        let profileNavigationController = UINavigationController(rootViewController: profileViewController)
+        profileNavigationController.title = "Профиль"
+        profileNavigationController.tabBarItem.image = UIImage(systemName: "person")
+        return profileNavigationController
     }
     
     //MARK: - BAG NAVIGATION CONTROL
@@ -60,7 +60,7 @@ class EdsTabBarController: UITabBarController {
     func createAllNavigationControllers() -> [UIViewController] {
         let homeNavigationController = createHomeNavigationController()
         let bagNavigationController = createBagNavigationController()
-        let registrationNavigationController = createRegistationNavigationController()
+        let registrationNavigationController = createProfileNavigationController()
         let bookViewController = createBookNavigationController()
         return [homeNavigationController, bookViewController, bagNavigationController, registrationNavigationController]
     }

@@ -11,17 +11,7 @@ class RegistrationViewController: UIViewController {
     //MARK: - CONSTANTS
     let buttonsRadius: CGFloat = 13
     
-    //regex for password
-    let pasRegex1 = try! NSRegularExpression(pattern: "[0-9]+")
-    let pasRegex2 = try! NSRegularExpression(pattern: "[a-z]+")
-    let pasRegex3 = try! NSRegularExpression(pattern: "[A-Z]+")
-    let pasRegex4 = try! NSRegularExpression(pattern: "[!+?.,#-]+")
-    
-    //regex for login
-    let loginRegex = try! NSRegularExpression(pattern: "[a-zA-z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+")
-    
-    //regex for usernanme
-    let userNameRegex = try! NSRegularExpression(pattern: "[a-zA-z0-9]{4,16}")
+    let alertsArray = [allAlerts.userNameAlert, allAlerts.emailAlert, allAlerts.passwordAlert, allAlerts.confirmPasswordAlert]
     
     //MARK: WELCOME LABEL
     private lazy var welcomLabel:  UILabel = {
@@ -176,84 +166,21 @@ class RegistrationViewController: UIViewController {
     //MARK: - CHECK ALL FIELDS
     
     func checkingAll() -> Bool {
-        let checkingArray = [checkUserName(userNameTextField.text),
-                             checkLogin(emailTextField.text),
-                             checkPassword(passwordTextField.text),
-                             checkEqualPasswords(passwordTextField.text, confinrmPasswordTextField.text)]
-        for b1 in checkingArray {
-            if !b1 { return  false}
-        }
-        return true
-    }
-    
-    func checkUserName(_ text: String?) -> Bool {
-        guard let text = text else { return false }
-        let range = NSRange(location: 0, length: text.utf16.count)
-        if !(userNameRegex.firstMatch(in: text, range: range) != nil) {
-            showUserNameALert()
-            return false
-        }
-        return true
-    }
-    
-    func checkEqualPasswords(_ password: String?, _ confirmPassword: String?) -> Bool {
-        guard let password = password, let confirmPassword = confirmPassword else { return false }
-        let b1 = password == confirmPassword
-        if !b1 {
-            showNoEqualAlert()
-        }
-        return b1
-    }
-    
-    func checkLogin(_ text: String?) -> Bool {
-        guard let text = text else { return false }
-        let range = NSRange(location: 0, length: text.utf16.count)
-        if !(loginRegex.firstMatch(in: text, range: range) != nil) {
-            showLoginALert()
-            return false
-        }
-        return true
-    }
-    
-    func checkPassword(_ text: String?) -> Bool {
-        guard let text = text else { return false }
-        let passordRegexes = [pasRegex1, pasRegex2, pasRegex3, pasRegex4]
-        let range = NSRange(location: 0, length: text.utf16.count)
-        for regex in passordRegexes {
-            if !(regex.firstMatch(in: text, options: [], range: range) != nil) {
-                showPassordAlert()
-                return false
+        let checkingArray = [checkAll.checkUserName(userNameTextField.text),
+                             checkAll.checkEmail(emailTextField.text),
+                             checkAll.checkPassword(passwordTextField.text),
+                             checkAll.checkEqualPasswords(passwordTextField.text, confinrmPasswordTextField.text)]
+        for i in 0..<checkingArray.count {
+            if !checkingArray[i] {
+                showAlert(alert: alertsArray[i])
+                return  false
             }
         }
         return true
     }
     
     //MARK: - SHOW ALERTS
-    func showPassordAlert() {
-        let alert = UIAlertController(title: "Неккоректный пароль", message: "Попробуйте новый пароль", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel)
-        alert.addAction(action)
-        present(alert, animated: true)
-    }
-    
-    func showLoginALert() {
-        let alert = UIAlertController(title: "Неверный логин", message: "Попробуйте другой логин", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel)
-        alert.addAction(action)
-        present(alert, animated: true)
-    }
-    
-    func showNoEqualAlert() {
-        let alert = UIAlertController(title: "Пароли не совпадают", message: "Попробуйте вести пароль снова", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel)
-        alert.addAction(action)
-        present(alert, animated: true)
-    }
-    
-    func showUserNameALert() {
-        let alert = UIAlertController(title: "Некорректное имя пользователя", message: "Придумайте новое имя", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel)
-        alert.addAction(action)
+    func showAlert(alert: UIAlertController) {
         present(alert, animated: true)
     }
     
