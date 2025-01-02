@@ -7,20 +7,27 @@
 import UIKit
 
 
+protocol MainProfileViewProtocol: AnyObject {
+    func success()
+    func failure()
+}
 
-class ProfileViewController: UIViewController {
+class MainProfileView: UIViewController {
+    
+    //var isSign = true
     
     //MARK: - CONSTANTS
     let viewControllers = [DeliveryViewController(), HistoryViewController()]
     let color1 = UIColor.init(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     let buttonRadius = CGFloat(15)
-    let cellsText = ["Ваши доставки", "Истрия заказов", "Настройки",
-                     "Тех поддержка", "Способы оплаты", "Возврат тоавра", "Смторели недавно"]
+    let cellsText = ["Ваши доставки", "История заказов",
+                     "Способы оплаты"]
     
-    
+    var presenter: MainProfilePresenterProtocol?
     //MARK: - LOGO
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logo7"))
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -188,7 +195,7 @@ class ProfileViewController: UIViewController {
 
 
 //MARK: - EXTENSION
-extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+extension MainProfileView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellsText.count
     }
@@ -212,4 +219,16 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         self.navigationController?.pushViewController(deliveryViewCntroller, animated: true)
     }
     
+}
+
+
+extension MainProfileView: MainProfileViewProtocol {
+    
+    func success() {
+        
+    }
+    
+    func failure() {
+        
+    }
 }

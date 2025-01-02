@@ -223,13 +223,15 @@ extension AddressViewController: UITextFieldDelegate, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         user1Data.address.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+        tableView.reloadData()
     }
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             user1Data.address.remove(at: indexPath.row)
             rowCounter -= 1
             tableView.deleteRows(at: [indexPath], with: .fade)
-            //tableView.reloadData()
+            tableView.reloadData()
         }
     }
     

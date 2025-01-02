@@ -9,6 +9,8 @@ import UIKit
 
 class PhoneViewController: UIViewController {
 
+    
+    
     //MARK: - PHONE VIEW
     private lazy var phoneView: UIView = {
         let view = UIView()
@@ -31,6 +33,7 @@ class PhoneViewController: UIViewController {
     private lazy var phoneTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите телефон"
+        textField.keyboardType = .phonePad
         if let phone = user1Data.phone {
             textField.text = phone
         }
@@ -73,8 +76,11 @@ class PhoneViewController: UIViewController {
         super.viewDidLoad()
         setupEmailView()
         setupAll()
-        // Do any additional setup after loading the view.
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
+
+    
     
     //MARK: - SETUP EMAIL VIEW
     func setupEmailView() {
@@ -101,7 +107,7 @@ class PhoneViewController: UIViewController {
         NSLayoutConstraint.activate([label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                                      label.topAnchor.constraint(equalTo: phoneView.topAnchor, constant: 5),
                                      label.heightAnchor.constraint(equalToConstant: 30),
-                                     label.widthAnchor.constraint(equalToConstant: 200)])
+                                     label.widthAnchor.constraint(equalToConstant: 240)])
     }
     
     func setupCloseButton(_ button: UIButton) {
@@ -140,10 +146,18 @@ class PhoneViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: phoneView.widthAnchor, multiplier: 0.15)])
     }
     
+    func showAlert(alert: UIAlertController) {
+        present(alert, animated: true, completion: nil)
+    }
+    
     //MARK: - TARGETS
     @objc func safePhone() {
         if let phone = phoneTextField.text {
-            user1Data.phone = phone
+            if checkAll.checkPhone(phone) {
+                user1Data.phone = phone
+            } else {
+                showAlert(alert: allAlerts.phoneAlert)
+            }
         }
         dismiss(animated: true)
     }
@@ -151,6 +165,11 @@ class PhoneViewController: UIViewController {
     //MARK: - CLOSE VIEW PRESS
     @objc func closeView() {
         dismiss(animated: true)
+    }
+    
+    @objc func dismissKeyboard() {
+        // Скрываем клавиатуру
+        phoneTextField.resignFirstResponder()
     }
 }
 
@@ -162,8 +181,9 @@ extension PhoneViewController: UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.text = "+7 "
+        textField.text = "+7"
     }
+    
 }
 
 

@@ -20,6 +20,8 @@ class Checker {
     //regex for usernanme
     let userNameRegex = try! NSRegularExpression(pattern: "[a-zA-z0-9]{4,16}")
     
+    //regex for phone
+    let phoneRegex = try! NSRegularExpression(pattern: "[+]7[0-9]{10}")
     
     func checkPassword(_ text: String?) -> Bool {
         guard let text = text else { return false }
@@ -51,6 +53,15 @@ class Checker {
         guard let text = text else { return false }
         let range = NSRange(location: 0, length: text.utf16.count)
         if !(userNameRegex.firstMatch(in: text, range: range) != nil) {
+            return false
+        }
+        return true
+    }
+    
+    func checkPhone(_ text: String?) -> Bool {
+        guard let text = text else { return false }
+        let range = NSRange(location: 0, length: text.utf16.count)
+        if !(phoneRegex.firstMatch(in: text, range: range) != nil) {
             return false
         }
         return true

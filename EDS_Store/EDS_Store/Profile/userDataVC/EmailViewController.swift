@@ -9,6 +9,7 @@ import UIKit
 
 class EmailViewController: UIViewController {
 
+    let gestureRecognizer = UITapGestureRecognizer()
     //MARK: - EMAIL VIEW
     private lazy var emailView: UIView = {
         let view = UIView()
@@ -31,6 +32,7 @@ class EmailViewController: UIViewController {
     private lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Введите почту"
+        textField.keyboardType = .emailAddress
         if let email = user1Data.email {
             textField.text = email
         }
@@ -161,6 +163,10 @@ class EmailViewController: UIViewController {
     @objc func closeView() {
         dismiss(animated: true)
     }
+    
+    @objc func offKeyBoard() {
+        emailTextField.resignFirstResponder()
+    }
 }
 
 //MARK: - EXTENSIONS
@@ -168,5 +174,9 @@ extension EmailViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        textField.resignFirstResponder()
     }
 }

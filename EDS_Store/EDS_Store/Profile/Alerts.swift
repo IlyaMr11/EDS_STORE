@@ -11,7 +11,7 @@ class Alerts {
     
     lazy var phoneAlert: UIAlertController = {
         let alert = UIAlertController(title: "Некорректный телефон", message: "Введите телефон еше раз", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .cancel)
+        let action = UIAlertAction(title: "OK", style: .destructive)
         alert.addAction(action)
         return alert
     }()
