@@ -77,7 +77,7 @@ class   SignViewController: UIViewController {
         button.backgroundColor = .black
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = buttonsRadius
-        button.addTarget(self, action: #selector(toProfile), for: .touchUpInside)
+        //button.addTarget(self, action: #selector(toProfile), for: .touchUpInside)
         return button
     }()
     
@@ -187,13 +187,13 @@ class   SignViewController: UIViewController {
         self.navigationController?.pushViewController(registrationViewController, animated: true)
     }
     
-    @objc func toProfile() {
-        isSign = true
-        if checkAllFields() {
-            let profileViewController = ProfileViewController()
-            self.navigationController?.pushViewController(profileViewController, animated: true)
-        }
-    }
+//    @objc func toProfile() {
+//        isSign = true
+//        if checkAllFields() {
+//            let profileViewController = ProfileViewController()
+//            self.navigationController?.pushViewController(profileViewController, animated: true)
+//        }
+//    }
     
     func checkAllFields() -> Bool {
         if !checkAll.checkEmail(loginTextField.text) {

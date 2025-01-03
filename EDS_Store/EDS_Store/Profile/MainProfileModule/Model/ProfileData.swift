@@ -8,11 +8,11 @@
 import Foundation
 
 class MainProfileModel {
-    let getNetworkService: GetDataNetworkProtocol
+    let networkService: ProfileNetworkServiceProtocol
     var name: String?
     
-    init(getNetworkService: GetDataNetworkProtocol) {
-        self.getNetworkService = getNetworkService
+    init(networkService: ProfileNetworkServiceProtocol) {
+        self.networkService = networkService
     }
     
 }

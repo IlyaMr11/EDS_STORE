@@ -17,17 +17,27 @@ class AppCordinator: CordinatorProtocol {
     var tabBarController: UITabBarController?
     var window: UIWindow?
 
-    init(tabBarController: UITabBarController, window: UIWindow) {
-        self.tabBarController = tabBarController
+    init(window: UIWindow?) {
+        self.tabBarController = UITabBarController()
         self.window = window
     }
     
     func startCordinator() {
-    
+        let profileRouter = createProfileModule()
+        if let profileNav = profileRouter.navigationController {
+            tabBarController?.viewControllers = [profileNav]
+        }
+        //MARK: - WARNING
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
     }
     
-    func createProfileMoudule() {
-        
+    func createProfileModule() -> ProfileRouterProtocol {
+        let profileNavigationController = UINavigationController()
+        let profileAssemblyBuilder = ProfileAssemblyBuilder()
+        let router = ProfileRouter(navigationController: profileNavigationController, profileAssemblyBuilder: profileAssemblyBuilder)
+        router.initinal()
+        return router
     }
     
 }

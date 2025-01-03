@@ -14,46 +14,54 @@ protocol ProfileRouterProtocol {
     func showUserInfoModule()
     func showDeliveryModule()
     func showHistoryModule()
+    var navigationController: UINavigationController? { get }
+    var AssemblyBuilder: ProfileAssemblyBuilderProtocol? { get }
+    func initinal()
+    func popToRoot()
 }
 
-class ProfileRouter: RouterProtocol, ProfileRouterProtocol {
+class ProfileRouter: ProfileRouterProtocol {
     
     
-    var AssemblyBuilder: AssemblyBuilderProtocol?
-    var navigationController: UINavigationController
+    var AssemblyBuilder: ProfileAssemblyBuilderProtocol?
+    var navigationController: UINavigationController?
     
     var profileAssemblyBuilder: ProfileAssemblyBuilderProtocol?
     
-    init(naviagationControllet: UINavigationController, profileAssemblyBuilder: ProfileAssemblyBuilderProtocol) {
-        self.navigationController = naviagationControllet
+    init(navigationController: UINavigationController, profileAssemblyBuilder: ProfileAssemblyBuilderProtocol) {
+        self.navigationController = navigationController
         self.profileAssemblyBuilder = profileAssemblyBuilder
     }
     
-    func inititalProtocol() {
+    func initinal() {
+        if let navigationController = navigationController {
+            guard let mainProfileView = profileAssemblyBuilder?.createMainProfileModule(router: self) else {return}
+            navigationController.viewControllers = [mainProfileView]
+        }
     }
     
     func popToRoot() {
-        <#code#>
+        
     }
     
     func showSignInModule() {
-        <#code#>
+        
     }
     
     func showRegistrationModule() {
-        <#code#>
+        
     }
     
     func showUserInfoModule() {
-        <#code#>
+        
     }
     
     func showDeliveryModule() {
-        <#code#>
+        
     }
     
     func showHistoryModule() {
-        <#code#>
+        
     }
     
 }

@@ -4,42 +4,45 @@
 //
 //  Created by Илья Морозов on 02.01.2025.
 //
+import UIKit
 
 protocol ProfileAssemblyBuilderProtocol {
+    func createMainProfileModule(router: ProfileRouterProtocol) -> UIViewController
     func createHistoryMoudle(router: ProfileRouterProtocol)
-    func createDeliveryModule(router: RouterProtocol)
-    func createSignInModule(router: RouterProtocol)
-    func createRegistrationModule(router: RouterProtocol)
-    func createUserInfoModule(router: RouterProtocol)
+    func createDeliveryModule(router: ProfileRouterProtocol)
+    func createSignInModule(router: ProfileRouterProtocol)
+    func createRegistrationModule(router: ProfileRouterProtocol)
+    func createUserInfoModule(router: ProfileRouterProtocol)
 }
 
-class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol, AssemblyBuilderProtocol {
-    
-    func createMainProfileModule(router: any RouterProtocol) -> ViewController {
+class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
+
+    func createMainProfileModule(router: any ProfileRouterProtocol) -> UIViewController {
         let view = MainProfileView()
-        let getNetworkService = GetNetworkService()
-        let presenter = MainProfilePresenter(view: view, router: router, networkService:  getNetworkService)
+        let profileNetworkService = ProfileNetworkService()
+        let presenter = MainProfilePresenter(view: view, router: router, networkService:  profileNetworkService)
         view.presenter = presenter
+        return view
     }
     
     func createHistoryMoudle(router: ProfileRouterProtocol) {
-        <#code#>
+        
     }
     
-    func createDeliveryModule(router: RouterProtocol) {
-        <#code#>
+    func createDeliveryModule(router: any ProfileRouterProtocol) {
+        
     }
     
-    func createSignInModule(router: RouterProtocol) {
-        <#code#>
+    func createSignInModule(router: any ProfileRouterProtocol) {
+        
     }
     
-    func createRegistrationModule(router: RouterProtocol) {
-        <#code#>
+    func createRegistrationModule(router: any ProfileRouterProtocol) {
+        
     }
     
-    func createUserInfoModule(router: RouterProtocol) {
-        <#code#>
+    func createUserInfoModule(router: any ProfileRouterProtocol) {
+        
     }
 
     
