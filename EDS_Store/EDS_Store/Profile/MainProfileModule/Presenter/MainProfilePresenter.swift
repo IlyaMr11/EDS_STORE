@@ -11,6 +11,7 @@ protocol MainProfilePresenterProtocol {
     init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, networkService: ProfileNetworkServiceProtocol)
     func tapOnCell(data: AnyObject)
     func tapOnUserInfo()
+    func toSignIn()
 }
 
 class MainProfilePresenter: MainProfilePresenterProtocol {
@@ -19,7 +20,7 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
     weak var view: MainProfileViewProtocol?
     let networkService: ProfileNetworkServiceProtocol!
     
-    required init(view: any MainProfileViewProtocol, router: any ProfileRouterProtocol, networkService:  ProfileNetworkServiceProtocol) {
+    required init(view: MainProfileViewProtocol, router: any ProfileRouterProtocol, networkService:  ProfileNetworkServiceProtocol) {
         self.view = view
         self.router = router
         self.networkService = networkService
@@ -33,5 +34,8 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
         
     }
     
+    func toSignIn() {
+        router?.showSignInModule()
+    }
     
 }

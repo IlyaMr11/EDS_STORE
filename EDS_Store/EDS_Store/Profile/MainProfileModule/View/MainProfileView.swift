@@ -183,8 +183,7 @@ class MainProfileView: UIViewController {
 
     //MARK: - TARGETS
     @objc func toSignVC() {
-        let SignViewController = SignViewController()
-        navigationController?.pushViewController(SignViewController, animated: true)
+        presenter?.toSignIn()
     }
     
     @objc func userInfoVC() {

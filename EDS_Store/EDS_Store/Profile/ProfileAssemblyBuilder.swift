@@ -10,7 +10,7 @@ protocol ProfileAssemblyBuilderProtocol {
     func createMainProfileModule(router: ProfileRouterProtocol) -> UIViewController
     func createHistoryMoudle(router: ProfileRouterProtocol)
     func createDeliveryModule(router: ProfileRouterProtocol)
-    func createSignInModule(router: ProfileRouterProtocol)
+    func createSignInModule(router: ProfileRouterProtocol) -> UIViewController
     func createRegistrationModule(router: ProfileRouterProtocol)
     func createUserInfoModule(router: ProfileRouterProtocol)
 }
@@ -33,8 +33,12 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
         
     }
     
-    func createSignInModule(router: any ProfileRouterProtocol) {
-        
+    func createSignInModule(router: any ProfileRouterProtocol) -> UIViewController {
+        let view = SignInView()
+        let model = SignInModel()
+        let presenter = SignInPresenter(view: view , router: router, model: model)
+        view.presenter = presenter
+        return view
     }
     
     func createRegistrationModule(router: any ProfileRouterProtocol) {

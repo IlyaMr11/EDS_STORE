@@ -45,7 +45,10 @@ class ProfileRouter: ProfileRouterProtocol {
     }
     
     func showSignInModule() {
-        
+        if let navigationController = navigationController {
+            guard let signInView = profileAssemblyBuilder?.createSignInModule(router: self) else {return}
+            navigationController.pushViewController(signInView, animated: true)
+        }
     }
     
     func showRegistrationModule() {

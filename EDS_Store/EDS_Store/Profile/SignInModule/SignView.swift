@@ -7,12 +7,17 @@
 
 import UIKit
 
-class   SignViewController: UIViewController {
+protocol SignInViewProtocol: AnyObject {
+}
+
+class SignInView: UIViewController {
     
     //MARK: - CONSTANTS
     //radiuses
     let borderRadius = CGFloat(30)
     let buttonsRadius = CGFloat(15)
+    
+    var presenter: SignInPresenterProtocol?
     
     //MARK: - LOGO
     private lazy var logoImageView: UIImageView = {
@@ -213,10 +218,14 @@ class   SignViewController: UIViewController {
 }
 
 //EXTENSION
-extension SignViewController: UITextFieldDelegate {
+extension SignInView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+}
+
+extension SignInView: SignInViewProtocol {
     
 }
