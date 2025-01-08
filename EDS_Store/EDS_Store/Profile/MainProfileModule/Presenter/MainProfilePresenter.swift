@@ -31,7 +31,7 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
     }
     
     func tapOnUserInfo() {
-        
+        router?.showUserInfoModule()
     }
     
     func toSignIn() {

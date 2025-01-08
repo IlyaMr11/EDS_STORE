@@ -187,8 +187,7 @@ class MainProfileView: UIViewController {
     }
     
     @objc func userInfoVC() {
-        let userInfoViewController = UserInfoViewController()
-        navigationController?.pushViewController(userInfoViewController, animated: true)
+        presenter?.tapOnUserInfo()
     }
 }
 

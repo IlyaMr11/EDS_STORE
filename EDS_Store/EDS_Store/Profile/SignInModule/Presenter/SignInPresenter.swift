@@ -25,11 +25,11 @@ class SignInPresenter: SignInPresenterProtocol {
     }
     
     func toRegistation() {
-        
+        router?.showRegistrationModule()
     }
     
     func toMainProfile() {
-        
+        router?.initinal()
     }
     
 }

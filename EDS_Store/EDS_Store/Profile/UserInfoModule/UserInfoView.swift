@@ -7,13 +7,19 @@
 
 import UIKit
 
-class UserInfoViewController: UIViewController {
+protocol UserInfoViewProtocol: AnyObject {
+    func seccess()
+    func failure()
+}
+class UserInfoView: UIViewController {
 
     //MARK: - CONSTANTS
     let color1 = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 0.95)
     let color2 = UIColor(red: 0.90, green: 0.90, blue: 0.90, alpha: 0.90)
-    let userCellData = ["Имя", "Пол", "Номер телефона", "Почта", "Адреса", "Уведомления"]
+    let userCellData = ["Имя", "Пол", "Номер телефона", "Адреса", "Уведомления"]
     let identifier = "userCell"
+    
+    var presenter: UserInfoPresenterProtocol?
     
     //MARK: - USER PHOTO VIEW
     private lazy var userPhotoImageView: UIImageView = {
@@ -100,7 +106,7 @@ class UserInfoViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
-            imageView.heightAnchor.constraint(equalToConstant: 120),
+            imageView.heightAnchor.constraint(equalToConstant: 180),
             imageView.widthAnchor.constraint(equalToConstant: 170),
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor)])
     }
@@ -118,7 +124,7 @@ class UserInfoViewController: UIViewController {
 }
 
 //MARK: - EXTENSIONS
-extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, UpdateUserDataDelegate {
+extension UserInfoView: UITableViewDataSource, UITableViewDelegate, UpdateUserDataDelegate {
     func didUpdateSex(_ data: String?) {
         //
     }
@@ -130,7 +136,7 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        6
+        5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -149,37 +155,23 @@ extension UserInfoViewController: UITableViewDataSource, UITableViewDelegate, Up
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
-        
-        switch row {
-            case 0:
-            let vc = UserNameViewController()
-            vc.delegate = self
-            vc.modalPresentationStyle = .pageSheet
-            present(vc, animated: true)
-        case 1:
-            let vc = UserSexViewController()
-            vc.delegate = self
-            vc.modalPresentationStyle = .pageSheet
-            present(vc, animated: true)
-        case 2:
-            let vc = PhoneViewController()
-            vc.modalPresentationStyle = .pageSheet
-            present(vc, animated: true, completion: nil)
-        case 3:
-            let vc = EmailViewController()
+        let vc = presenter?.tapOnCell(index: row)
+        if let vc = vc {
             vc.modalPresentationStyle = .pageSheet
             present(vc, animated: true , completion: nil)
-        case 4:
-            let vc = AddressViewController()
-            vc.modalPresentationStyle = .pageSheet
-            present(vc, animated: true, completion: nil)
-        case 5:
-            let vc = NotificationViewController()
-            vc.modalPresentationStyle = .pageSheet
-            present(vc, animated: true , completion: nil)
-        default:
-            print("trouble")
         }
     }
+    
+}
+
+extension UserInfoView: UserInfoViewProtocol {
+    func seccess() {
+        
+    }
+    
+    func failure() {
+        
+    }
+    
     
 }

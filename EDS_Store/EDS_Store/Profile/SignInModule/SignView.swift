@@ -82,7 +82,7 @@ class SignInView: UIViewController {
         button.backgroundColor = .black
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = buttonsRadius
-        //button.addTarget(self, action: #selector(toProfile), for: .touchUpInside)
+        button.addTarget(self, action: #selector(toProfile), for: .touchUpInside)
         return button
     }()
     
@@ -188,17 +188,15 @@ class SignInView: UIViewController {
     
     //MARK: - TARGETS
     @objc func toRegistration() {
-        let registrationViewController = RegistrationViewController()
-        self.navigationController?.pushViewController(registrationViewController, animated: true)
+        self.presenter?.toRegistation()
     }
     
-//    @objc func toProfile() {
-//        isSign = true
-//        if checkAllFields() {
-//            let profileViewController = ProfileViewController()
-//            self.navigationController?.pushViewController(profileViewController, animated: true)
-//        }
-//    }
+    @objc func toProfile() {
+        isSign = true
+        if checkAllFields() {
+            presenter?.toMainProfile()
+        }
+    }
     
     func checkAllFields() -> Bool {
         if !checkAll.checkEmail(loginTextField.text) {

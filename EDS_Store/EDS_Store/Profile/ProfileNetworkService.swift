@@ -12,6 +12,7 @@ protocol ProfileNetworkServiceProtocol {
     func getUserData()
     func setUserData()
 }
+
 class ProfileNetworkService:  ProfileNetworkServiceProtocol {
     func getUserData() {
         

@@ -8,8 +8,13 @@
 import Foundation
 
 protocol SignInModelProtocol {
-    
+    func isUserDefine() -> Bool
 }
+
 class SignInModel: SignInModelProtocol {
+    func isUserDefine() -> Bool {
+        return true
+    }
+    
     
 }

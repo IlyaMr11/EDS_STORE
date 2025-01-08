@@ -9,6 +9,7 @@ import UIKit
 
 
 protocol ProfileRouterProtocol {
+    func popView()
     func showSignInModule()
     func showRegistrationModule()
     func showUserInfoModule()
@@ -44,6 +45,11 @@ class ProfileRouter: ProfileRouterProtocol {
         
     }
     
+    func popView() {
+        if let navigationController = navigationController {
+            navigationController.popViewController(animated: true)
+        }
+    }
     func showSignInModule() {
         if let navigationController = navigationController {
             guard let signInView = profileAssemblyBuilder?.createSignInModule(router: self) else {return}
@@ -52,11 +58,17 @@ class ProfileRouter: ProfileRouterProtocol {
     }
     
     func showRegistrationModule() {
-        
+        if let navigationController = navigationController {
+            guard let regstrationView = profileAssemblyBuilder?.createRegistrationModule(router: self) else {return}
+            navigationController.pushViewController(regstrationView, animated: true)
+        }
     }
     
     func showUserInfoModule() {
-        
+        if let navigationController = navigationController {
+            guard let userInfoView = profileAssemblyBuilder?.createUserInfoModule(router: self) else {return}
+            navigationController.pushViewController(userInfoView, animated: true)
+        }
     }
     
     func showDeliveryModule() {

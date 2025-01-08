@@ -6,12 +6,18 @@
 //
 import UIKit
 
-class RegistrationViewController: UIViewController {
+protocol RegistrationViewProtocol: AnyObject {
+    
+}
+
+class RegistrationView: UIViewController {
     
     //MARK: - CONSTANTS
     let buttonsRadius: CGFloat = 13
     
     let alertsArray = [allAlerts.userNameAlert, allAlerts.emailAlert, allAlerts.passwordAlert, allAlerts.confirmPasswordAlert]
+    
+    var presenter: RegistrationPresenterProtocol?
     
     //MARK: WELCOME LABEL
     private lazy var welcomLabel:  UILabel = {
@@ -187,10 +193,14 @@ class RegistrationViewController: UIViewController {
 }
 
 //MARK: - EXTENSION
-extension RegistrationViewController: UITextFieldDelegate {
+extension RegistrationView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+    
+}
+
+extension RegistrationView: RegistrationViewProtocol {
     
 }
