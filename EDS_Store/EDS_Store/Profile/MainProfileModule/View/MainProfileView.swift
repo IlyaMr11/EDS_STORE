@@ -17,7 +17,7 @@ class MainProfileView: UIViewController {
     //var isSign = true
     
     //MARK: - CONSTANTS
-    let viewControllers = [DeliveryViewController(), HistoryViewController()]
+    
     let color1 = UIColor.init(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     let buttonRadius = CGFloat(15)
     let cellsText = ["Ваши доставки", "История заказов",
@@ -212,9 +212,8 @@ extension MainProfileView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let deliveryViewCntroller = viewControllers[indexPath.row]
-        
-        self.navigationController?.pushViewController(deliveryViewCntroller, animated: true)
+        let index = indexPath.row
+        presenter?.tapOnCell(index: index)
     }
     
 }

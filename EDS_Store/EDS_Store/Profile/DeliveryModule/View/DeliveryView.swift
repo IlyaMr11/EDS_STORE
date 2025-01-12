@@ -7,12 +7,19 @@
 
 import UIKit
 
-class DeliveryViewController: UIViewController {
+protocol DeliveryViewProtocol: AnyObject {
+    func success()
+    func failure()
+}
+
+class DeliveryView: UIViewController {
     
     //MARK: - CONSTANTS
     let viewRadius = CGFloat(20)
     let buttonRadius = CGFloat(15)
     let color1 = UIColor.init(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.5)
+    
+    var presenter: DeliveryPresenterProtocol?
     
     //MARK: - WARNING LABEL
     private lazy var warningLabel: UILabel = {
@@ -126,4 +133,16 @@ class DeliveryViewController: UIViewController {
     @objc func toHomeVC() {
         self.tabBarController?.selectedIndex = 0
     }
+}
+
+extension DeliveryView: DeliveryViewProtocol {
+    func success() {
+        
+    }
+    
+    func failure() {
+        
+    }
+    
+    
 }

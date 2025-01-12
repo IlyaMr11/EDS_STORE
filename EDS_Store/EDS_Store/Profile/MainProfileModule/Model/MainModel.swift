@@ -7,11 +7,15 @@
 
 import Foundation
 
-class MainProfileModel {
+protocol MainProfileModelProtocol {
+    init (networkService: ProfileNetworkServiceProtocol)
+}
+
+class MainProfileModel: MainProfileModelProtocol {
     let networkService: ProfileNetworkServiceProtocol
     var name: String?
     
-    init(networkService: ProfileNetworkServiceProtocol) {
+    required init(networkService: ProfileNetworkServiceProtocol) {
         self.networkService = networkService
     }
     

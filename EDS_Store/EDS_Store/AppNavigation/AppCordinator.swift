@@ -23,9 +23,11 @@ class AppCordinator: CordinatorProtocol {
     }
     
     func startCordinator() {
+        tabBarController?.tabBar.tintColor = .orange
         let profileRouter = createProfileModule()
         if let profileNav = profileRouter.navigationController {
             tabBarController?.viewControllers = [profileNav]
+            profileNav.tabBarItem.image = UIImage(systemName: "person.circle")
         }
         //MARK: - WARNING
         window?.rootViewController = tabBarController

@@ -192,9 +192,8 @@ class SignInView: UIViewController {
     }
     
     @objc func toProfile() {
-        isSign = true
-        if checkAllFields() {
-            presenter?.toMainProfile()
+        if let login = loginTextField.text, let password = passwordTextField.text {
+            presenter?.toMainProfile(login: login, password: password)
         }
     }
     

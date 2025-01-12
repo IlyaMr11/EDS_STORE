@@ -8,8 +8,8 @@
 import UIKit
 
 protocol MainProfilePresenterProtocol {
-    init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, networkService: ProfileNetworkServiceProtocol)
-    func tapOnCell(data: AnyObject)
+    init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, model: MainProfileModel)
+    func tapOnCell(index: Int)
     func tapOnUserInfo()
     func toSignIn()
 }
@@ -18,16 +18,23 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
     
     var router: ProfileRouterProtocol?
     weak var view: MainProfileViewProtocol?
-    let networkService: ProfileNetworkServiceProtocol!
+    let model: MainProfileModel?
     
-    required init(view: MainProfileViewProtocol, router: any ProfileRouterProtocol, networkService:  ProfileNetworkServiceProtocol) {
+    required init(view: MainProfileViewProtocol, router: any ProfileRouterProtocol, model:  MainProfileModel) {
         self.view = view
         self.router = router
-        self.networkService = networkService
+        self.model = model
     }
     
-    func tapOnCell(data: AnyObject) {
-        
+    func tapOnCell(index: Int) {
+        switch index {
+        case 0:
+            router?.showHistoryModule()
+        case 1:
+            router?.showDeliveryModule()
+        default:
+            print("empty")
+        }
     }
     
     func tapOnUserInfo() {

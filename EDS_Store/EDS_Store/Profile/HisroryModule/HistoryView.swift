@@ -7,8 +7,15 @@
 
 import UIKit
 
-class HistoryViewController: UIViewController {
+protocol HistoryViewProtocol: AnyObject {
+    func success()
+    func failure()
+}
 
+class HistoryView: UIViewController {
+
+    var presenter: HistoryPresenterProtocol?
+    
     //MARK: - CONSTANTS
     let buttonRadius = CGFloat(15)
     let viewRadius = CGFloat(25)
@@ -127,4 +134,15 @@ class HistoryViewController: UIViewController {
     @objc func toHomeVC() {
         self.tabBarController?.selectedIndex = 0
     }
+}
+
+extension HistoryView: HistoryViewProtocol {
+    func success() {
+        
+    }
+    
+    func failure() {
+        
+    }
+    
 }

@@ -13,24 +13,9 @@ protocol UserInfoModelProtocol {
 
 class UserInfoModel: UserInfoModelProtocol {
     func tapOnCell(index: Int) -> UIViewController {
-        switch index {
-            case 0:
-            let vc = UserNameViewController()
-            return vc
-        case 1:
-            let vc = UserSexViewController()
-            return vc
-        case 2:
-            let vc = PhoneViewController()
-            return vc
-        case 3:
-            let vc = AddressViewController()
-            return vc
-        case 4:
-            let vc = NotificationViewController()
-            return vc
-        default:
-            return UIViewController()
-        }
+        let viewArray = [UserNameViewController(), UserSexViewController(), PhoneViewController(), AddressViewController(), NotificationViewController()]
+        return viewArray[index]
+            
+        
     }
 }

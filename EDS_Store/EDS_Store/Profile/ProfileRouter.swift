@@ -72,11 +72,17 @@ class ProfileRouter: ProfileRouterProtocol {
     }
     
     func showDeliveryModule() {
-        
+        if let navigationController = navigationController {
+            guard let deliveryView = profileAssemblyBuilder?.createDeliveryModule(router: self) else {return}
+            navigationController.pushViewController(deliveryView, animated: true)
+        }
     }
     
     func showHistoryModule() {
-        
+        if let navigationController = navigationController {
+            guard let historyView = profileAssemblyBuilder?.createHistoryMoudle(router: self) else {return}
+            navigationController.pushViewController(historyView, animated: true)
+        }
     }
     
 }

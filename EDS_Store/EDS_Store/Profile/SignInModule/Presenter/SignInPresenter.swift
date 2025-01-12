@@ -10,7 +10,7 @@ import UIKit
 protocol SignInPresenterProtocol {
     init(view: SignInViewProtocol, router: ProfileRouterProtocol, model: SignInModelProtocol)
     func toRegistation()
-    func toMainProfile()
+    func toMainProfile(login: String, password: String)
 }
 
 class SignInPresenter: SignInPresenterProtocol {
@@ -28,8 +28,11 @@ class SignInPresenter: SignInPresenterProtocol {
         router?.showRegistrationModule()
     }
     
-    func toMainProfile() {
-        router?.initinal()
+    func toMainProfile(login: String, password: String) {
+        if model.isUserDefine(login: login, password: password) {
+            router?.initinal()
+        }
+        
     }
     
 }
