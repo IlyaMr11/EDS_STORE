@@ -29,9 +29,18 @@ class SignInPresenter: SignInPresenterProtocol {
     }
     
     func toMainProfile(login: String, password: String) {
-        if model.isUserDefine(login: login, password: password) {
-            router?.initinal()
+        DispatchQueue.global().async {
+            let (bool, text) = self.model.isUserDefine(login: login, password: password)
+            print(bool)
+            if bool {
+                DispatchQueue.main.async {
+                    isSign = true
+                    self.router?.initinal()
+                }
+                
+            }
         }
+        
         
     }
     

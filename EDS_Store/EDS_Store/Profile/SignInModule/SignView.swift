@@ -69,7 +69,7 @@ class SignInView: UIViewController {
         textField.layer.cornerRadius = buttonsRadius
         textField.layer.borderWidth = 1.5
         textField.layer.borderColor = UIColor.orange.cgColor
-        textField.isSecureTextEntry = true
+        //textField.isSecureTextEntry = true
         textField.clearButtonMode = .whileEditing
         textField.delegate = self
         return textField

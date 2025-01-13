@@ -9,7 +9,7 @@ import Foundation
 
 protocol SignInModelProtocol {
     init(networkService: ProfileNetworkServiceProtocol)
-    func isUserDefine(login: String, password: String) -> Bool
+    func isUserDefine(login: String, password: String)  -> (Bool, String)
 }
 
 class SignInModel: SignInModelProtocol {
@@ -19,18 +19,21 @@ class SignInModel: SignInModelProtocol {
         self.networkService = networkService
     }
     
-    func isUserDefine(login: String, password: String) -> Bool {
+    func isUserDefine(login: String, password: String) -> (Bool, String) {
         var result: Bool = false
+        var message = ""
+        let group = DispatchGroup()
+        group.enter()
+        print("hi")
         networkService.isUserExist(login: login, password: password, completion: { (bool, text) in
-            if !bool && text != nil {
-                print(text!)
-            } else {
-                result = true
+            if !bool {
+                message = text ?? "error"
             }
+            result = bool
+            group.leave()
         })
-        return result
-        
+        group.wait()
+        return (result, message)
     }
-    
     
 }

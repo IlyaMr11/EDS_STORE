@@ -29,12 +29,14 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
     
     func isUserExist(login: String, password: String, completion: @escaping (Bool, String?) -> Void) {
         let db = configureFirebase()
-        db.collection("User").whereField("login", isEqualTo: login).getDocuments { (querySnapshot, error) in
+        print("h")
+        db.collection("Users").whereField("login", isEqualTo: login).getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error - \(error.localizedDescription)")
                 completion(false, "Error fetching user")
                 return
             }
+            print("g")
             
             guard let documents = querySnapshot?.documents, !documents.isEmpty else {
                 print("User not found")
@@ -46,9 +48,13 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
             let pass = data["password"] as? String ?? ""
             
             if pass == password {
+                print("correct")
                 completion(true, nil)
+                return
             } else {
+                print("wrong password")
                 completion(false, "wrong password")
+                return
             }
         }
     }
