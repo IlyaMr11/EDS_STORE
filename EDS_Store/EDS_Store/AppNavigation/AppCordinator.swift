@@ -25,9 +25,9 @@ class AppCordinator: CordinatorProtocol {
     func startCordinator() {
         tabBarController?.tabBar.tintColor = .orange
         let profileRouter = createProfileModule()
-        if let profileNav = profileRouter.navigationController {
-            tabBarController?.viewControllers = [profileNav]
-            profileNav.tabBarItem.image = UIImage(systemName: "person.circle")
+        let homeRouter = createHomeModule()
+        if let profileNav = profileRouter.navigationController, let homeNav = homeRouter.navigationController {
+            tabBarController?.viewControllers = [homeNav, profileNav]
         }
         //MARK: - WARNING
         window?.rootViewController = tabBarController
@@ -36,10 +36,19 @@ class AppCordinator: CordinatorProtocol {
     
     func createProfileModule() -> ProfileRouterProtocol {
         let profileNavigationController = UINavigationController()
+        profileNavigationController.tabBarItem.image = UIImage(systemName: "person.circle")
         let profileAssemblyBuilder = ProfileAssemblyBuilder()
         let router = ProfileRouter(navigationController: profileNavigationController, profileAssemblyBuilder: profileAssemblyBuilder)
         router.initinal()
         return router
     }
     
+    func createHomeModule() -> HomeRouterProtocol {
+        let homeNavigationController = UINavigationController()
+        homeNavigationController.tabBarItem.image = UIImage(systemName: "house")
+        let homeAssemblyBuilder = HomeAssemblyBuilder()
+        let router = HomeRouter(navigationController: homeNavigationController, assemblyBuilder: homeAssemblyBuilder)
+        router.initinal()
+        return router
+    }
 }

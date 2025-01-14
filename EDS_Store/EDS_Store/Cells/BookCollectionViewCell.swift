@@ -138,7 +138,6 @@ class BookCollectionViewCell: UICollectionViewCell {
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-                                    
     }
     
     //MARK: - ON WEBSITE

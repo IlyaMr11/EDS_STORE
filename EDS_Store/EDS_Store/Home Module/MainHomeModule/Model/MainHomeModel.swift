@@ -10,3 +10,7 @@ import Foundation
 protocol MainHomeModelProtocol {
     
 }
+
+class MainHomeModel: MainHomeModelProtocol {
+    
+}

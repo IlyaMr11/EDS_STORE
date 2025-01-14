@@ -8,12 +8,12 @@
 import Foundation
 
 protocol MainHomePresenterProtocol {
-    init(model: MainHomeModelProtocol, router: HomeRouterProtocol, view: MainHomeViewProtocol)
+    init(view: MainHomeViewProtocol, router: HomeRouterProtocol, model:  MainHomeModelProtocol)
     
 }
 
 class MainHomePresenter: MainHomePresenterProtocol {
-    required init(model: any MainHomeModelProtocol, router: any HomeRouterProtocol, view: any MainHomeViewProtocol) {
+    required init(view: any MainHomeViewProtocol, router: any HomeRouterProtocol, model: any MainHomeModelProtocol) {
         self.model = model
         self.router = router
         self.view = view
