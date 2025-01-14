@@ -7,10 +7,11 @@
 
 import UIKit
 
-protocol SignInViewProtocol: AnyObject {
+protocol SignInViewProtocol: UIViewController {
+    func showAlert(_ alert: UIAlertController)
 }
 
-class SignInView: UIViewController {
+class SignInView: UIViewController, SignInViewProtocol {
     
     //MARK: - CONSTANTS
     //radiuses
@@ -197,21 +198,23 @@ class SignInView: UIViewController {
         }
     }
     
+    func showAlert(_ alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
     func checkAllFields() -> Bool {
         if !checkAll.checkEmail(loginTextField.text) {
-            showAlert(alert: allAlerts.emailAlert)
+            showAlert(allAlerts.emailAlert)
             return false
         } else if !checkAll.checkPassword(passwordTextField.text) {
-            showAlert(alert: allAlerts.passwordAlert)
+            showAlert(allAlerts.passwordAlert)
             return false
         }
         return true
     }
     
     //MARK: - SHOW ALERTS
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
-    }
+    
 }
 
 //EXTENSION
@@ -223,6 +226,3 @@ extension SignInView: UITextFieldDelegate {
     
 }
 
-extension SignInView: SignInViewProtocol {
-    
-}

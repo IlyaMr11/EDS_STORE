@@ -17,7 +17,7 @@ class SignInPresenter: SignInPresenterProtocol {
     var router: ProfileRouterProtocol?
     weak var view: SignInViewProtocol?
     let model: SignInModelProtocol!
-   
+    
     required init(view: any SignInViewProtocol, router: any ProfileRouterProtocol, model: SignInModelProtocol) {
         self.view = view
         self.router = router
@@ -37,7 +37,24 @@ class SignInPresenter: SignInPresenterProtocol {
                     isSign = true
                     self.router?.initinal()
                 }
-                
+            } else {
+                switch text {
+                case "Wrong password":
+                    DispatchQueue.main.async {
+                        self.view?.showAlert(allAlerts.wrongPasswordAlert)
+                    }
+                    break
+                case "User not found":
+                    DispatchQueue.main.async {
+                        self.view?.showAlert(allAlerts.noUserAlert)
+                    }
+                case "Server error":
+                    DispatchQueue.main.async {
+                        self.view?.showAlert(allAlerts.serverErrorAlert)
+                    }
+                default:
+                    print("error")
+                }
             }
         }
         

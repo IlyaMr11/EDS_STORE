@@ -8,6 +8,23 @@
 import UIKit
 
 class Alerts {
+    lazy var serverErrorAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Ошибка сервера", message: "Проверьте подключение к интернету", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        return alert
+    }()
+    
+    lazy var noUserAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Неверный логин", message: "Нет пользователя с таким логином, попробуйте другой", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        return alert
+    }()
+    
+    lazy var wrongPasswordAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Неверный пароль", message: "Попробуйте другой пароль", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        return alert
+    }()
     
     lazy var phoneAlert: UIAlertController = {
         let alert = UIAlertController(title: "Некорректный телефон", message: "Введите телефон еше раз", preferredStyle: .alert)

@@ -33,7 +33,7 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
         db.collection("Users").whereField("login", isEqualTo: login).getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error - \(error.localizedDescription)")
-                completion(false, "Error fetching user")
+                completion(false, "Server error")
                 return
             }
             print("g")
@@ -53,7 +53,7 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
                 return
             } else {
                 print("wrong password")
-                completion(false, "wrong password")
+                completion(false, "Wrong password")
                 return
             }
         }
