@@ -27,7 +27,7 @@ class MainHomeTableViewCell: UITableViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = .systemFont(ofSize: 17, weight: .medium)
         label.text = "title"
         label.textColor = .black
         return label
@@ -35,7 +35,7 @@ class MainHomeTableViewCell: UITableViewCell {
     
     private lazy var secondTitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.font = .systemFont(ofSize: 17, weight: .medium)
         label.textColor = .black
         return label
     }()
@@ -163,5 +163,12 @@ class MainHomeTableViewCell: UITableViewCell {
             button.centerXAnchor.constraint(equalTo: prView.centerXAnchor),
             button.widthAnchor.constraint(equalTo: prView.widthAnchor),
             button.heightAnchor.constraint(equalTo: prView.heightAnchor, multiplier: 0.16)])
+    }
+    
+    func configure(with productTup: (Product, Product)) {
+        titleLabel.text = productTup.0.name
+        priceLabel.text = "Цена: \(productTup.0.price) р."
+        secondTitleLabel.text = productTup.1.name
+        secondPriceLabel.text = "Цена: \(productTup.1.price) р."
     }
 }

@@ -10,12 +10,13 @@ import UIKit
 protocol MainHomeViewProtocol: AnyObject {
     func success()
     func failure()
+    func configureTable(productArray: [(Product, Product)])
 }
 
 class MainHomeView: UIViewController, MainHomeViewProtocol {
     
     var presenter: MainHomePresenterProtocol?
-    
+    var productArray: [(Product, Product)] = []
     //MARK: - VIEWS
     
     private lazy var searchView: UIView = {
@@ -63,7 +64,18 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
     
     func success() {
         setupAllViews()
+        loadData()
     }
+    
+    func configureTable(productArray: [(Product, Product)]) {
+        self.productArray = productArray
+        mainTableView.reloadData()
+    }
+    
+    func loadData() {
+        presenter?.showProductData()
+    }
+    
     
     func setupAllViews() {
         setupSearchView(searchView)
@@ -111,11 +123,12 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
 
 extension MainHomeView: UITextFieldDelegate & UITableViewDelegate & UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        productArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MainHomeTableViewCell.identifier, for: indexPath) as! MainHomeTableViewCell
+        cell.configure(with: productArray[indexPath.row])
         return cell
     }
     

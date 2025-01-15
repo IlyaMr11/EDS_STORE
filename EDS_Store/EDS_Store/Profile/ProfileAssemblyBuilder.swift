@@ -19,8 +19,7 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
 
     func createMainProfileModule(router: any ProfileRouterProtocol) -> UIViewController {
         let view = MainProfileView()
-        let networkService = ProfileNetworkService()
-        let model = MainProfileModel(networkService: networkService)
+        let model = MainProfileModel(networkService: ProfileNetworkService.shared)
         let presenter = MainProfilePresenter(view: view, router: router, model:  model)
         view.presenter = presenter
         return view
@@ -44,7 +43,7 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
     
     func createSignInModule(router: any ProfileRouterProtocol) -> UIViewController {
         let view = SignInView()
-        let model = SignInModel(networkService: ProfileNetworkService())
+        let model = SignInModel(networkService: ProfileNetworkService.shared)
         let presenter = SignInPresenter(view: view , router: router, model: model)
         view.presenter = presenter
         return view
@@ -52,7 +51,7 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
     
     func createRegistrationModule(router: any ProfileRouterProtocol) -> UIViewController {
         let view = RegistrationView()
-        let model = RegistrationModel(networkService: ProfileNetworkService())
+        let model = RegistrationModel(networkService: ProfileNetworkService.shared)
         let presenter = RegistrationPresenter(view: view , router: router, model: model)
         view.presenter = presenter
         return view

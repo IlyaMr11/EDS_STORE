@@ -19,16 +19,8 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
     
     static let shared = ProfileNetworkService()
     
-    private func configureFirebase() -> Firestore {
-        let db:  Firestore!
-        let settings = FirestoreSettings()
-        Firestore.firestore().settings = settings
-        db = Firestore.firestore()
-        return db
-    }
-    
     func isUserExist(login: String, password: String, completion: @escaping (Bool, String?) -> Void) {
-        let db = configureFirebase()
+        let db = FireBaseLayer.shared.configureFirebase()
         print("h")
         db.collection("Users").whereField("login", isEqualTo: login).getDocuments { (querySnapshot, error) in
             if let error = error {
@@ -60,7 +52,7 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
     }
     
     func getUserData(collection: String, docName: String, completion: @escaping (Person?) -> Void) {
-        let db = configureFirebase()
+        let db = FireBaseLayer.shared.configureFirebase()
         db.collection(collection).document(docName).getDocument(completion: { (document, error) in
             guard error == nil else { completion(nil); return}
             let person = Person(login: document?.get("login") as! String, password: document?.get("password") as! String)

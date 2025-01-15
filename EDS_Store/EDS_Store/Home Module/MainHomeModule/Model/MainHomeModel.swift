@@ -8,9 +8,15 @@
 import Foundation
 
 protocol MainHomeModelProtocol {
-    
+    init(networkService: HomeNetworkServiceProtocol)
+    var networkService:  HomeNetworkServiceProtocol { get }
 }
 
 class MainHomeModel: MainHomeModelProtocol {
+    var networkService:  HomeNetworkServiceProtocol
+    
+    required init(networkService: any HomeNetworkServiceProtocol) {
+        self.networkService = networkService
+    }
     
 }

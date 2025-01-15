@@ -146,4 +146,6 @@ class BookCollectionViewCell: UICollectionViewCell {
             UIApplication.shared.open(url)
         }
     }
+    
+    
 }

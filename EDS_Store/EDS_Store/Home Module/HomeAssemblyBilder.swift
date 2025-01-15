@@ -14,7 +14,7 @@ protocol HomeAssemblyBuilderProtocol {
 class HomeAssemblyBuilder: HomeAssemblyBuilderProtocol {
     func mainHomeModule(router: HomeRouterProtocol) -> UIViewController {
         let view = MainHomeView()
-        let model = MainHomeModel()
+        let model = MainHomeModel(networkService: HomeNetworkService.shared)
         let presenter = MainHomePresenter(view: view, router: router, model: model)
         view.presenter = presenter
         return view

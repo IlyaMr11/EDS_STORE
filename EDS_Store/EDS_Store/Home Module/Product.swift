@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct product: Codable {
+struct Product {
     let name: String
     let ratio: String
     let flange: String
