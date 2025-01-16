@@ -14,4 +14,5 @@ struct Product {
     let price: String
     let type: String
     let size: String
+    let picture: String
 }

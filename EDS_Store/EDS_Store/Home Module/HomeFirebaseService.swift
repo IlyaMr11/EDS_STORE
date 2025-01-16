@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol HomeNetworkServiceProtocol {
+protocol HomeFirebaseServiceProtocol {
     func getProductData(completion: @escaping ([Product]?, String?) -> Void)
 }
 
-class HomeNetworkService: HomeNetworkServiceProtocol {
+class HomeFirebaseService: HomeFirebaseServiceProtocol {
     
-    static let shared = HomeNetworkService()
+    static let shared = HomeFirebaseService()
     
     func getProductData(completion: @escaping ([Product]?, String?) -> Void) {
         DispatchQueue.global().async {
@@ -39,14 +39,15 @@ class HomeNetworkService: HomeNetworkServiceProtocol {
                 
                 let products = documents.compactMap { document -> Product?  in
                     let data = document.data()
-                    print("Document data: \(data)") 
+                    print("Document data: \(data)")
                     return Product(
                         name: data["name"] as? String ?? "",
                         ratio: data["ratio"] as? String ?? "",
                         flange: data["flange"] as? String ?? "",
                         price: data["price"] as? String ?? "",
                         type: data["type"] as? String ?? "",
-                        size: data["size"] as? String ?? ""
+                        size: data["size"] as? String ?? "",
+                        picture: data["picture"] as? String ?? ""
                     )
                 }
                 DispatchQueue.main.async {

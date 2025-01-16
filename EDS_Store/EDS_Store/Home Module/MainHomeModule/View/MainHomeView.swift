@@ -51,6 +51,9 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.layer.cornerRadius = 20
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .systemGray4
         tableView.register(MainHomeTableViewCell.self, forCellReuseIdentifier: MainHomeTableViewCell.identifier)
         return tableView
     }()
@@ -61,6 +64,8 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
         view.backgroundColor = .white
         success()
     }
+    
+
     
     func success() {
         setupAllViews()
@@ -75,7 +80,6 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
     func loadData() {
         presenter?.showProductData()
     }
-    
     
     func setupAllViews() {
         setupSearchView(searchView)
@@ -109,7 +113,7 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
     func setupTableView(_ table: UITableView) {
         view.addSubview(table)
         table.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([table.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 20), table.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -10), table.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 10), table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)])
+        NSLayoutConstraint.activate([table.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 20), table.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor), table.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor), table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)])
     }
     
     func failure() {
@@ -128,7 +132,9 @@ extension MainHomeView: UITextFieldDelegate & UITableViewDelegate & UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MainHomeTableViewCell.identifier, for: indexPath) as! MainHomeTableViewCell
-        cell.configure(with: productArray[indexPath.row])
+        let productTup = productArray[indexPath.row]
+        cell.configure(with: productTup)
+        presenter?.setupPicture(productTup, cell: cell)
         return cell
     }
     

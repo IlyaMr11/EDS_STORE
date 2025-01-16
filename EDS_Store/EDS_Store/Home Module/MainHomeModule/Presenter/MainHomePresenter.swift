@@ -5,14 +5,16 @@
 //  Created by Илья Морозов on 12.01.2025.
 //
 
-import Foundation
+import UIKit
 
 protocol MainHomePresenterProtocol {
     init(view: MainHomeViewProtocol, router: HomeRouterProtocol, model:  MainHomeModelProtocol)
     func showProductData()
+    func setupPicture(_ products: (Product, Product), cell: MainHomeTableViewCell)
 }
 
 class MainHomePresenter: MainHomePresenterProtocol {
+    
     let model: MainHomeModelProtocol
     var router: HomeRouterProtocol?
     var view: MainHomeViewProtocol?
@@ -24,7 +26,7 @@ class MainHomePresenter: MainHomePresenterProtocol {
     }
     
     func showProductData()  {
-        self.model.networkService.getProductData { (products, text) in
+        self.model.firebaseService.getProductData { (products, text) in
             if let text = text {
                 print(text)
                 DispatchQueue.main.async {
@@ -51,6 +53,36 @@ class MainHomePresenter: MainHomePresenterProtocol {
                 self.view?.configureTable(productArray: productArr)
             }
             
+        }
+    }
+    
+    func setupPicture(_ proudcts: (Product, Product), cell: MainHomeTableViewCell) {
+        let path1 = proudcts.0.picture
+        let path2 = proudcts.1.picture
+        model.loadPhoto(path: path1) { (image, text) in
+            if let text = text {
+                print(text)
+                return
+            }
+            
+            if let image = image {
+                DispatchQueue.main.async {
+                    cell.productImage.image = image
+                }
+            }
+            
+        }
+        model.loadPhoto(path: path2) { (image, text) in
+            if let text = text {
+                print(text)
+                return
+            }
+            
+            if let image = image {
+                DispatchQueue.main.async {
+                    cell.secondProductImage.image = image
+                }
+            }
         }
     }
 }

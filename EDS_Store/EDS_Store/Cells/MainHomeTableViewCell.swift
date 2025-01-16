@@ -13,14 +13,14 @@ class MainHomeTableViewCell: UITableViewCell {
     
     private lazy var productView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 15
         view.backgroundColor = .white
         return view
     }()
     
     private lazy var secondProductView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 15
         view.backgroundColor = .white
         return view
     }()
@@ -55,16 +55,16 @@ class MainHomeTableViewCell: UITableViewCell {
         return label
     }()
     
-    private lazy var productImage: UIImageView = {
+    lazy var productImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = 15
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    private lazy var secondProductImage: UIImageView = {
+    lazy var secondProductImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = 15
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -72,7 +72,7 @@ class MainHomeTableViewCell: UITableViewCell {
     private lazy var bagButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .orange
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 15
         button.setImage(UIImage(systemName: "basket"), for: .normal)
         return button
     }()
@@ -80,7 +80,7 @@ class MainHomeTableViewCell: UITableViewCell {
     private lazy var secondBagButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .orange
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 15
         button.setImage(UIImage(systemName: "basket"), for: .normal)
         return button
     }()
@@ -89,6 +89,7 @@ class MainHomeTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
+        contentView.backgroundColor = .systemGray3
     }
     
     required init?(coder: NSCoder) {
@@ -102,7 +103,7 @@ class MainHomeTableViewCell: UITableViewCell {
         contentView.addSubview(v2)
         v1.translatesAutoresizingMaskIntoConstraints = false
         v2.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([v1.topAnchor.constraint(equalTo: contentView.topAnchor), v2.topAnchor.constraint(equalTo: contentView.topAnchor), v1.bottomAnchor.constraint(equalTo: contentView.bottomAnchor), v2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor), v1.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.49), v2.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.49), v1.leftAnchor.constraint(equalTo:  contentView.leftAnchor), v2.rightAnchor.constraint(equalTo: contentView.rightAnchor)])
+        NSLayoutConstraint.activate([v1.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7), v2.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7), v1.bottomAnchor.constraint(equalTo: contentView.bottomAnchor), v2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor), v1.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.482), v2.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.482), v1.leftAnchor.constraint(equalTo:  contentView.leftAnchor, constant: 5), v2.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5)])
     }
     
     func createProduct(prView: UIView, image: UIImageView, title: UILabel, price: UILabel, button: UIButton) -> UIView {
@@ -129,7 +130,7 @@ class MainHomeTableViewCell: UITableViewCell {
         prView.addSubview(aView)
         aView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            aView.topAnchor.constraint(equalTo: prView.topAnchor),
+            aView.topAnchor.constraint(equalTo: prView.topAnchor, constant: 5),
             aView.leadingAnchor.constraint(equalTo: prView.leadingAnchor),
             aView.trailingAnchor.constraint(equalTo: prView.trailingAnchor),
             aView.heightAnchor.constraint(equalTo: prView.heightAnchor, multiplier: 0.64)])
@@ -139,7 +140,7 @@ class MainHomeTableViewCell: UITableViewCell {
         prView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: prView.topAnchor, constant: 180),
+            label.topAnchor.constraint(equalTo: prView.topAnchor, constant: 190),
             label.leadingAnchor.constraint(equalTo: prView.leadingAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: prView.trailingAnchor),
             label.heightAnchor.constraint(equalTo: prView.heightAnchor, multiplier: 0.1)])
@@ -171,4 +172,5 @@ class MainHomeTableViewCell: UITableViewCell {
         secondTitleLabel.text = productTup.1.name
         secondPriceLabel.text = "Цена: \(productTup.1.price) р."
     }
+    
 }
