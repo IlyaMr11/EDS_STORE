@@ -10,6 +10,11 @@ import UIKit
 class MainHomeTableViewCell: UITableViewCell {
     static let identifier: String = "mainHomeCell"
 
+    var product1: Product?
+    var product2: Product?
+    var presenter: MainHomePresenterProtocol?
+    var image1: UIImage?
+    var image2: UIImage?
     
     private lazy var productView: UIView = {
         let view = UIView()
@@ -71,19 +76,27 @@ class MainHomeTableViewCell: UITableViewCell {
     
     private lazy var bagButton: UIButton = {
         let button = UIButton()
+        button.tintColor = .white
         button.backgroundColor = .orange
         button.layer.cornerRadius = 15
         button.setImage(UIImage(systemName: "basket"), for: .normal)
+        button.tag = 0
+        button.addTarget(self, action: #selector(pressProduct(_:)), for: .touchUpInside)
         return button
     }()
     
     private lazy var secondBagButton: UIButton = {
         let button = UIButton()
+        button.tintColor = .white
         button.backgroundColor = .orange
         button.layer.cornerRadius = 15
-        button.setImage(UIImage(systemName: "basket"), for: .normal)
+        button.setImage(UIImage(systemName: "basket")?.withTintColor(.white), for: .normal)
+        button.tag = 1
+        button.addTarget(self, action: #selector(pressProduct(_:)), for: .touchUpInside)
         return button
     }()
+    
+    
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -173,4 +186,11 @@ class MainHomeTableViewCell: UITableViewCell {
         secondPriceLabel.text = "Цена: \(productTup.1.price) р."
     }
     
+    @objc func pressProduct(_ sender: UIButton) {
+        guard let product = [product1, product2][sender.tag],
+        let image = [image1, image2][sender.tag] else { print("no product"); return }
+        print("hello")
+        presenter?.showProductDetail(product, image)
+    }
 }
+                         

@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseDatabase
 
 protocol HomeFirebaseServiceProtocol {
     func getProductData(completion: @escaping ([Product]?, String?) -> Void)
@@ -37,18 +39,23 @@ class HomeFirebaseService: HomeFirebaseServiceProtocol {
                     return
                 }
                 
-                let products = documents.compactMap { document -> Product?  in
+                var products: [Product] = []
+                
+                for document in documents {
                     let data = document.data()
-                    print("Document data: \(data)")
-                    return Product(
-                        name: data["name"] as? String ?? "",
-                        ratio: data["ratio"] as? String ?? "",
-                        flange: data["flange"] as? String ?? "",
-                        price: data["price"] as? String ?? "",
-                        type: data["type"] as? String ?? "",
-                        size: data["size"] as? String ?? "",
-                        picture: data["picture"] as? String ?? ""
-                    )
+                    guard let productType = data["productType"] as? String else { continue }
+                    switch productType {
+                    case "reducer":
+                        let product = ProductDecoder.reducerDecoder(data)
+                        products.append(product)
+                    case "motor":
+                        let product = ProductDecoder.motorDecoder(data)
+                        products.append(product)
+                    default:
+                        continue
+                    }
+                    
+                          
                 }
                 DispatchQueue.main.async {
                     completion(products, nil)

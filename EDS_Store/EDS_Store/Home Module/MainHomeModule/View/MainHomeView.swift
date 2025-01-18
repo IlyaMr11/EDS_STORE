@@ -65,7 +65,10 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
         success()
     }
     
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        mainTableView.reloadData()
+    }
     
     func success() {
         setupAllViews()
@@ -135,6 +138,7 @@ extension MainHomeView: UITextFieldDelegate & UITableViewDelegate & UITableViewD
         let productTup = productArray[indexPath.row]
         cell.configure(with: productTup)
         presenter?.setupPicture(productTup, cell: cell)
+        cell.presenter = self.presenter
         return cell
     }
     

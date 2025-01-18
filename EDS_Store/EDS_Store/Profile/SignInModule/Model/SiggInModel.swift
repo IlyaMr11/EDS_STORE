@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 protocol SignInModelProtocol {
     init(networkService: ProfileNetworkServiceProtocol)
     func isUserDefine(login: String, password: String)  -> (Bool, String)

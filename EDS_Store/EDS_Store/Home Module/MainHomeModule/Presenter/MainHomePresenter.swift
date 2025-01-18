@@ -9,11 +9,13 @@ import UIKit
 
 protocol MainHomePresenterProtocol {
     init(view: MainHomeViewProtocol, router: HomeRouterProtocol, model:  MainHomeModelProtocol)
+    func showProductDetail(_ product: Product, _ iamge: UIImage)
     func showProductData()
     func setupPicture(_ products: (Product, Product), cell: MainHomeTableViewCell)
 }
 
 class MainHomePresenter: MainHomePresenterProtocol {
+    
     
     let model: MainHomeModelProtocol
     var router: HomeRouterProtocol?
@@ -56,6 +58,10 @@ class MainHomePresenter: MainHomePresenterProtocol {
         }
     }
     
+    func showProductDetail(_ product: Product, _ image: UIImage) {
+        router?.showProductDetails(product: product, image: image)
+    }
+    
     func setupPicture(_ proudcts: (Product, Product), cell: MainHomeTableViewCell) {
         let path1 = proudcts.0.picture
         let path2 = proudcts.1.picture
@@ -68,6 +74,8 @@ class MainHomePresenter: MainHomePresenterProtocol {
             if let image = image {
                 DispatchQueue.main.async {
                     cell.productImage.image = image
+                    cell.image1 = image
+                    cell.product1 = proudcts.0
                 }
             }
             
@@ -81,6 +89,8 @@ class MainHomePresenter: MainHomePresenterProtocol {
             if let image = image {
                 DispatchQueue.main.async {
                     cell.secondProductImage.image = image
+                    cell.image2 = image
+                    cell.product2 = proudcts.1
                 }
             }
         }
