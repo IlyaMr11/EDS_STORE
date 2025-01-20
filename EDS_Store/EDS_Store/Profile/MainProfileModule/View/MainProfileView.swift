@@ -12,7 +12,7 @@ protocol MainProfileViewProtocol: AnyObject {
     func failure()
 }
 
-class MainProfileView: UIViewController {
+class MainProfileView: UIViewController, MainProfileViewProtocol {
     
     //var isSign = true
     
@@ -24,6 +24,7 @@ class MainProfileView: UIViewController {
                      "Способы оплаты"]
     
     var presenter: MainProfilePresenterProtocol?
+    var person: Person?
     //MARK: - LOGO
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logo7"))
@@ -107,22 +108,23 @@ class MainProfileView: UIViewController {
     
     //MARK: - CHOOSE VIEW
     func setupViews() {
-        if isSign {
-            setupAllProfile()
+        if self.person != nil {
+            success()
         } else {
-            setupNoUser()
+            failure()
         }
+             
     }
     
     //MARK: - SETUP BEFORE SIGN
-    func setupNoUser() {
+    func failure() {
         setupLogo(logoImageView)
         setupWarningLabel(warningLabel)
         setupToSignButton(toSignButton)
     }
     
     //MARK: - SETUP AFTER SIGN
-    func setupAllProfile() {
+    func success() {
         setupGrayView(grayView)
         setupUserInfoButton(userInfoButton)
         setupNameLabel(nameLabel)
@@ -219,13 +221,4 @@ extension MainProfileView: UITableViewDataSource, UITableViewDelegate {
 }
 
 
-extension MainProfileView: MainProfileViewProtocol {
-    
-    func success() {
-        
-    }
-    
-    func failure() {
-        
-    }
-}
+

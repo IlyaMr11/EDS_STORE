@@ -8,13 +8,16 @@
 import UIKit
 
 class Alerts {
+    
+    static let shared = Alerts()
+    
     lazy var serverErrorAlert: UIAlertController = {
         let alert = UIAlertController(title: "Ошибка сервера", message: "Проверьте подключение к интернету", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel))
         return alert
     }()
     
-    lazy var noUserAlert: UIAlertController = {
+    lazy var userNoFoundAlert: UIAlertController = {
         let alert = UIAlertController(title: "Неверный логин", message: "Нет пользователя с таким логином, попробуйте другой", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel))
         return alert
@@ -60,6 +63,60 @@ class Alerts {
         alert.addAction(action)
         return alert
     }()
+    
+    lazy var noUserAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Пользователь не авторизован", message: "Войдите в акаунт для того чтобы добавить товар", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        return alert
+    }()
+    
+    lazy var emptyBagAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Корзина пуста", message: "Добавьте товары в корзину", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        return alert
+    }()
 }
 
 let allAlerts = Alerts()
+
+
+enum AlertType {
+    case serverError
+    case userNotFound
+    case wrongPassword
+    case phone
+    case email
+    case userName
+    case password
+    case confirmPassword
+    case noUser
+    case emptyBasket
+    
+    // Вычисляемое свойство для получения соответствующего алерта
+    var alertController: UIAlertController {
+        switch self {
+        case .serverError:
+            return Alerts.shared.serverErrorAlert
+        case .userNotFound:
+            return Alerts.shared.userNoFoundAlert
+        case .wrongPassword:
+            return Alerts.shared.wrongPasswordAlert
+        case .phone:
+            return Alerts.shared.phoneAlert
+        case .email:
+            return Alerts.shared.emailAlert
+        case .userName:
+            return Alerts.shared.userNameAlert
+        case .password:
+            return Alerts.shared.passwordAlert
+        case .confirmPassword:
+            return Alerts.shared.confirmPasswordAlert
+        case .noUser:
+            return Alerts.shared.noUserAlert
+        case .emptyBasket:
+            return Alerts.shared.emptyBagAlert
+        }
+    }
+}

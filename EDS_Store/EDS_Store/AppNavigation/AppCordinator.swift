@@ -16,6 +16,7 @@ protocol CordinatorProtocol {
 class AppCordinator: CordinatorProtocol {
     var tabBarController: UITabBarController?
     var window: UIWindow?
+    
 
     init(window: UIWindow?) {
         self.tabBarController = UITabBarController()
@@ -26,16 +27,22 @@ class AppCordinator: CordinatorProtocol {
         tabBarController?.tabBar.tintColor = .orange
         let profileRouter = createProfileModule()
         let homeRouter = createHomeModule()
-        if let profileNav = profileRouter.navigationController, let homeNav = homeRouter.navigationController {
-            tabBarController?.viewControllers = [homeNav, profileNav]
-        }
-        //MARK: - WARNING
+        let bagRouter = createBagModule()
+        
         window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
+        guard let profileNav = profileRouter.navigationController,
+              let homeNav = homeRouter.navigationController,
+              let bagNav = bagRouter.navigationController else  { return }
+        
+        //MARK: - WARNING
+        tabBarController?.viewControllers = [homeNav, bagNav, profileNav]
+        
     }
     
     func createProfileModule() -> ProfileRouterProtocol {
         let profileNavigationController = UINavigationController()
+        profileNavigationController.title = "Профиль"
         profileNavigationController.tabBarItem.image = UIImage(systemName: "person.circle")
         let profileAssemblyBuilder = ProfileAssemblyBuilder()
         let router = ProfileRouter(navigationController: profileNavigationController, profileAssemblyBuilder: profileAssemblyBuilder)
@@ -45,9 +52,20 @@ class AppCordinator: CordinatorProtocol {
     
     func createHomeModule() -> HomeRouterProtocol {
         let homeNavigationController = UINavigationController()
+        homeNavigationController.title = "Главная"
         homeNavigationController.tabBarItem.image = UIImage(systemName: "house")
         let homeAssemblyBuilder = HomeAssemblyBuilder()
         let router = HomeRouter(navigationController: homeNavigationController, assemblyBuilder: homeAssemblyBuilder)
+        router.initinal()
+        return router
+    }
+    
+    func createBagModule() -> BagRouterProtocol {
+        let bagNavigationController = UINavigationController()
+        bagNavigationController.title = "Корзина"
+        bagNavigationController.tabBarItem.image = UIImage(systemName: "basket")
+        let bagAssemblyBuilder = BagAssemblyBuilder()
+        let router = BagRouter(navigationController: bagNavigationController, assemblyBuilder: bagAssemblyBuilder)
         router.initinal()
         return router
     }

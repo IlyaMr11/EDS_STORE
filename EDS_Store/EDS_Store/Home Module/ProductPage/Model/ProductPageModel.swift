@@ -8,9 +8,14 @@
 import Foundation
 
 protocol ProductPageModelProtocol {
-    
+    func addProduct(product: Product)
 }
 
 class ProductPageModel: ProductPageModelProtocol {
+    func addProduct(product: any Product) {
+        UserBasket.shared.addProductToBasket(product, count: 1)
+        print(UserBasket.shared.currentBasket)
+    }
+    
     
 }

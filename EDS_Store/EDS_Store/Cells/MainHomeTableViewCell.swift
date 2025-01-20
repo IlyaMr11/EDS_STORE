@@ -35,13 +35,16 @@ class MainHomeTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 17, weight: .medium)
         label.text = "title"
         label.textColor = .black
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
     private lazy var secondTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .medium)
+        label.numberOfLines = 0
         label.textColor = .black
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     

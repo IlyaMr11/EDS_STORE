@@ -10,6 +10,7 @@ import UIKit
 protocol ProductPageViewProtocol: UIViewController {
     var product: Product? { get set }
     var image: UIImage? { get set }
+    func failure(alert: UIAlertController)
 }
 
 class ProductPageView: UIViewController, ProductPageViewProtocol {
@@ -53,6 +54,7 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         button.setTitle("Добавить в корзину", for: .normal)
         button.layer.cornerRadius = 17
         button.titleLabel?.font = .systemFont(ofSize: 23, weight: .medium)
+        button.addTarget(self, action: #selector(addProduct), for: .touchUpInside)
         return button
     }()
     
@@ -60,6 +62,15 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         super.viewDidLoad()
         self.title = "Товар"
         setupAll()
+    }
+    
+    func failure(alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
+    @objc func addProduct() {
+        guard let product = self.product else { return }
+        presenter?.addToBag(product: product)
     }
     
     func setupAll() {
@@ -158,8 +169,9 @@ extension ProductPageView: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section == 0 {
             cell.textLabel?.text = firstSection[indexPath.row] + commonData[indexPath.row]
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
             return
-        }
+    }
         
         switch product.productType {
         case "reducer":
@@ -167,10 +179,16 @@ extension ProductPageView: UITableViewDelegate, UITableViewDataSource {
             let reducerData = [reducer.ratio, reducer.type, reducer.size, reducer.flange]
             cell.textLabel?.text = reducerCells[indexPath.row] + reducerData[indexPath.row]
             return
-        case "motor:":
+        case "motor":
+            guard let motor = product as? Motor else { return }
+            let motorData = [motor.power, motor.type, motor.size, motor.flange]
+            cell.textLabel?.text = motorCells[indexPath.row] + motorData[indexPath.row]
             return
         default:
             return 
         }
     }
 }
+
+
+

@@ -9,11 +9,14 @@ import Foundation
 
 protocol MainProfileModelProtocol {
     init (networkService: ProfileNetworkServiceProtocol)
+    var user: Person? { get set }
 }
 
 class MainProfileModel: MainProfileModelProtocol {
     let networkService: ProfileNetworkServiceProtocol
     var name: String?
+    var user: Person?
+    
     
     required init(networkService: ProfileNetworkServiceProtocol) {
         self.networkService = networkService

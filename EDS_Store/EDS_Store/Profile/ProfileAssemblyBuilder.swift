@@ -22,6 +22,7 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
         let model = MainProfileModel(networkService: ProfileNetworkService.shared)
         let presenter = MainProfilePresenter(view: view, router: router, model:  model)
         view.presenter = presenter
+        view.person = PersonData.shared.currentUser
         return view
     }
     

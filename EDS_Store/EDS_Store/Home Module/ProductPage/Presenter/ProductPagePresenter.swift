@@ -9,6 +9,7 @@ import UIKit
 
 protocol ProductPagePresenterProtocol {
     init(view: ProductPageViewProtocol, router: HomeRouterProtocol, model: ProductPageModelProtocol)
+    func addToBag(product: Product)
 }
     
 class ProductPagePresenter: ProductPagePresenterProtocol {
@@ -22,6 +23,14 @@ class ProductPagePresenter: ProductPagePresenterProtocol {
         self.model = model
         self.router = router
         self.view = view
+    }
+    
+    func addToBag(product: Product) {
+        guard let _ = PersonData.shared.currentUser else {
+            view?.failure(alert: AlertType.noUser.alertController)
+            return
+        }
+        model.addProduct(product: product)
     }
     
 }
