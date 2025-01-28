@@ -16,8 +16,7 @@ class PersonData {
     static let shared = PersonData()
     
     
-    private(set) var currentUser: Person? = Person(login: "", password: "")
-    
+    private(set) var currentUser: Person?
     private init() {}
     
     func setUser(_ person: Person) {
