@@ -146,7 +146,7 @@ class EmailViewController: UIViewController {
     
     //MARK: - TARGETS
     @objc func safeEmail() {
-        if checkAll.checkEmail(emailTextField.text) {
+        if Checker.shared.checkEmail(emailTextField.text) {
             if let email = emailTextField.text {
                 user1Data.email = email
             }

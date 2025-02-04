@@ -77,6 +77,13 @@ class Alerts {
         alert.addAction(action)
         return alert
     }()
+    
+    lazy var loginNoFreeAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Логин уже занят", message: "Введите другой логин", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        return alert
+    }()
 }
 
 let allAlerts = Alerts()
@@ -93,9 +100,10 @@ enum AlertType {
     case confirmPassword
     case noUser
     case emptyBasket
+    case loginNoFree
     
     // Вычисляемое свойство для получения соответствующего алерта
-    var alertController: UIAlertController {
+    var alert: UIAlertController {
         switch self {
         case .serverError:
             return Alerts.shared.serverErrorAlert
@@ -117,6 +125,8 @@ enum AlertType {
             return Alerts.shared.noUserAlert
         case .emptyBasket:
             return Alerts.shared.emptyBagAlert
+        case .loginNoFree:
+            return Alerts.shared.loginNoFreeAlert
         }
     }
 }

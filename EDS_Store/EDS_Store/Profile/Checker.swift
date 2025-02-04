@@ -8,6 +8,8 @@
 import Foundation
 
 class Checker {
+    
+    static let shared = Checker()
     //regex for password
     let pasRegex1 = try! NSRegularExpression(pattern: "[0-9]+")
     let pasRegex2 = try! NSRegularExpression(pattern: "[a-z]+")
@@ -69,4 +71,4 @@ class Checker {
     
 }
 
-let checkAll = Checker()
+

@@ -61,12 +61,7 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
         
     }
     
-    func createNewData(collection: String, docName: String, user: Person, completion: @escaping (Bool, String?) -> Void) {
-            
-    }
-        
-        
-
+    
     func setUserData() {
         
     }

@@ -203,10 +203,10 @@ class SignInView: UIViewController, SignInViewProtocol {
     }
     
     func checkAllFields() -> Bool {
-        if !checkAll.checkEmail(loginTextField.text) {
+        if !Checker.shared.checkEmail(loginTextField.text) {
             showAlert(allAlerts.emailAlert)
             return false
-        } else if !checkAll.checkPassword(passwordTextField.text) {
+        } else if !Checker.shared.checkPassword(passwordTextField.text) {
             showAlert(allAlerts.passwordAlert)
             return false
         }

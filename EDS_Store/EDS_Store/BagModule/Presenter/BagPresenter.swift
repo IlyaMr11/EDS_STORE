@@ -31,7 +31,7 @@ class BagPresenter: BagPresenterProtocol {
     
     func pushBasketToView() {
         guard !UserBasket.shared.currentBasket.isEmpty else {
-            let alert = AlertType.emptyBasket.alertController
+            let alert = AlertType.emptyBasket.alert
             view?.failure(alert: alert)
             return }
         print("i push data")

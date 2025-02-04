@@ -6,11 +6,19 @@
 //
 import UIKit
 
-protocol RegistrationViewProtocol: AnyObject {
-    
+struct Fields {
+    let password: String
+    let login: String
+    let name: String
+    let confirmPassword: String
 }
 
-class RegistrationView: UIViewController {
+protocol RegistrationViewProtocol: AnyObject {
+    func success()
+    func failure(alert: UIAlertController)
+}
+
+class RegistrationView: UIViewController, RegistrationViewProtocol {
     
     //MARK: - CONSTANTS
     let buttonsRadius: CGFloat = 13
@@ -47,7 +55,7 @@ class RegistrationView: UIViewController {
         button.backgroundColor = .black
         button.layer.cornerRadius = buttonsRadius
         button.layer.borderWidth = 1.5
-        button.addTarget(self, action: #selector(endRegistration), for: .touchUpInside)
+        button.addTarget(self, action: #selector(registration), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -118,12 +126,38 @@ class RegistrationView: UIViewController {
         setupAll()
     }
     
+    func success() {
+        let alert = UIAlertController(title: "Регистрация успешна", message: "Вы успешно зарегистрировались", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ок", style: .cancel))
+        
+        let action = UIAlertAction(title: "На экран регистрации", style: .default) { [weak self] _ in
+            self?.presenter?.toSignIn()
+        }
+
+        alert.addAction(action)
+        present(alert, animated: true)
+        presenter?.toSignIn()
+    }
+    
+    func failure(alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
     //MARK: - SETUP
     func setupAll(){
         setupLabel(welcomLabel)
         setupStackView(stackView)
         setupRegButton(registrationButton)
         setupLogo()
+    }
+    
+    //MARK: - TARGETS
+    @objc func registration() {
+        let password = passwordTextField.text ?? ""
+        let name = userNameTextField.text ?? ""
+        let login = emailTextField.text ?? ""
+        let confinrmPassword = confinrmPasswordTextField.text ?? ""
+        presenter?.registerUser(Fields(password: password, login: login, name: name, confirmPassword: confinrmPassword))
     }
     
     //MARK: - SETUP LABEL
@@ -152,6 +186,7 @@ class RegistrationView: UIViewController {
         button.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
     }
+    
     //MARK: - SETUP LOGO
     func setupLogo() {
         view.addSubview(logoImageView)
@@ -161,35 +196,6 @@ class RegistrationView: UIViewController {
             logoImageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.45),
             logoImageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.14)])
     }
-    
-    //MARK: - TARGETS
-    @objc func endRegistration() {
-        if checkingAll() {
-            self.navigationController?.popViewController(animated: true)
-        }
-    }
-    
-    //MARK: - CHECK ALL FIELDS
-    
-    func checkingAll() -> Bool {
-        let checkingArray = [checkAll.checkUserName(userNameTextField.text),
-                             checkAll.checkEmail(emailTextField.text),
-                             checkAll.checkPassword(passwordTextField.text),
-                             checkAll.checkEqualPasswords(passwordTextField.text, confinrmPasswordTextField.text)]
-        for i in 0..<checkingArray.count {
-            if !checkingArray[i] {
-                showAlert(alert: alertsArray[i])
-                return  false
-            }
-        }
-        return true
-    }
-    
-    //MARK: - SHOW ALERTS
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
-    }
-    
 }
 
 //MARK: - EXTENSION
@@ -201,6 +207,3 @@ extension RegistrationView: UITextFieldDelegate {
     
 }
 
-extension RegistrationView: RegistrationViewProtocol {
-    
-}

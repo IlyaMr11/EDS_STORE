@@ -145,7 +145,7 @@ class UserNameViewController: UIViewController {
     
     //MARK: - TARGETS
     @objc func safeName() {
-        if checkAll.checkUserName(nameTextField.text) {
+        if Checker.shared.checkUserName(nameTextField.text) {
             if let name = nameTextField.text {
                 user1Data.name = name
                 delegate?.didUpdateName(name)

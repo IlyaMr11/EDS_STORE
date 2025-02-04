@@ -153,7 +153,7 @@ class PhoneViewController: UIViewController {
     //MARK: - TARGETS
     @objc func safePhone() {
         if let phone = phoneTextField.text {
-            if checkAll.checkPhone(phone) {
+            if Checker.shared.checkPhone(phone) {
                 user1Data.phone = phone
             } else {
                 showAlert(alert: allAlerts.phoneAlert)

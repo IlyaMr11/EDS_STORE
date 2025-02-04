@@ -27,7 +27,7 @@ class ProductPagePresenter: ProductPagePresenterProtocol {
     
     func addToBag(product: Product) {
         guard let _ = PersonData.shared.currentUser else {
-            view?.failure(alert: AlertType.noUser.alertController)
+            view?.failure(alert: AlertType.noUser.alert)
             return
         }
         model.addProduct(product: product)

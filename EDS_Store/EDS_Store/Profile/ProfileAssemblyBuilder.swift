@@ -52,8 +52,8 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
     
     func createRegistrationModule(router: any ProfileRouterProtocol) -> UIViewController {
         let view = RegistrationView()
-        let model = RegistrationModel(networkService: ProfileNetworkService.shared)
-        let presenter = RegistrationPresenter(view: view , router: router, model: model)
+        let model = RegistrationModel()
+        let presenter = RegistrationPresenter(view: view, router: router, model: model)
         view.presenter = presenter
         return view
     }
