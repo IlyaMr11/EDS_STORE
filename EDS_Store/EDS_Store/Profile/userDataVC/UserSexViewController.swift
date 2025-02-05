@@ -41,9 +41,9 @@ class UserSexViewController: UIViewController {
         segment.setTitleTextAttributes(selectedAttributes, for: .selected)
         segment.tintColor = .white
         segment.selectedSegmentTintColor = .black
-        if let sex = user1Data.sex {
-            segment.selectedSegmentIndex = sex == "Мужской" ? 0 : 1
-        }
+//        if let sex = user1Data.sex {
+//            segment.selectedSegmentIndex = sex == "Мужской" ? 0 : 1
+//        }
         return segment
     }()
     
@@ -137,9 +137,9 @@ class UserSexViewController: UIViewController {
     @objc func safeSex() {
         switch sexSegmentedControl.selectedSegmentIndex {
         case 0:
-            user1Data.sex = "Мужской"
+            print()
         case 1:
-            user1Data.sex = "Женский"
+            print()
         default:
             print("no data")
         }

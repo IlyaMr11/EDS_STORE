@@ -34,12 +34,12 @@ class UserInfoView: UIViewController {
     //MARK: NAME LABEL
     var userNameLabel: UILabel = {
         let label = UILabel()
-        if let userName = user1Data.name {
-            label.text = userName
-        } else {
-            label.text = "Имя не указано"
-        }
-        label.font = .systemFont(ofSize: 18)
+//        if let userName = user1Data.name {
+//            label.text = userName
+//        } else {
+//            label.text = "Имя не указано"
+//        }
+//        label.font = .systemFont(ofSize: 18)
         return label
     }()
     

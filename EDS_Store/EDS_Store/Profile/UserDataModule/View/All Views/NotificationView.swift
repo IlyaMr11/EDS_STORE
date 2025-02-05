@@ -46,7 +46,7 @@ class NotificationView: UIViewController, UserDataViewProtocol {
     private lazy var notifcSwitch: UISwitch = {
         let switcher = UISwitch()
         switcher.onTintColor = .orange
-        if let isOn =  user1Data.notification {
+        if let isOn =  user1Data.notify {
             switcher.isOn = isOn
         }
         return switcher
@@ -100,7 +100,7 @@ class NotificationView: UIViewController, UserDataViewProtocol {
 
     //MARK: - SAFE NOTIFICATION PRESS
     @objc func safeNotification() {
-        user1Data.notification = notifcSwitch.isOn
+        user1Data.notify = notifcSwitch.isOn
         dismiss(animated: true , completion: nil)
     }
     

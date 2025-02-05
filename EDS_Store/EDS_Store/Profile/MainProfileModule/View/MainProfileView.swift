@@ -9,12 +9,16 @@ import UIKit
 
 protocol MainProfileViewProtocol: AnyObject {
     func success()
-    func failure()
+    func failure(alert: UIAlertController?)
+    func setupName(_ name: String)
 }
 
 class MainProfileView: UIViewController, MainProfileViewProtocol {
     
     //var isSign = true
+    var userData: UserData? {
+        return PersonData.shared.userData
+    }
     
     //MARK: - CONSTANTS
     
@@ -25,6 +29,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     
     var presenter: MainProfilePresenterProtocol?
     var person: Person?
+    
     //MARK: - LOGO
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logo7"))
@@ -56,7 +61,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.layer.cornerRadius = buttonRadius
-        label.text = "Илья Морозов"
+        label.text = userData?.name
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 25)
         label.textColor = .black
@@ -126,7 +131,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     }
     
     //MARK: - SETUP BEFORE SIGN
-    func failure() {
+    func failure(alert: UIAlertController? = nil) {
         setupLogo(logoImageView)
         setupWarningLabel(warningLabel)
         setupToSignButton(toSignButton)
@@ -139,6 +144,15 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupNameLabel(nameLabel)
         setupProfileTableView(profileTableView)
         setupBottomLogo(logoImageView)
+        loadName()
+    }
+    
+    func setupName(_ name: String) {
+        nameLabel.text = name
+    }
+    
+    func loadName() {
+        presenter?.loadName(person!.login)
     }
     
     //MARK: - SETUP LOGO

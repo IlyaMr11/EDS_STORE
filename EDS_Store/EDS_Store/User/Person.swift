@@ -15,11 +15,15 @@ struct Person {
 class PersonData {
     static let shared = PersonData()
     
-    
+    private(set) var userData: UserData?
     private(set) var currentUser: Person?
     private init() {}
     
     func setUser(_ person: Person) {
         currentUser = person
+    }
+    
+    func setUserData(_ userData: UserData) {
+        self.userData = userData
     }
 }

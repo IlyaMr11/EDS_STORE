@@ -37,6 +37,13 @@ struct Reducer: Product, Codable {
     var flange: String
 }
 
+struct anyProduct: Product, Codable {
+    var name: String
+    var price: String
+    var productType: String
+    var picture: String
+}
+
 class ProductDecoder {
     
     static func motorDecoder(_ data: [String: Any]) -> Motor {
@@ -65,5 +72,12 @@ class ProductDecoder {
             )
     }
     
-    
+    static func prodcutDecoder(_ data: [String: Any]) -> anyProduct {
+        return anyProduct(
+            name: data["name"] as? String ?? "",
+            price: data["price"] as? String ?? "",
+            productType: data["productType"] as? String ?? "",
+            picture: data["picture"] as? String ?? ""
+        )
+    }
 }

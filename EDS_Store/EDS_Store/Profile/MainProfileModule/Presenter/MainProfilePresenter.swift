@@ -12,6 +12,7 @@ protocol MainProfilePresenterProtocol {
     func tapOnCell(index: Int)
     func tapOnUserInfo()
     func toSignIn()
+    func loadName(_ login: String)
 }
 
 class MainProfilePresenter: MainProfilePresenterProtocol {
@@ -38,4 +39,33 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
         router?.showSignInModule()
     }
     
+    func loadName(_ login: String) {
+        model?.loadUserData(login, completion: { [weak self] (userData, error) in
+            if let error = error {
+                switch error {
+                case .serverError:
+                    DispatchQueue.main.async {
+                        self?.view?.failure(alert: AlertType.serverError.alert)
+                    }
+                    return
+                case .noInternet:
+                    DispatchQueue.main.async {
+                        self?.view?.failure(alert: AlertType.serverError.alert)
+                        return
+                    }
+                default:
+                    return
+                }
+            }
+            
+            guard let userData = userData else {
+                print("Error loading user data")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self?.view?.setupName(userData.name ?? "")
+            }
+        })
+    }
 }
