@@ -7,11 +7,15 @@
 
 import UIKit
 
-class UserNameViewController: UIViewController {
+class NameView: UIViewController, UserDataViewProtocol {
+    
+    var presenter: (any UserDataPresenterProtocol)?
+    
 
     //MARK: - DELEGATE AND CONSTANTS
     weak var delegate: UpdateUserDataDelegate?
     let viewRadius = CGFloat(20)
+//    let showStyle = 
     
     //MARK: - NAME VIEW
     private lazy var nameView: UIView = {
@@ -76,6 +80,45 @@ class UserNameViewController: UIViewController {
         setupNameView()
         setupAll()
         // Do any additional setup after loading the view.
+    }
+    
+    func saveData() {
+        
+    }
+    
+    func loadData() {
+        
+    }
+    
+    func success() {
+        
+    }
+    
+    func failure(error: UserDataError) {
+        
+    }
+    
+    
+    //MARK: - TARGETS
+    @objc func safeName() {
+        if Checker.shared.checkUserName(nameTextField.text) {
+            if let name = nameTextField.text {
+                user1Data.name = name
+                delegate?.didUpdateName(name)
+                dismiss(animated: true)
+            }
+        } else {
+            showAlert(alert: allAlerts.userNameAlert)
+        }
+    }
+    
+    func showAlert(alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
+    //MARK: - CLOSE VIEW PRESS
+    @objc func closeView() {
+        dismiss(animated: true)
     }
     
     //MARK: - SETUP NAME VIEW
@@ -143,31 +186,10 @@ class UserNameViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: nameView.widthAnchor, multiplier: 0.15)])
     }
     
-    //MARK: - TARGETS
-    @objc func safeName() {
-        if Checker.shared.checkUserName(nameTextField.text) {
-            if let name = nameTextField.text {
-                user1Data.name = name
-                delegate?.didUpdateName(name)
-                dismiss(animated: true)
-            }
-        } else {
-            showAlert(alert: allAlerts.userNameAlert)
-        }
-    }
-    
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
-    }
-    
-    //MARK: - CLOSE VIEW PRESS
-    @objc func closeView() {
-        dismiss(animated: true)
-    }
 }
 
 //MARK: - EXTENSION
-extension UserNameViewController: UITextFieldDelegate {
+extension NameView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

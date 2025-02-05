@@ -21,7 +21,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     let color1 = UIColor.init(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     let buttonRadius = CGFloat(15)
     let cellsText = ["Ваши доставки", "История заказов",
-                     "Способы оплаты"]
+                     "Способы оплаты", "Имя", "Номер телефона", "Адреса", "Уведомления"]
     
     var presenter: MainProfilePresenterProtocol?
     var person: Person?
@@ -116,6 +116,15 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
              
     }
     
+    //MARK: - TARGETS
+    @objc func toSignVC() {
+        presenter?.toSignIn()
+    }
+    
+    @objc func userInfoVC() {
+        presenter?.tapOnUserInfo()
+    }
+    
     //MARK: - SETUP BEFORE SIGN
     func failure() {
         setupLogo(logoImageView)
@@ -129,6 +138,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupUserInfoButton(userInfoButton)
         setupNameLabel(nameLabel)
         setupProfileTableView(profileTableView)
+        setupBottomLogo(logoImageView)
     }
     
     //MARK: - SETUP LOGO
@@ -179,18 +189,16 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     func setupProfileTableView(_ tableView: UITableView) {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([tableView.topAnchor.constraint(equalTo: grayView.bottomAnchor, constant: 35),
-                                     tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), tableView.widthAnchor.constraint(equalToConstant: view.bounds.width), tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
-    }
-
-    //MARK: - TARGETS
-    @objc func toSignVC() {
-        presenter?.toSignIn()
+        NSLayoutConstraint.activate([tableView.topAnchor.constraint(equalTo: grayView.bottomAnchor, constant: 45),
+                                     tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), tableView.widthAnchor.constraint(equalToConstant: view.bounds.width), tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -175)])
     }
     
-    @objc func userInfoVC() {
-        presenter?.tapOnUserInfo()
+    func setupBottomLogo(_ image: UIImageView) {
+        view.addSubview(image)
+        image.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([image.topAnchor.constraint(equalTo: profileTableView.bottomAnchor, constant: 20), image.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), image.widthAnchor.constraint(equalToConstant: 180), image.heightAnchor.constraint(equalToConstant: 130)])
     }
+
 }
 
 
@@ -214,8 +222,7 @@ extension MainProfileView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let index = indexPath.row
-        presenter?.tapOnCell(index: index)
+        presenter?.tapOnCell(index: indexPath.row)
     }
     
 }

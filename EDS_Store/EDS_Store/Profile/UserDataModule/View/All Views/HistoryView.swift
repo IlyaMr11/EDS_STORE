@@ -12,9 +12,21 @@ protocol HistoryViewProtocol: AnyObject {
     func failure()
 }
 
-class HistoryView: UIViewController {
-
-    var presenter: HistoryPresenterProtocol?
+class HistoryView: UIViewController, UserDataViewProtocol {
+    func saveData() {
+        
+    }
+    
+    func loadData() {
+        
+    }
+    
+    func failure(error: UserDataError) {
+        
+    }
+    
+    var presenter: (any UserDataPresenterProtocol)?
+    
     
     //MARK: - CONSTANTS
     let buttonRadius = CGFloat(15)

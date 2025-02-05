@@ -12,14 +12,16 @@ protocol DeliveryViewProtocol: AnyObject {
     func failure()
 }
 
-class DeliveryView: UIViewController {
+class DeliveryView: UIViewController, UserDataViewProtocol {
+    
+    var presenter: (any UserDataPresenterProtocol)?
+    
     
     //MARK: - CONSTANTS
     let viewRadius = CGFloat(20)
     let buttonRadius = CGFloat(15)
     let color1 = UIColor.init(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.5)
     
-    var presenter: DeliveryPresenterProtocol?
     
     //MARK: - WARNING LABEL
     private lazy var warningLabel: UILabel = {
@@ -92,6 +94,31 @@ class DeliveryView: UIViewController {
         setupEmptyDeliveryView(emptyDeliveryView)
     }
     
+    func saveData() {
+        
+    }
+    
+    func loadData() {
+        
+    }
+    
+    func failure(error: UserDataError) {
+        
+    }
+    
+    func setupHomeVCButton(_ button: UIButton) {
+        emptyDeliveryView.addSubview(button)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([button.topAnchor.constraint(equalTo: delivertStackView.bottomAnchor, constant: 20),                              button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                     button.heightAnchor.constraint(equalToConstant: 50),
+                                     button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.6)])
+    }
+      
+    //MARK: - TARGETS
+    @objc func toHomeVC() {
+        self.tabBarController?.selectedIndex = 0
+    }
+    
     //MARK: - SETUP BACK VIEW
     func setupEmptyDeliveryView(_ emptyView: UIView) {
         view.addSubview(emptyView)
@@ -121,18 +148,6 @@ class DeliveryView: UIViewController {
                                      stackView.widthAnchor.constraint(equalTo: view.widthAnchor)])
     }
     
-    func setupHomeVCButton(_ button: UIButton) {
-        emptyDeliveryView.addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([button.topAnchor.constraint(equalTo: delivertStackView.bottomAnchor, constant: 20),                              button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                     button.heightAnchor.constraint(equalToConstant: 50),
-                                     button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.6)])
-    }
-      
-    //MARK: - TARGETS
-    @objc func toHomeVC() {
-        self.tabBarController?.selectedIndex = 0
-    }
 }
 
 extension DeliveryView: DeliveryViewProtocol {

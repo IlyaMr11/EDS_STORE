@@ -8,11 +8,10 @@ import UIKit
 
 protocol ProfileAssemblyBuilderProtocol {
     func createMainProfileModule(router: ProfileRouterProtocol) -> UIViewController
-    func createHistoryMoudle(router: ProfileRouterProtocol) -> UIViewController
-    func createDeliveryModule(router: ProfileRouterProtocol) -> UIViewController
     func createSignInModule(router: ProfileRouterProtocol) -> UIViewController
     func createRegistrationModule(router: ProfileRouterProtocol) -> UIViewController
     func createUserInfoModule(router: ProfileRouterProtocol) -> UIViewController
+    func createUserDataModule(router: ProfileRouterProtocol, index: Int) -> UIViewController
 }
 
 class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
@@ -23,22 +22,6 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
         let presenter = MainProfilePresenter(view: view, router: router, model:  model)
         view.presenter = presenter
         view.person = PersonData.shared.currentUser
-        return view
-    }
-    
-    func createHistoryMoudle(router: ProfileRouterProtocol) -> UIViewController {
-        let view = HistoryView()
-        let model = HistoryModel()
-        let presenter = HistoryPresenter(view: view , router: router, model: model)
-        view.presenter = presenter
-        return view
-    }
-    
-    func createDeliveryModule(router: any ProfileRouterProtocol) -> UIViewController {
-        let view = DeliveryView()
-        let model = DeliveryModel()
-        let presenter = DeliveryPresenter(view: view, router: router, model: model)
-        view.presenter = presenter
         return view
     }
     
@@ -66,5 +49,12 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
         return view
     }
 
-
+    func createUserDataModule(router: ProfileRouterProtocol, index: Int) -> UIViewController {
+        let array = [DeliveryView.self, HistoryView.self, PayView.self, NameView.self, PhoneView.self, AddressView.self, NotificationView.self]
+        let view = array[index].init() as! UserDataViewProtocol
+        let model = UserDataModel()
+        let presenter = UserDataPresenter(view: view, model: model, router: router)
+        view.presenter = presenter
+        return view
+    }
 }

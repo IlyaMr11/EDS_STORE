@@ -7,7 +7,11 @@
 
 import UIKit
 
-class NotificationViewController: UIViewController {
+class NotificationView: UIViewController, UserDataViewProtocol {
+    
+    
+    var presenter: (any UserDataPresenterProtocol)?
+    
     
     //MARK: - NOTIFICATION VIEW
     private lazy var notificationView: UIView = {
@@ -71,6 +75,33 @@ class NotificationViewController: UIViewController {
         super.viewDidLoad()
         setupNotificView()
         setupAll()
+    }
+    
+    func saveData() {
+        
+    }
+    
+    func loadData() {
+        
+    }
+    
+    func success() {
+        
+    }
+    
+    func failure(error: UserDataError) {
+        
+    }
+    
+    //MARK: - TARGETS
+    @objc func closeView() {
+        dismiss(animated: true)
+    }
+
+    //MARK: - SAFE NOTIFICATION PRESS
+    @objc func safeNotification() {
+        user1Data.notification = notifcSwitch.isOn
+        dismiss(animated: true , completion: nil)
     }
     
     //MARK: - SETUP NOTIFIC VIEW
@@ -137,14 +168,4 @@ class NotificationViewController: UIViewController {
                                      button.heightAnchor.constraint(equalTo: notificationView.widthAnchor, multiplier: 0.15)])
     }
     
-    //MARK: - TARGETS
-    @objc func closeView() {
-        dismiss(animated: true)
-    }
-
-    //MARK: - SAFE NOTIFICATION PRESS
-    @objc func safeNotification() {
-        user1Data.notification = notifcSwitch.isOn
-        dismiss(animated: true , completion: nil)
-    }
 }

@@ -7,7 +7,10 @@
 
 import UIKit
 
-class AddressViewController: UIViewController {
+class AddressView: UIViewController, UserDataViewProtocol {
+    
+    var presenter: (any UserDataPresenterProtocol)?
+    
     
     //MARK: - CONSTANTS
     let identifier = "addressCell"
@@ -94,6 +97,24 @@ class AddressViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    
+    func saveData() {
+        
+    }
+    
+    func loadData() {
+        
+    }
+    
+    func success() {
+        
+    }
+    
+    func failure(error: UserDataError) {
+        
+    }
+    
+    
     //MARK: - SETUP ADDRESS VIEW
     func setupAddressView() {
         view.addSubview(addressView)
@@ -113,6 +134,48 @@ class AddressViewController: UIViewController {
         setupButtonStackView(buttonStackView)
     }
 
+    
+    
+    
+    //MARK: - CREATE TABLE CELL
+    func createTableCell(_ index: Int) -> UIView {
+        print("hi")
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 70))
+        let label = UILabel(frame: CGRect(x: 5, y: 0, width: 90, height: 70))
+        label.text = "Адрес №\(index+1)"
+        label.textColor = .black
+        view.addSubview(label)
+        let textField = UITextField(frame: CGRect(x: 145, y: 0, width: view.bounds.width - 250, height: 70))
+        textField.placeholder = "Введите адрес"
+        textField.textAlignment = .left
+        textField.delegate = self
+        textField.tag = index
+        if user1Data.address.count > index {
+            textField.text = user1Data.address[index]
+        }
+        view.addSubview(textField)
+        return view
+    }
+    
+    //MARK: - TARGETS
+    @objc func editTable() {
+        addressTableView.isEditing.toggle()
+    }
+    
+    @objc func addRow() {
+        rowCounter += 1
+        user1Data.address.append("")
+        print(rowCounter)
+        addressTableView.reloadData()
+    }
+    
+    @objc func safeName() {
+        dismiss(animated: true)
+    }
+    
+    @objc func closeView() {
+        dismiss(animated: true)
+    }
     
     func setupTitleLabel(_ label: UILabel) {
         addressView.addSubview(label)
@@ -159,50 +222,10 @@ class AddressViewController: UIViewController {
                                      stackView.heightAnchor.constraint(equalToConstant: 40),
                                      stackView.widthAnchor.constraint(equalToConstant: 90)])
     }
-    
-    //MARK: - CREATE TABLE CELL
-    func createTableCell(_ index: Int) -> UIView {
-        print("hi")
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 70))
-        let label = UILabel(frame: CGRect(x: 5, y: 0, width: 90, height: 70))
-        label.text = "Адрес №\(index+1)"
-        label.textColor = .black
-        view.addSubview(label)
-        let textField = UITextField(frame: CGRect(x: 145, y: 0, width: view.bounds.width - 250, height: 70))
-        textField.placeholder = "Введите адрес"
-        textField.textAlignment = .left
-        textField.delegate = self
-        textField.tag = index
-        if user1Data.address.count > index {
-            textField.text = user1Data.address[index]
-        }
-        view.addSubview(textField)
-        return view
-    }
-    
-    //MARK: - TARGETS
-    @objc func editTable() {
-        addressTableView.isEditing.toggle()
-    }
-    
-    @objc func addRow() {
-        rowCounter += 1
-        user1Data.address.append("")
-        print(rowCounter)
-        addressTableView.reloadData()
-    }
-    
-    @objc func safeName() {
-        dismiss(animated: true)
-    }
-    
-    @objc func closeView() {
-        dismiss(animated: true)
-    }
 }
 
 //MARK: - EXTENSIONS
-extension AddressViewController: UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+extension AddressView: UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return rowCounter
     }

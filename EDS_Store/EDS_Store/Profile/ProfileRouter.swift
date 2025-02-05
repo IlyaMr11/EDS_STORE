@@ -13,12 +13,11 @@ protocol ProfileRouterProtocol {
     func showSignInModule()
     func showRegistrationModule()
     func showUserInfoModule()
-    func showDeliveryModule()
-    func showHistoryModule()
     var navigationController: UINavigationController? { get }
     var AssemblyBuilder: ProfileAssemblyBuilderProtocol? { get }
     func initinal()
     func popToRoot()
+    func showUserDataModule(index: Int)
 }
 
 class ProfileRouter: ProfileRouterProtocol {
@@ -71,17 +70,10 @@ class ProfileRouter: ProfileRouterProtocol {
         }
     }
     
-    func showDeliveryModule() {
+    func showUserDataModule(index: Int) {
         if let navigationController = navigationController {
-            guard let deliveryView = profileAssemblyBuilder?.createDeliveryModule(router: self) else {return}
-            navigationController.pushViewController(deliveryView, animated: true)
-        }
-    }
-    
-    func showHistoryModule() {
-        if let navigationController = navigationController {
-            guard let historyView = profileAssemblyBuilder?.createHistoryMoudle(router: self) else {return}
-            navigationController.pushViewController(historyView, animated: true)
+            guard let userDataView = profileAssemblyBuilder?.createUserDataModule(router: self, index: index) else {return}
+            navigationController.showDetailViewController(userDataView, sender: nil)
         }
     }
     

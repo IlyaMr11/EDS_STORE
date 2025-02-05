@@ -27,14 +27,7 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
     }
     
     func tapOnCell(index: Int) {
-        switch index {
-        case 0:
-            router?.showHistoryModule()
-        case 1:
-            router?.showDeliveryModule()
-        default:
-            print("empty")
-        }
+        router?.showUserDataModule(index: index)
     }
     
     func tapOnUserInfo() {

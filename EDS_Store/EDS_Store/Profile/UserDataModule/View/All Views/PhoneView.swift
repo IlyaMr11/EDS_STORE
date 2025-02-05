@@ -7,9 +7,11 @@
 
 import UIKit
 
-class PhoneViewController: UIViewController {
-
+class PhoneView: UIViewController, UserDataViewProtocol {
     
+    
+    var presenter: (any UserDataPresenterProtocol)?
+
     
     //MARK: - PHONE VIEW
     private lazy var phoneView: UIView = {
@@ -80,7 +82,43 @@ class PhoneViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
 
+    func saveData() {
+        
+    }
     
+    func loadData() {
+        
+    }
+    
+    func success() {
+        
+    }
+    
+    func failure(error: UserDataError) {
+        
+    }
+    
+    //MARK: - TARGETS
+    @objc func safePhone() {
+        if let phone = phoneTextField.text {
+            if Checker.shared.checkPhone(phone) {
+                user1Data.phone = phone
+            } else {
+                showAlert(alert: allAlerts.phoneAlert)
+            }
+        }
+        dismiss(animated: true)
+    }
+    
+    //MARK: - CLOSE VIEW PRESS
+    @objc func closeView() {
+        dismiss(animated: true)
+    }
+    
+    @objc func dismissKeyboard() {
+        // Скрываем клавиатуру
+        phoneTextField.resignFirstResponder()
+    }
     
     //MARK: - SETUP EMAIL VIEW
     func setupEmailView() {
@@ -150,31 +188,10 @@ class PhoneViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    //MARK: - TARGETS
-    @objc func safePhone() {
-        if let phone = phoneTextField.text {
-            if Checker.shared.checkPhone(phone) {
-                user1Data.phone = phone
-            } else {
-                showAlert(alert: allAlerts.phoneAlert)
-            }
-        }
-        dismiss(animated: true)
-    }
-    
-    //MARK: - CLOSE VIEW PRESS
-    @objc func closeView() {
-        dismiss(animated: true)
-    }
-    
-    @objc func dismissKeyboard() {
-        // Скрываем клавиатуру
-        phoneTextField.resignFirstResponder()
-    }
 }
 
 //MARK: - EXTESNSIONS
-extension PhoneViewController: UITextFieldDelegate {
+extension PhoneView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
