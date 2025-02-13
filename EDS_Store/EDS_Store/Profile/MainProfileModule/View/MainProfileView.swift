@@ -15,11 +15,6 @@ protocol MainProfileViewProtocol: AnyObject {
 
 class MainProfileView: UIViewController, MainProfileViewProtocol {
     
-    //var isSign = true
-    var userData: UserData? {
-        return PersonData.shared.userData
-    }
-    
     //MARK: - CONSTANTS
     
     let color1 = UIColor.init(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
@@ -28,7 +23,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
                      "Способы оплаты", "Имя", "Номер телефона", "Адреса", "Уведомления"]
     
     var presenter: MainProfilePresenterProtocol?
-    var person: Person?
+
     
     //MARK: - LOGO
     private lazy var logoImageView: UIImageView = {
@@ -61,7 +56,6 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.layer.cornerRadius = buttonRadius
-        label.text = userData?.name
         label.numberOfLines = 0
         label.font = .boldSystemFont(ofSize: 25)
         label.textColor = .black
@@ -106,16 +100,20 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("I load ")
         setupViews()
         view.backgroundColor = .white
         title = "Профиль"
+        
     }
     
     //MARK: - CHOOSE VIEW
     func setupViews() {
-        if self.person != nil {
+        if PersonData.shared.currentUser != nil {
             success()
+            print("ura")
         } else {
+            print("faile i call")
             failure()
         }
              
@@ -126,6 +124,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         presenter?.toSignIn()
     }
     
+    //MARK: - SHOULD REMOVE
     @objc func userInfoVC() {
         presenter?.tapOnUserInfo()
     }
@@ -143,16 +142,19 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupUserInfoButton(userInfoButton)
         setupNameLabel(nameLabel)
         setupProfileTableView(profileTableView)
-        setupBottomLogo(logoImageView)
+        //setupBottomLogo(logoImageView)
         loadName()
+    
     }
     
+    
     func setupName(_ name: String) {
+        print("I setup name")
         nameLabel.text = name
     }
     
     func loadName() {
-        presenter?.loadName(person!.login)
+        presenter?.loadName(PersonData.shared.currentUser?.login ?? "")
     }
     
     //MARK: - SETUP LOGO

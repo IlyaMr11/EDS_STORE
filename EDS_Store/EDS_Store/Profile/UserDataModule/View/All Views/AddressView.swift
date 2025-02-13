@@ -75,7 +75,7 @@ class AddressView: UIViewController, UserDataViewProtocol {
     //MARK: - ADRESS TABLE VIEW
     private lazy var addressTableView: UITableView = {
         let tableView = UITableView()
-        rowCounter = user1Data.address.count
+        rowCounter = PersonData.shared.userData?.address?.count ?? 0
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: identifier)
@@ -150,8 +150,8 @@ class AddressView: UIViewController, UserDataViewProtocol {
         textField.textAlignment = .left
         textField.delegate = self
         textField.tag = index
-        if user1Data.address.count > index {
-            textField.text = user1Data.address[index]
+        if PersonData.shared.userData?.address?.count ?? 0 > index {
+            textField.text = PersonData.shared.userData?.address?[index]
         }
         view.addSubview(textField)
         return view
@@ -162,9 +162,10 @@ class AddressView: UIViewController, UserDataViewProtocol {
         addressTableView.isEditing.toggle()
     }
     
+    //MARK: - WARNING !!!
     @objc func addRow() {
         rowCounter += 1
-        user1Data.address.append("")
+        //PersonData.shared.userData?.address?.append("")
         print(rowCounter)
         addressTableView.reloadData()
     }
@@ -244,14 +245,15 @@ extension AddressView: UITextFieldDelegate, UITableViewDelegate, UITableViewData
         return true
     }
     
+    //MARK: - WARNING !!!!!!
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        user1Data.address.swapAt(sourceIndexPath.row, destinationIndexPath.row)
+        //PersonData.shared.userData?.address?.swapAt(sourceIndexPath.row, destinationIndexPath.row)
         tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            user1Data.address.remove(at: indexPath.row)
+            //user1Data.address.remove(at: indexPath.row)
             rowCounter -= 1
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.reloadData()
@@ -261,10 +263,10 @@ extension AddressView: UITextFieldDelegate, UITableViewDelegate, UITableViewData
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         if let text = textField.text {
-            if textField.tag >= user1Data.address.count {
-                user1Data.address.append(text)
+            if textField.tag >= PersonData.shared.userData?.address?.count ?? 0 {
+                //user1Data.address.append(text)
             } else {
-                user1Data.address[textField.tag] = text
+                //user1Data.address[textField.tag] = text
             }
         }
         return true

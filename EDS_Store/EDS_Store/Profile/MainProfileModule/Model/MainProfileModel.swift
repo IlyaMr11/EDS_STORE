@@ -12,6 +12,8 @@ enum ProfileError: Error {
     case serverError
     case noData
 }
+
+
 protocol MainProfileModelProtocol {
     init (networkService: ProfileNetworkServiceProtocol)
     func loadUserData(_ login: String, completion: @escaping (UserData?, ProfileError?) -> Void)
@@ -28,6 +30,7 @@ class MainProfileModel: MainProfileModelProtocol {
         self.networkService = networkService
     }
     
+    //MARK: - LOAD USER DATA
     func loadUserData(_ login: String, completion: @escaping (UserData?, ProfileError?) -> Void) {
         let db = FireBaseLayer.shared.configureFirebase()
         db.collection("UsersData").whereField("login", isEqualTo: login).getDocuments { (snapshot, error) in
@@ -37,11 +40,21 @@ class MainProfileModel: MainProfileModelProtocol {
                 return
             }
             
-            guard let snapshot = snapshot, snapshot.isEmpty else {
+            print("Login: \(login)")
+            
+            guard let snapshot = snapshot else {
                 print("Error - snapshot is nil")
                 completion(nil, ProfileError.serverError)
                 return
             }
+            
+            if snapshot.isEmpty {
+                print("Error - snapshot is empty")
+                completion(nil, ProfileError.serverError)
+                return
+            }
+            
+            print("Snapshot documents count: \(snapshot.documents.count)")
             
             let document = snapshot.documents[0]
             let data = document.data()
@@ -50,6 +63,7 @@ class MainProfileModel: MainProfileModelProtocol {
             let phone = data["phone"] as? String ?? ""
             let notify = data["notify"] as? Bool ?? false
             let p = data["purchase"] as? [[String: Any]] ?? [[:]]
+            
             var purchases = [(Product, Int, String)]()
             for complex in p {
                 let status = complex["status"] as? String ?? ""

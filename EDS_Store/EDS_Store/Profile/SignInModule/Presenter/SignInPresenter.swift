@@ -35,6 +35,7 @@ class SignInPresenter: SignInPresenterProtocol {
             if bool {
                 DispatchQueue.main.async {
                     PersonData.shared.setUser(Person(login: login, password: password))
+                    print("main async here")
                     self.router?.initinal()
                 }
             } else {

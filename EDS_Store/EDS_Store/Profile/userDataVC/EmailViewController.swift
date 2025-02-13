@@ -33,9 +33,9 @@ class EmailViewController: UIViewController {
         let textField = UITextField()
         textField.placeholder = "Введите почту"
         textField.keyboardType = .emailAddress
-        if let email = user1Data.email {
-            textField.text = email
-        }
+        //if let email = Person.email {
+         //   textField.text = email
+        //}
         textField.delegate = self
         textField.textAlignment = .right
         return textField
@@ -146,13 +146,13 @@ class EmailViewController: UIViewController {
     
     //MARK: - TARGETS
     @objc func safeEmail() {
-        if Checker.shared.checkEmail(emailTextField.text) {
-            if let email = emailTextField.text {
-                user1Data.email = email
-            }
-        } else {
-            showAlert(alert: allAlerts.emailAlert)
-        }
+//        if Checker.shared.checkEmail(emailTextField.text) {
+//            if let email = emailTextField.text {
+//                user1Data.email = email
+//            }
+//        } else {
+//            showAlert(alert: allAlerts.emailAlert)
+//        }
         dismiss(animated: true)
     }
     

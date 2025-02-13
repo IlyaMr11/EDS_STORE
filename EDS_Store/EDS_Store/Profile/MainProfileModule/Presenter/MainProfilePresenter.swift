@@ -27,6 +27,7 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
         self.model = model
     }
     
+    //MARK: - SHOW USER DATA MODULE
     func tapOnCell(index: Int) {
         router?.showUserDataModule(index: index)
     }
@@ -35,10 +36,12 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
         router?.showUserInfoModule()
     }
     
+    //MARK: - SHOW SIGN IN MODULE
     func toSignIn() {
         router?.showSignInModule()
     }
     
+    //MARK: - LOAD ALL USER DATA
     func loadName(_ login: String) {
         model?.loadUserData(login, completion: { [weak self] (userData, error) in
             if let error = error {

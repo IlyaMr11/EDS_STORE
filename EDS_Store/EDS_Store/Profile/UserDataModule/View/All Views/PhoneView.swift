@@ -36,7 +36,7 @@ class PhoneView: UIViewController, UserDataViewProtocol {
         let textField = UITextField()
         textField.placeholder = "Введите телефон"
         textField.keyboardType = .phonePad
-        if let phone = user1Data.phone {
+        if let phone = PersonData.shared.userData?.phone {
             textField.text = phone
         }
         textField.delegate = self
@@ -102,7 +102,7 @@ class PhoneView: UIViewController, UserDataViewProtocol {
     @objc func safePhone() {
         if let phone = phoneTextField.text {
             if Checker.shared.checkPhone(phone) {
-                user1Data.phone = phone
+                //PersonData.shared.userData?.phone = phone
             } else {
                 showAlert(alert: allAlerts.phoneAlert)
             }
