@@ -107,10 +107,11 @@ class AddressView: UIViewController, UserDataViewProtocol {
     }
     
     func success() {
-        
+        let alert = SuccessAlert.successSave.alert
+        present(alert, animated: true)
     }
     
-    func failure(error: UserDataError) {
+    func failure(error: AlertType) {
         
     }
     

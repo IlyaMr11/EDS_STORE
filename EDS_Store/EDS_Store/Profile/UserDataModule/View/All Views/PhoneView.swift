@@ -83,7 +83,12 @@ class PhoneView: UIViewController, UserDataViewProtocol {
     }
 
     func saveData() {
-        
+        if Checker.shared.checkPhone(phoneTextField.text) {
+            presenter?.updateUserData(attr: .phone, data: phoneTextField.text!)
+        } else {
+            showAlert(alert: allAlerts.phoneAlert)
+        }
+        dismiss(animated: true)
     }
     
     func loadData() {
@@ -91,23 +96,17 @@ class PhoneView: UIViewController, UserDataViewProtocol {
     }
     
     func success() {
-        
+        let alert = SuccessAlert.successSave.alert
+        present(alert, animated: true)
     }
     
-    func failure(error: UserDataError) {
+    func failure(error: AlertType) {
         
     }
     
     //MARK: - TARGETS
     @objc func safePhone() {
-        if let phone = phoneTextField.text {
-            if Checker.shared.checkPhone(phone) {
-                //PersonData.shared.userData?.phone = phone
-            } else {
-                showAlert(alert: allAlerts.phoneAlert)
-            }
-        }
-        dismiss(animated: true)
+        saveData()
     }
     
     //MARK: - CLOSE VIEW PRESS

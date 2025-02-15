@@ -20,7 +20,7 @@ class Checker {
     let loginRegex = try! NSRegularExpression(pattern: "[a-zA-z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+")
     
     //regex for usernanme
-    let userNameRegex = try! NSRegularExpression(pattern: "[a-zA-z0-9]{4,16}")
+    let userNameRegex = try! NSRegularExpression(pattern: "[@!#$%^&*_,?+~`|]")
     
     //regex for phone
     let phoneRegex = try! NSRegularExpression(pattern: "[+]7[0-9]{10}")
@@ -45,7 +45,7 @@ class Checker {
     func checkEmail(_ text: String?) -> Bool {
         guard let text = text else { return false }
         let range = NSRange(location: 0, length: text.utf16.count)
-        if !(loginRegex.firstMatch(in: text, range: range) != nil) {
+        if loginRegex.firstMatch(in: text, range: range) == nil {
             return false
         }
         return true
@@ -54,16 +54,17 @@ class Checker {
     func checkUserName(_ text: String?) -> Bool {
         guard let text = text else { return false }
         let range = NSRange(location: 0, length: text.utf16.count)
-        if !(userNameRegex.firstMatch(in: text, range: range) != nil) {
-            return false
+        if userNameRegex.firstMatch(in: text, range: range) == nil {
+            return true
         }
-        return true
+        return false
     }
     
     func checkPhone(_ text: String?) -> Bool {
         guard let text = text else { return false }
+        if text.count < 4 { return false }
         let range = NSRange(location: 0, length: text.utf16.count)
-        if !(phoneRegex.firstMatch(in: text, range: range) != nil) {
+        if phoneRegex.firstMatch(in: text, range: range) == nil {
             return false
         }
         return true

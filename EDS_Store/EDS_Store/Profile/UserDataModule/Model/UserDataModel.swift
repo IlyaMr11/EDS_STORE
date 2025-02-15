@@ -9,7 +9,7 @@ import Foundation
 
 protocol UserDataModelProtocol {
     func getUserData()
-    func saveUserData(attr: DataAttrs, value: Any, completion: @escaping (UserDataError?) -> Void )
+    func saveUserData(attr: DataAttrs, value: Any, completion: @escaping (AlertType?) -> Void )
 }
 
 
@@ -18,7 +18,25 @@ class UserDataModel: UserDataModelProtocol {
         
     }
     
-    func saveUserData(attr: DataAttrs, value: Any, completion: @escaping (UserDataError?) -> Void) {
+    func isDataValid(attr: DataAttrs, value: Any) -> Bool {
+        switch attr {
+        case .name:
+            return Checker.shared.checkUserName(value as? String ?? "")
+        case .phone:
+            return Checker.shared.checkPhone(value as? String ?? "")
+            
+        default: return true
+        }
+    }
+    
+    func saveUserData(attr: DataAttrs, value: Any, completion: @escaping (AlertType?) -> Void) {
+        
+        
+        if !isDataValid(attr: attr, value: value) {
+            completion(.dataError)
+            return
+        }
+        
         PersonData.shared.setDataAttrs(attr: attr, newValue: value)
         
         guard let login = PersonData.shared.currentUser?.login else {
@@ -27,7 +45,6 @@ class UserDataModel: UserDataModelProtocol {
             return
         }
         
-        print("")
         
         let db = FireBaseLayer.shared.configureFirebase()
         db.collection("UsersData").whereField("login", isEqualTo:  login).getDocuments { snapshot, error in
@@ -39,7 +56,7 @@ class UserDataModel: UserDataModelProtocol {
             
             guard let document = snapshot?.documents.first else {
                 print("no docuemnts nil")
-                completion(.emptyData)
+                completion(.serverError)
                 return
             }
             

@@ -7,17 +7,13 @@
 
 import UIKit
 
-enum UserDataError {
-    case badConnection
-    case emptyData
-    case serverError
-}
+
 
 protocol UserDataViewProtocol: UIViewController {
     func saveData()
     func loadData()
     func success()
-    func failure(error: UserDataError)
+    func failure(error: AlertType)
     var presenter: UserDataPresenterProtocol? { get set }
 }
 

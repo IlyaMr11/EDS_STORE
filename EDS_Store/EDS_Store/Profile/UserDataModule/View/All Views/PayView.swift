@@ -30,7 +30,7 @@ class PayView: UIViewController, UserDataViewProtocol {
         
     }
     
-    func failure(error: UserDataError) {
+    func failure(error: AlertType) {
     
     }
 }

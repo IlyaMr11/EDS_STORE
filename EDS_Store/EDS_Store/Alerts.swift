@@ -84,6 +84,27 @@ class Alerts {
         alert.addAction(action)
         return alert
     }()
+    
+    lazy var dataErrorAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Некоректные данные", message: "Введите корректные данные", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        return alert
+    }()
+    
+    lazy var badConnectionAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Плохое соединение", message: "Установите стабильное соединение с интернетом", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        return alert
+    }()
+    
+    lazy var successSaveAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Сохранено", message: "Данные успешно сохранены", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        return alert
+    }()
 }
 
 let allAlerts = Alerts()
@@ -101,6 +122,8 @@ enum AlertType {
     case noUser
     case emptyBasket
     case loginNoFree
+    case dataError
+    case badConnection
     
     // Вычисляемое свойство для получения соответствующего алерта
     var alert: UIAlertController {
@@ -127,6 +150,22 @@ enum AlertType {
             return Alerts.shared.emptyBagAlert
         case .loginNoFree:
             return Alerts.shared.loginNoFreeAlert
+        case .dataError:
+            return Alerts.shared.dataErrorAlert
+        case .badConnection:
+            return Alerts.shared.badConnectionAlert
+        }
+    }
+}
+
+
+enum SuccessAlert {
+    case successSave
+    
+    var alert: UIAlertController {
+        switch self {
+        case .successSave:
+            Alerts.shared.successSaveAlert
         }
     }
 }

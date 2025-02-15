@@ -149,9 +149,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupUserInfoButton(userInfoButton)
         setupNameLabel(nameLabel)
         setupProfileTableView(profileTableView)
-        //setupBottomLogo(logoImageView)
         loadName()
-    
     }
     
     
@@ -220,13 +218,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([tableView.topAnchor.constraint(equalTo: grayView.bottomAnchor, constant: 45),
-                                     tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), tableView.widthAnchor.constraint(equalToConstant: view.bounds.width), tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -175)])
-    }
-    
-    func setupBottomLogo(_ image: UIImageView) {
-        view.addSubview(image)
-        image.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([image.topAnchor.constraint(equalTo: profileTableView.bottomAnchor, constant: 20), image.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), image.widthAnchor.constraint(equalToConstant: 180), image.heightAnchor.constraint(equalToConstant: 130)])
+                                     tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), tableView.widthAnchor.constraint(equalToConstant: view.bounds.width), tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)])
     }
 
 }
@@ -241,6 +233,7 @@ extension MainProfileView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = cellsText[indexPath.row]
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         cell.accessoryType = .disclosureIndicator
         cell.backgroundColor = color1
         cell.layer.cornerRadius = 10
@@ -248,7 +241,7 @@ extension MainProfileView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 80
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

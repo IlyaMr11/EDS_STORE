@@ -83,9 +83,7 @@ class NameView: UIViewController, UserDataViewProtocol {
     }
     
     func saveData() {
-        if let name = nameTextField.text {
-            presenter?.updateUserData(attr: .name, data: name)
-        }
+        presenter?.updateUserData(attr: .name, data: nameTextField.text ?? "")
     }
     
     func loadData() {
@@ -93,30 +91,23 @@ class NameView: UIViewController, UserDataViewProtocol {
     }
     
     func success() {
-        
+        let alert = SuccessAlert.successSave.alert
+        present(alert, animated: true)
     }
     
-    func failure(error: UserDataError) {
+    func failure(error: AlertType) {
+        if error == .dataError {
+            showAlert(alert: AlertType.userName.alert)
+            return
+        }
+        showAlert(alert: error.alert)
         
     }
     
     
     //MARK: - TARGETS
     @objc func safeName() {
-        if Checker.shared.checkUserName(nameTextField.text) {
-            saveData()
-            
-            print("presentingViewController: \(String(describing: presentingViewController))")
-            if let tabBarController = presentingViewController as? UITabBarController {
-                if let navVC = tabBarController.selectedViewController as? UINavigationController {
-                    navVC.viewControllers.first?.viewDidAppear(true)
-                    print("i call update")
-                }
-            }
-            dismiss(animated: true)
-        } else {
-            showAlert(alert: allAlerts.userNameAlert)
-        }
+        saveData()
     }
     
     func showAlert(alert: UIAlertController) {
@@ -125,6 +116,13 @@ class NameView: UIViewController, UserDataViewProtocol {
     
     //MARK: - CLOSE VIEW PRESS
     @objc func closeView() {
+        print("presentingViewController: \(String(describing: presentingViewController))")
+        if let tabBarController = presentingViewController as? UITabBarController {
+            if let navVC = tabBarController.selectedViewController as? UINavigationController {
+                navVC.viewControllers.first?.viewDidAppear(true)
+                print("i call update")
+            }
+        }
         dismiss(animated: true)
     }
     

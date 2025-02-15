@@ -36,7 +36,10 @@ class UserDataPresenter: UserDataPresenterProtocol {
             if let error = error {
                 DispatchQueue.main.async {
                     self?.view?.failure(error: error)
-                    
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self?.view?.success()
                 }
             }
         }
