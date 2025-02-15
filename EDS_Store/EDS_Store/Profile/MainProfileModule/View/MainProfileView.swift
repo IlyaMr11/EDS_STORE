@@ -197,7 +197,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         view.addSubview(grayView)
         View.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            View.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10), View.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), View.heightAnchor.constraint(equalToConstant: 75), View.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.85)])
+            View.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20), View.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), View.heightAnchor.constraint(equalToConstant: 75), View.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.85)])
     }
     
     //MARK: - SETUP USERINFO

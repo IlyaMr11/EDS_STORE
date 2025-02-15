@@ -131,6 +131,7 @@ class SignInView: UIViewController, SignInViewProtocol {
         super.viewDidLoad()
         title = "Вход"
         view.backgroundColor = .white
+        self.navigationItem.largeTitleDisplayMode = .never
         setupAllViews()
         // Do any additional setup after loading the view.
     }
@@ -148,7 +149,7 @@ class SignInView: UIViewController, SignInViewProtocol {
         view.addSubview(imageView)
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.45).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.125).isActive = true
     }
     
@@ -157,13 +158,13 @@ class SignInView: UIViewController, SignInViewProtocol {
         view.addSubview(label)
         label.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -view.bounds.width * 0.2).isActive = true
         label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: view.bounds.width * 0.2).isActive = true
-        label.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 5).isActive = true
-        label.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.15).isActive = true
+        label.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 0).isActive = true
+        label.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.12).isActive = true
     }
     
     func setupBorder(_ border: UIView) {
         view.addSubview(border)
-        border.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor).isActive = true
+        border.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 15).isActive = true
         border.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
         border.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         border.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.825).isActive = true
@@ -172,7 +173,7 @@ class SignInView: UIViewController, SignInViewProtocol {
     //MARK: SETUP StackViews
     func setupFieldsStackView(_ stackView: UIStackView) {
         view.addSubview(stackView)
-        stackView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 20).isActive = true
+        stackView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 15).isActive = true
         stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.16).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
