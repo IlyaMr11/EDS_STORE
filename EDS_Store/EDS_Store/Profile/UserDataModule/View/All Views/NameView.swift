@@ -39,7 +39,7 @@ class NameView: UIViewController, UserDataViewProtocol {
     private lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Ваше имя"
-        textField.text = ""
+        textField.text = PersonData.shared.userData?.name
         textField.delegate = self
         textField.textAlignment = .right
         return textField
@@ -83,7 +83,9 @@ class NameView: UIViewController, UserDataViewProtocol {
     }
     
     func saveData() {
-        
+        if let name = nameTextField.text {
+            presenter?.updateUserData(attr: .name, data: name)
+        }
     }
     
     func loadData() {
@@ -102,11 +104,16 @@ class NameView: UIViewController, UserDataViewProtocol {
     //MARK: - TARGETS
     @objc func safeName() {
         if Checker.shared.checkUserName(nameTextField.text) {
-            if let name = nameTextField.text {
-                //user1Data.name = name
-                delegate?.didUpdateName(name)
-                dismiss(animated: true)
+            saveData()
+            
+            print("presentingViewController: \(String(describing: presentingViewController))")
+            if let tabBarController = presentingViewController as? UITabBarController {
+                if let navVC = tabBarController.selectedViewController as? UINavigationController {
+                    navVC.viewControllers.first?.viewDidAppear(true)
+                    print("i call update")
+                }
             }
+            dismiss(animated: true)
         } else {
             showAlert(alert: allAlerts.userNameAlert)
         }

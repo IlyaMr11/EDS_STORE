@@ -9,6 +9,7 @@ import UIKit
 
 protocol MainProfileViewProtocol: AnyObject {
     func success()
+    func updateName()
     func failure(alert: UIAlertController?)
     func setupName(_ name: String)
 }
@@ -48,7 +49,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         button.setTitle("Войти или зарегистрироваться", for: .normal)
         button.backgroundColor = .orange
         button.layer.cornerRadius = buttonRadius
-        button.addTarget(self, action: #selector(toSignVC), for: .touchUpInside)
+        button.addTarget(self, action: #selector(toSignVC(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -71,7 +72,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         button.setImage(image, for: .normal)
         button.backgroundColor = color1
         button.layer.cornerRadius = buttonRadius
-        button.addTarget(self, action: #selector(userInfoVC), for: .touchUpInside)
+        //button.addTarget(self, action: #selector(userInfoVC), for: .touchUpInside)
         return button
     }()
     
@@ -107,6 +108,11 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateName()
+    }
+    
     //MARK: - CHOOSE VIEW
     func setupViews() {
         if PersonData.shared.currentUser != nil {
@@ -120,7 +126,8 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     }
     
     //MARK: - TARGETS
-    @objc func toSignVC() {
+    @objc func toSignVC(sender: UIButton) {
+        ButtonAnimations.growSize(layer: sender.layer)
         presenter?.toSignIn()
     }
     
@@ -151,6 +158,13 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     func setupName(_ name: String) {
         print("I setup name")
         nameLabel.text = name
+    }
+    
+    func updateName() {
+        print("i Update name")
+        if let name = PersonData.shared.userData?.name {
+            nameLabel.text = name
+        }
     }
     
     func loadName() {

@@ -63,6 +63,7 @@ class MainProfileModel: MainProfileModelProtocol {
             let phone = data["phone"] as? String ?? ""
             let notify = data["notify"] as? Bool ?? false
             let p = data["purchase"] as? [[String: Any]] ?? [[:]]
+            let address = data["address"] as? [String] ?? []
             
             var purchases = [(Product, Int, String)]()
             for complex in p {
@@ -73,7 +74,7 @@ class MainProfileModel: MainProfileModelProtocol {
                 purchases.append((product, count, status))
             }
             
-            let userData = UserData(login: login, name: name, purchase: purchases, phone: phone, notify: notify)
+            let userData = UserData(login: login, name: name, purchase: purchases, phone: phone, address: address, notify: notify)
             PersonData.shared.setUserData(userData)
             completion(userData, nil)
         }

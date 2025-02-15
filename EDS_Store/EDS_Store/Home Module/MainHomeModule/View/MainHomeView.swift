@@ -15,6 +15,8 @@ protocol MainHomeViewProtocol: AnyObject {
 
 class MainHomeView: UIViewController, MainHomeViewProtocol {
     
+    private let threshold: CGFloat = 100
+    
     var presenter: MainHomePresenterProtocol?
     var productArray: [(Product, Product)] = []
     //MARK: - VIEWS
@@ -106,7 +108,7 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
     func setupSearchView(_ sView: UIView) {
         view.addSubview(sView)
         sView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([sView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20), sView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20),
+        NSLayoutConstraint.activate([sView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30), sView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20),
             sView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20),
             sView.heightAnchor.constraint(equalToConstant: 80)])
         setupTextField(searchTextField)
@@ -116,7 +118,7 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
     func setupTableView(_ table: UITableView) {
         view.addSubview(table)
         table.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([table.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 20), table.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor), table.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor), table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)])
+        NSLayoutConstraint.activate([table.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 30), table.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor), table.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor), table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)])
     }
     
     func failure() {
@@ -126,6 +128,9 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
     @objc func searchProduct() {
         
     }
+    
+    
+    
 }
 
 extension MainHomeView: UITextFieldDelegate & UITableViewDelegate & UITableViewDataSource {
@@ -142,6 +147,7 @@ extension MainHomeView: UITextFieldDelegate & UITableViewDelegate & UITableViewD
         return cell
     }
     
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         300
     }
@@ -149,5 +155,22 @@ extension MainHomeView: UITextFieldDelegate & UITableViewDelegate & UITableViewD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        
+        if offsetY > threshold {
+            self.navigationItem.largeTitleDisplayMode = .never
+        } else {
+            self.navigationItem.largeTitleDisplayMode = .always
+        }
+        
+        // Анимация изменения размера заголовка
+        UIView.animate(withDuration: 0.2) {
+            self.navigationController?.navigationBar.layoutIfNeeded()
+        }
     }
 }

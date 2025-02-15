@@ -16,6 +16,8 @@ protocol BagViewProtocol: AnyObject {
 
 class BagView: UIViewController, BagViewProtocol {
     
+    private let yPosition: CGFloat = 100
+    
     var presenter: BagPresenterProtocol?
     var bagArray: [(Product, Int)] = []
     var imageArray: [UIImage] = []
@@ -59,7 +61,7 @@ class BagView: UIViewController, BagViewProtocol {
         view.addSubview(bagTableView)
         bagTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            bagTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            bagTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             bagTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bagTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             bagTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
@@ -85,4 +87,17 @@ extension BagView: UITableViewDelegate & UITableViewDataSource {
         return 300
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        
+        if offsetY > yPosition {
+            self.navigationItem.largeTitleDisplayMode = .never
+        } else {
+            self.navigationItem.largeTitleDisplayMode = .always
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.navigationController?.navigationBar.layoutIfNeeded()
+        }
+    }
 }

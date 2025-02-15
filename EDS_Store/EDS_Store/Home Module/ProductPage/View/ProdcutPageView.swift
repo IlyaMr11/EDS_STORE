@@ -54,7 +54,7 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         button.setTitle("Добавить в корзину", for: .normal)
         button.layer.cornerRadius = 17
         button.titleLabel?.font = .systemFont(ofSize: 23, weight: .medium)
-        button.addTarget(self, action: #selector(addProduct), for: .touchUpInside)
+        button.addTarget(self, action: #selector(addProduct(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -68,7 +68,8 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         present(alert, animated: true)
     }
     
-    @objc func addProduct() {
+    @objc func addProduct(sender: UIButton) {
+        ButtonAnimations.growSize(layer: sender.layer)
         guard let product = self.product else { return }
         presenter?.addToBag(product: product)
     }

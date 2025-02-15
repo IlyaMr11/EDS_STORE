@@ -83,7 +83,7 @@ class SignInView: UIViewController, SignInViewProtocol {
         button.backgroundColor = .black
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = buttonsRadius
-        button.addTarget(self, action: #selector(toProfile), for: .touchUpInside)
+        button.addTarget(self, action: #selector(toProfile(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -93,7 +93,7 @@ class SignInView: UIViewController, SignInViewProtocol {
         button.backgroundColor = .orange
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = buttonsRadius
-        button.addTarget(self, action: #selector(toRegistration), for: .touchUpInside)
+        button.addTarget(self, action: #selector(toRegistration(sender: )), for: .touchUpInside)
         return button
     }()
     
@@ -111,7 +111,7 @@ class SignInView: UIViewController, SignInViewProtocol {
     private lazy var fieldsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [loginTextField, passwordTextField])
         stackView.axis = .vertical
-        stackView.spacing = view.bounds.width / 30
+        stackView.spacing = 20
         stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -164,7 +164,7 @@ class SignInView: UIViewController, SignInViewProtocol {
     func setupBorder(_ border: UIView) {
         view.addSubview(border)
         border.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor).isActive = true
-        border.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5).isActive = true
+        border.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
         border.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         border.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.825).isActive = true
     }
@@ -183,16 +183,18 @@ class SignInView: UIViewController, SignInViewProtocol {
         stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.225).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -20).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -15).isActive = true
     }
     
     
     //MARK: - TARGETS
-    @objc func toRegistration() {
+    @objc func toRegistration(sender: UIButton) {
+        ButtonAnimations.growSize(layer: sender.layer)
         self.presenter?.toRegistation()
     }
     
-    @objc func toProfile() {
+    @objc func toProfile(sender: UIButton) {
+        ButtonAnimations.growSize(layer: sender.layer)
         if let login = loginTextField.text, let password = passwordTextField.text {
             presenter?.toMainProfile(login: login, password: password)
         }

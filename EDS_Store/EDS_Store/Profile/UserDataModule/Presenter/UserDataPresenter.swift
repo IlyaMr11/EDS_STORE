@@ -9,7 +9,7 @@ import Foundation
 
 protocol UserDataPresenterProtocol {
     func loadUserData(data: Any)
-    func updateUserData(data: Any)
+    func updateUserData(attr: DataAttrs, data: Any)
     init(view: UserDataViewProtocol, model: UserDataModelProtocol,  router: ProfileRouterProtocol)
 }
 
@@ -31,7 +31,15 @@ class UserDataPresenter: UserDataPresenterProtocol {
         
     }
         
-    func updateUserData(data: Any) {
+    func updateUserData(attr: DataAttrs, data: Any) {
+        model.saveUserData(attr: attr, value: data) { [weak self] error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self?.view?.failure(error: error)
+                    
+                }
+            }
+        }
     }
     
         

@@ -44,6 +44,7 @@ class AppCordinator: CordinatorProtocol {
         let profileNavigationController = UINavigationController()
         profileNavigationController.title = "Профиль"
         profileNavigationController.tabBarItem.image = UIImage(systemName: "person.circle")
+        profileNavigationController.setupNavBarAttrs()
         let profileAssemblyBuilder = ProfileAssemblyBuilder()
         let router = ProfileRouter(navigationController: profileNavigationController, profileAssemblyBuilder: profileAssemblyBuilder)
         router.initinal()
@@ -54,6 +55,7 @@ class AppCordinator: CordinatorProtocol {
         let homeNavigationController = UINavigationController()
         homeNavigationController.title = "Главная"
         homeNavigationController.tabBarItem.image = UIImage(systemName: "house")
+        homeNavigationController.setupNavBarAttrs()
         let homeAssemblyBuilder = HomeAssemblyBuilder()
         let router = HomeRouter(navigationController: homeNavigationController, assemblyBuilder: homeAssemblyBuilder)
         router.initinal()
@@ -64,6 +66,7 @@ class AppCordinator: CordinatorProtocol {
         let bagNavigationController = UINavigationController()
         bagNavigationController.title = "Корзина"
         bagNavigationController.tabBarItem.image = UIImage(systemName: "basket")
+        bagNavigationController.setupNavBarAttrs()
         let bagAssemblyBuilder = BagAssemblyBuilder()
         let router = BagRouter(navigationController: bagNavigationController, assemblyBuilder: bagAssemblyBuilder)
         router.initinal()
