@@ -11,11 +11,13 @@ protocol MainProfilePresenterProtocol {
     init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, model: MainProfileModel)
     func tapOnCell(index: Int)
     func tapOnUserInfo()
+    func setupUser()
     func toSignIn()
     func loadName(_ login: String)
 }
 
 class MainProfilePresenter: MainProfilePresenterProtocol {
+    
     
     var router: ProfileRouterProtocol?
     weak var view: MainProfileViewProtocol?
@@ -41,34 +43,33 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
         router?.showSignInModule()
     }
     
-    //MARK: - LOAD ALL USER DATA
-    func loadName(_ login: String) {
-        model?.loadUserData(login, completion: { [weak self] (userData, error) in
-            if let error = error {
-                switch error {
-                case .serverError:
-                    DispatchQueue.main.async {
-                        self?.view?.failure(alert: AlertType.serverError.alert)
-                    }
-                    return
-                case .noInternet:
-                    DispatchQueue.main.async {
-                        self?.view?.failure(alert: AlertType.serverError.alert)
-                        return
-                    }
-                default:
-                    return
+    func setupUser() {
+        model?.setupUser() { [weak self] alert in
+            if let alert = alert {
+                DispatchQueue.main.async {
+                    self?.view?.failure(alert: alert)
                 }
-            }
-            
-            guard let userData = userData else {
-                print("Error loading user data")
                 return
             }
             
             DispatchQueue.main.async {
-                self?.view?.setupName(userData.name ?? "")
+                self?.view?.success()
             }
-        })
+        }
+    }
+    
+    //MARK: - LOAD ALL USER DATA
+    func loadName(_ login: String) {
+        model?.loadUserData(login) { [weak self] error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self?.view?.failure(alert: error)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self?.view?.updateName()
+            }
+        }
     }
 }

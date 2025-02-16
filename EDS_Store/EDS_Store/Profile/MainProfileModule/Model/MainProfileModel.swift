@@ -16,7 +16,8 @@ enum ProfileError: Error {
 
 protocol MainProfileModelProtocol {
     init (networkService: ProfileNetworkServiceProtocol)
-    func loadUserData(_ login: String, completion: @escaping (UserData?, ProfileError?) -> Void)
+    func setupUser(completion: (AlertType?) -> Void)
+    func loadUserData(_ login: String, completion: @escaping (AlertType?) -> Void)
     var userData: UserData? { get set }
 }
 
@@ -30,13 +31,24 @@ class MainProfileModel: MainProfileModelProtocol {
         self.networkService = networkService
     }
     
+    //MARK: - SETUP USER FROM USER DEF
+    func setupUser(completion: (AlertType?) -> Void) {
+        if let person = UserDefaultsData.shared.getUser() {
+            PersonData.shared.setUser(person)
+            completion(nil)
+            return
+        }
+        completion(AlertType.noUser)
+        return
+    }
+    
     //MARK: - LOAD USER DATA
-    func loadUserData(_ login: String, completion: @escaping (UserData?, ProfileError?) -> Void) {
+    func loadUserData(_ login: String, completion: @escaping (AlertType?) -> Void) {
         let db = FireBaseLayer.shared.configureFirebase()
         db.collection("UsersData").whereField("login", isEqualTo: login).getDocuments { (snapshot, error) in
             if let error = error {
                 print("Error - \(error.localizedDescription)")
-                completion(nil, ProfileError.noInternet)
+                completion(AlertType.badConnection)
                 return
             }
             
@@ -44,13 +56,13 @@ class MainProfileModel: MainProfileModelProtocol {
             
             guard let snapshot = snapshot else {
                 print("Error - snapshot is nil")
-                completion(nil, ProfileError.serverError)
+                completion(AlertType.serverError)
                 return
             }
             
             if snapshot.isEmpty {
                 print("Error - snapshot is empty")
-                completion(nil, ProfileError.serverError)
+                completion(AlertType.serverError)
                 return
             }
             
@@ -76,7 +88,7 @@ class MainProfileModel: MainProfileModelProtocol {
             
             let userData = UserData(login: login, name: name, purchase: purchases, phone: phone, address: address, notify: notify)
             PersonData.shared.setUserData(userData)
-            completion(userData, nil)
+            completion(nil)
         }
     }
 }

@@ -10,8 +10,7 @@ import UIKit
 protocol MainProfileViewProtocol: AnyObject {
     func success()
     func updateName()
-    func failure(alert: UIAlertController?)
-    func setupName(_ name: String)
+    func failure(alert: AlertType)
 }
 
 class MainProfileView: UIViewController, MainProfileViewProtocol {
@@ -115,14 +114,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     
     //MARK: - CHOOSE VIEW
     func setupViews() {
-        if PersonData.shared.currentUser != nil {
-            success()
-            print("ura")
-        } else {
-            print("faile i call")
-            failure()
-        }
-             
+        presenter?.setupUser()
     }
     
     //MARK: - TARGETS
@@ -137,10 +129,13 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     }
     
     //MARK: - SETUP BEFORE SIGN
-    func failure(alert: UIAlertController? = nil) {
-        setupLogo(logoImageView)
-        setupWarningLabel(warningLabel)
-        setupToSignButton(toSignButton)
+    func failure(alert: AlertType) {
+        switch alert {
+        case .noUser:
+            noUser()
+        default:
+            showAlert(alert: alert.alert)
+        }
     }
     
     //MARK: - SETUP AFTER SIGN
@@ -151,15 +146,10 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupProfileTableView(profileTableView)
         loadName()
     }
-    
-    
-    func setupName(_ name: String) {
-        print("I setup name")
-        nameLabel.text = name
-    }
+
     
     func updateName() {
-        print("i Update name")
+//        print("i Update name")
         if let name = PersonData.shared.userData?.name {
             nameLabel.text = name
         }
@@ -168,6 +158,17 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     func loadName() {
         presenter?.loadName(PersonData.shared.currentUser?.login ?? "")
     }
+    
+    func noUser() {
+        setupLogo(logoImageView)
+        setupWarningLabel(warningLabel)
+        setupToSignButton(toSignButton)
+    }
+    
+    func showAlert(alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
     
     //MARK: - SETUP LOGO
     func setupLogo(_ imageView: UIImageView) {
