@@ -8,13 +8,11 @@
 import Foundation
 
 struct UserData {
+    var login: String
     var name: String?
-    var sex: String?
+    var purchase: [(Product, Int, String)]
     var phone: String?
-    var email: String?
-    var address: [String] = []
-    var notification: Bool?
+    var address: [String]? = []
+    var notify: Bool?
 }
 
-
-var user1Data = UserData()
