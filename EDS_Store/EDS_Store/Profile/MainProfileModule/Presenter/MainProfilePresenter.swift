@@ -8,12 +8,13 @@
 import UIKit
 
 protocol MainProfilePresenterProtocol {
-    init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, model: MainProfileModel)
+    init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, model: MainProfileModelProtocol)
     func tapOnCell(index: Int)
     func tapOnUserInfo()
     func setupUser()
     func toSignIn()
     func loadName(_ login: String)
+    func signOut()
 }
 
 class MainProfilePresenter: MainProfilePresenterProtocol {
@@ -21,9 +22,9 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
     
     var router: ProfileRouterProtocol?
     weak var view: MainProfileViewProtocol?
-    let model: MainProfileModel?
+    let model: MainProfileModelProtocol?
     
-    required init(view: MainProfileViewProtocol, router: any ProfileRouterProtocol, model:  MainProfileModel) {
+    required init(view: MainProfileViewProtocol, router: any ProfileRouterProtocol, model:  MainProfileModelProtocol) {
         self.view = view
         self.router = router
         self.model = model
@@ -64,12 +65,23 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
             if let error = error {
                 DispatchQueue.main.async {
                     self?.view?.failure(alert: error)
+                    print("I push error on View")
                 }
             }
             
             DispatchQueue.main.async {
                 self?.view?.updateName()
             }
+        }
+    }
+    
+    func signOut() {
+        model?.signOut()
+        DispatchQueue.main.async { [weak self] in
+            var newView = MainProfileView()
+            newView.presenter = self
+            self?.router?.navigationController?.viewControllers[0] = newView
+            self?.view = newView
         }
     }
 }

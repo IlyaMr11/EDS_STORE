@@ -18,7 +18,7 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
 
     func createMainProfileModule(router: any ProfileRouterProtocol) -> UIViewController {
         let view = MainProfileView()
-        let model = MainProfileModel(networkService: ProfileNetworkService.shared)
+        let model = MainProfileModel()
         let presenter = MainProfilePresenter(view: view, router: router, model:  model)
         view.presenter = presenter
         return view

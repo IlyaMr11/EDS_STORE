@@ -97,6 +97,15 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         return tableView
     }()
     
+    //MARK: - EXIT BUTTON
+    private lazy var exitButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("выйти", for: .normal)
+        button.addTarget(self, action: #selector(signOut(sender:)), for: .touchUpInside)
+        button.tintColor = .red
+        return button
+    }()
+    
     //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,15 +153,18 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupUserInfoButton(userInfoButton)
         setupNameLabel(nameLabel)
         setupProfileTableView(profileTableView)
+        configureNavBar()
         loadName()
     }
-
     
     func updateName() {
-//        print("i Update name")
         if let name = PersonData.shared.userData?.name {
             nameLabel.text = name
         }
+    }
+    
+    func configureNavBar() {
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
     }
     
     func loadName() {
@@ -170,6 +182,25 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     }
     
     
+    @objc func signOut(sender: UIButton) {
+        ButtonAnimations.growSize(layer: sender.layer)
+        let alert =  exitAlert()
+        showAlert(alert: alert)
+    }
+    
+    
+    func exitAlert() -> UIAlertController {
+        let alert = UIAlertController(title: "Выход", message: "Вы точно хотите выйти из аккаунта?", preferredStyle: .alert)
+        let exit = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
+            self?.presenter?.signOut()
+        }
+        
+        let cancel = UIAlertAction(title: "Нет остаться", style: .cancel)
+        alert.addAction(exit)
+        alert.addAction(cancel)
+        return alert
+    }
+        
     //MARK: - SETUP LOGO
     func setupLogo(_ imageView: UIImageView) {
         view.addSubview(imageView)
@@ -221,7 +252,6 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         NSLayoutConstraint.activate([tableView.topAnchor.constraint(equalTo: grayView.bottomAnchor, constant: 45),
                                      tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), tableView.widthAnchor.constraint(equalToConstant: view.bounds.width), tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)])
     }
-
 }
 
 

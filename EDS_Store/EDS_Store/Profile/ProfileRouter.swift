@@ -14,7 +14,7 @@ protocol ProfileRouterProtocol {
     func showRegistrationModule()
     func showUserInfoModule()
     var navigationController: UINavigationController? { get }
-    var AssemblyBuilder: ProfileAssemblyBuilderProtocol? { get }
+    var assemblyBuilder: ProfileAssemblyBuilderProtocol? { get }
     func initinal()
     func popToRoot()
     func showUserDataModule(index: Int)
@@ -23,7 +23,7 @@ protocol ProfileRouterProtocol {
 class ProfileRouter: ProfileRouterProtocol {
     
     
-    var AssemblyBuilder: ProfileAssemblyBuilderProtocol?
+    var assemblyBuilder: ProfileAssemblyBuilderProtocol?
     var navigationController: UINavigationController?
     
     var profileAssemblyBuilder: ProfileAssemblyBuilderProtocol?

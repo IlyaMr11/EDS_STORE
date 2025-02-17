@@ -105,17 +105,18 @@ class Alerts {
         alert.addAction(action)
         return alert
     }()
+    
 }
 
 let allAlerts = Alerts()
 
 
-enum AlertType {
-    case serverError
-    case userNotFound
-    case wrongPassword
-    case phone
-    case email
+enum AlertType: String {
+    case serverError = "server error"
+    case userNotFound = "user not found"
+    case wrongPassword = "wrong password"
+    case phone = "phone"
+    case email = "email"
     case userName
     case password
     case confirmPassword

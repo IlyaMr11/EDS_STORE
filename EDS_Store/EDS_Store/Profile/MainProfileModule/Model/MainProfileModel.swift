@@ -7,29 +7,14 @@
 
 import Foundation
 
-enum ProfileError: Error {
-    case noInternet
-    case serverError
-    case noData
-}
-
 
 protocol MainProfileModelProtocol {
-    init (networkService: ProfileNetworkServiceProtocol)
     func setupUser(completion: (AlertType?) -> Void)
     func loadUserData(_ login: String, completion: @escaping (AlertType?) -> Void)
-    var userData: UserData? { get set }
+    func signOut()
 }
 
 class MainProfileModel: MainProfileModelProtocol {
-    let networkService: ProfileNetworkServiceProtocol
-    var name: String?
-    var userData: UserData?
-    
-    
-    required init(networkService: ProfileNetworkServiceProtocol) {
-        self.networkService = networkService
-    }
     
     //MARK: - SETUP USER FROM USER DEF
     func setupUser(completion: (AlertType?) -> Void) {
@@ -90,6 +75,11 @@ class MainProfileModel: MainProfileModelProtocol {
             PersonData.shared.setUserData(userData)
             completion(nil)
         }
+    }
+    
+    func signOut() {
+        PersonData.shared.removeUser()
+        UserDefaultsData.shared.clearUser()
     }
 }
 

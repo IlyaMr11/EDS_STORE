@@ -26,11 +26,11 @@ class PersonData {
     private(set) var currentUser: Person?
     private init() {}
     
-    func setUser(_ person: Person) {
+    func setUser(_ person: Person?) {
         currentUser = person
     }
     
-    func setUserData(_ userData: UserData) {
+    func setUserData(_ userData: UserData?) {
         self.userData = userData
     }
     
@@ -41,6 +41,11 @@ class PersonData {
         case .notify: userData?.notify = newValue as? Bool ?? false
         case .address: userData?.address = newValue as? [String] ?? [""]
         }
+    }
+    
+    func removeUser() {
+        currentUser = nil
+        userData = nil
     }
     
 }
