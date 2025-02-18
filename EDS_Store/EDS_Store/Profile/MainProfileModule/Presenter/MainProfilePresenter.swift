@@ -10,7 +10,6 @@ import UIKit
 protocol MainProfilePresenterProtocol {
     init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, model: MainProfileModelProtocol)
     func tapOnCell(index: Int)
-    func tapOnUserInfo()
     func setupUser()
     func toSignIn()
     func loadName(_ login: String)
@@ -33,10 +32,6 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
     //MARK: - SHOW USER DATA MODULE
     func tapOnCell(index: Int) {
         router?.showUserDataModule(index: index)
-    }
-    
-    func tapOnUserInfo() {
-        router?.showUserInfoModule()
     }
     
     //MARK: - SHOW SIGN IN MODULE
@@ -78,7 +73,7 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
     func signOut() {
         model?.signOut()
         DispatchQueue.main.async { [weak self] in
-            var newView = MainProfileView()
+            let newView = MainProfileView()
             newView.presenter = self
             self?.router?.navigationController?.viewControllers[0] = newView
             self?.view = newView

@@ -11,6 +11,7 @@ protocol MainProfileViewProtocol: AnyObject {
     func success()
     func updateName()
     func failure(alert: AlertType)
+    var presenter: MainProfilePresenterProtocol? { get set }
 }
 
 class MainProfileView: UIViewController, MainProfileViewProtocol {
@@ -131,11 +132,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         ButtonAnimations.growSize(layer: sender.layer)
         presenter?.toSignIn()
     }
-    
-    //MARK: - SHOULD REMOVE
-    @objc func userInfoVC() {
-        presenter?.tapOnUserInfo()
-    }
+
     
     //MARK: - SETUP BEFORE SIGN
     func failure(alert: AlertType) {

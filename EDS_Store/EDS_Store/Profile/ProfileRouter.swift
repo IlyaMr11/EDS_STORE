@@ -12,7 +12,6 @@ protocol ProfileRouterProtocol {
     func popView()
     func showSignInModule()
     func showRegistrationModule()
-    func showUserInfoModule()
     var navigationController: UINavigationController? { get }
     var assemblyBuilder: ProfileAssemblyBuilderProtocol? { get }
     func initinal()
@@ -63,12 +62,6 @@ class ProfileRouter: ProfileRouterProtocol {
         }
     }
     
-    func showUserInfoModule() {
-        if let navigationController = navigationController {
-            guard let userInfoView = profileAssemblyBuilder?.createUserInfoModule(router: self) else {return}
-            navigationController.pushViewController(userInfoView, animated: true)
-        }
-    }
     
     func showUserDataModule(index: Int) {
         if let navigationController = navigationController {

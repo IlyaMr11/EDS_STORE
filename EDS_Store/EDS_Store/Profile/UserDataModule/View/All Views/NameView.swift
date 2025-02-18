@@ -12,8 +12,6 @@ class NameView: UIViewController, UserDataViewProtocol {
     var presenter: (any UserDataPresenterProtocol)?
     
 
-    //MARK: - DELEGATE AND CONSTANTS
-    weak var delegate: UpdateUserDataDelegate?
     let viewRadius = CGFloat(20)
 //    let showStyle = 
     
