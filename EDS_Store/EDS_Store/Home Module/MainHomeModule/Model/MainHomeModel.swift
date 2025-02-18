@@ -37,7 +37,7 @@ class MainHomeModel: MainHomeModelProtocol {
                 completion(nil, error.localizedDescription)
                 return
             }
-        
+            
             guard let data = data, let image = UIImage(data: data) else {
                 completion(nil, "incorrect data")
                 return

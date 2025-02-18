@@ -19,7 +19,6 @@ class HomeFirebaseService: HomeFirebaseServiceProtocol {
     
     func getProductData(completion: @escaping ([Product]?, String?) -> Void) {
         DispatchQueue.global().async {
-            print("hi")
             let db = FireBaseLayer.shared.configureFirebase()
             db.collection("Products").getDocuments { (querySnapshot, error) in
                 if let error = error {

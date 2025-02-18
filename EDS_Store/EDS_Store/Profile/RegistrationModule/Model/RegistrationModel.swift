@@ -7,62 +7,73 @@
 
 import Foundation
 
-enum RegError {
-    case serverError
-    case loginNoFree
-    case success
-}
 
 protocol RegistrationModelProtocol {
-    func createUser(login: String, password: String, completion: @escaping (RegError) -> Void)
-    func checkFields(fields: Fields) -> Int
+    func createUser(fields: Fields, completion: @escaping (AlertType?) -> Void)
+    func checkFields(fields: Fields) -> AlertType?
 }
 
 class RegistrationModel: RegistrationModelProtocol {
     
-    func checkFields(fields: Fields) -> Int {
+    func checkFields(fields: Fields) -> AlertType? {
+        let alerts: [AlertType] = [.password, .userName, .email, .confirmPassword]
         let checkingArray = [Checker.shared.checkPassword(fields.password),
                              Checker.shared.checkUserName(fields.name),
                              Checker.shared.checkEmail(fields.login),
                              Checker.shared.checkEqualPasswords(fields.password, fields.confirmPassword)]
         
-        for i in 0..<checkingArray.count {
-            if !checkingArray[i] {
-                return  i
+        for (b, alert) in zip(checkingArray, alerts) {
+            if !b {
+                return alert
             }
         }
-        return -1
+        
+        return nil
     }
     
     
-    func createUser(login: String, password: String, completion: @escaping (RegError) -> Void) {
+    func createUser(fields: Fields, completion: @escaping (AlertType?) -> Void) {
+        if let alert = checkFields(fields: fields) {
+            completion(alert)
+            return
+        }
+        
+        let password = fields.password, login = fields.login, name = fields.name
+        
         let db = FireBaseLayer.shared.configureFirebase()
         db.collection("Users").whereField("login", isEqualTo: login).getDocuments { (snapshot, error) in
-            if let error = error {
-                print("Ошибка \(error.localizedDescription)")
-                completion(RegError.serverError)
+            
+            
+            if error != nil {
+                completion(AlertType.serverError)
                 return
             }
             
             guard let snapshot = snapshot else {
-                print("Snapshot is nil")
-                completion(RegError.serverError)
+                completion(AlertType.serverError)
                 return
             }
             
             if !snapshot.documents.isEmpty {
-                completion(RegError.loginNoFree)
+                completion(AlertType.loginNoFree)
                 return
             }
             
             db.collection("Users").document().setData(["login": login, "password": password]) { error in
-                if let error = error {
-                    print("Error adding document: \(error)")
-                    completion(RegError.serverError)
+                if error != nil {
+                    completion(AlertType.serverError)
                     return
                 }
-                print("all - ok")
-                completion(RegError.success)
+            }
+            
+            db.collection("UsersData").document().setData(["login": login, "name": name]) { error in
+                if error != nil {
+                    print("UsersData server error")
+                    completion(AlertType.serverError)
+                    return
+                }
+                
+                completion(nil)
             }
         }
         
