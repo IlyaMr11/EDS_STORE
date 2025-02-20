@@ -57,7 +57,7 @@ class NotificationView: UIViewController, UserDataViewProtocol {
         let label = UILabel()
         label.text = "Получать уведомления:"
         label.textColor = .black
-        label.font = .boldSystemFont(ofSize: .init(15))
+        label.font = .systemFont(ofSize: .init(20), weight: .medium)
         return label
     }()
     
@@ -75,14 +75,20 @@ class NotificationView: UIViewController, UserDataViewProtocol {
         super.viewDidLoad()
         setupNotificView()
         setupAll()
+        loadData()
     }
     
     func saveData() {
-        
+        presenter?.updateUserData(attr: .notify, data: notifcSwitch.isOn)
+    }
+    
+    func setupData(data: Any) {
+        let data = data as? Bool ?? false
+        notifcSwitch.isOn = data
     }
     
     func loadData() {
-        
+        presenter?.loadUserData(attr: .notify)
     }
     
     func success() {
@@ -91,7 +97,7 @@ class NotificationView: UIViewController, UserDataViewProtocol {
     }
     
     func failure(error: AlertType) {
-        
+        showAlert(alert: error.alert)
     }
     
     //MARK: - TARGETS
@@ -101,8 +107,7 @@ class NotificationView: UIViewController, UserDataViewProtocol {
 
     //MARK: - SAFE NOTIFICATION PRESS
     @objc func safeNotification() {
-        //user1Data.notify = notifcSwitch.isOn
-        dismiss(animated: true , completion: nil)
+        saveData()
     }
     
     //MARK: - SETUP NOTIFIC VIEW
@@ -149,7 +154,7 @@ class NotificationView: UIViewController, UserDataViewProtocol {
         NSLayoutConstraint.activate([label.leadingAnchor.constraint(equalTo: notificationView.leadingAnchor, constant: 10),
                                      label.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 15),
                                      label.heightAnchor.constraint(equalToConstant: 40),
-                                     label.widthAnchor.constraint(equalToConstant: 200)])
+                                     label.widthAnchor.constraint(equalToConstant: 250)])
     }
     
     func setupSwitch(_ switcher: UISwitch) {
@@ -169,4 +174,10 @@ class NotificationView: UIViewController, UserDataViewProtocol {
                                      button.heightAnchor.constraint(equalTo: notificationView.widthAnchor, multiplier: 0.15)])
     }
     
+}
+
+extension UIViewController {
+    func showAlert(alert: UIAlertController) {
+        self.present(alert, animated: true)
+    }
 }

@@ -17,6 +17,8 @@ enum DataAttrs: String {
     case notify = "notify"
     case phone = "phone"
     case address = "address"
+    case history = "history"
+    case delivery = "delivery"
 }
 
 class PersonData {
@@ -39,7 +41,8 @@ class PersonData {
         case .name: userData?.name = newValue as? String ?? ""
         case .phone: userData?.phone = newValue as? String ?? ""
         case .notify: userData?.notify = newValue as? Bool ?? false
-        case .address: userData?.address = newValue as? [String] ?? [""]
+        case .address: userData?.address = newValue as? [String] ?? []
+        default: break
         }
     }
     

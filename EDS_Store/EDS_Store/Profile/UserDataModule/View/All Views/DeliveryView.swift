@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol DeliveryViewProtocol: AnyObject {
-    func success()
-    func failure()
-}
 
 class DeliveryView: UIViewController, UserDataViewProtocol {
     
@@ -98,11 +94,15 @@ class DeliveryView: UIViewController, UserDataViewProtocol {
         
     }
     
-    func loadData() {
+    func setupData(data: Any) {
         
     }
     
     func failure(error: AlertType) {
+        
+    }
+    
+    func success() {
         
     }
     
@@ -150,14 +150,3 @@ class DeliveryView: UIViewController, UserDataViewProtocol {
     
 }
 
-extension DeliveryView: DeliveryViewProtocol {
-    func success() {
-        
-    }
-    
-    func failure() {
-        
-    }
-    
-    
-}

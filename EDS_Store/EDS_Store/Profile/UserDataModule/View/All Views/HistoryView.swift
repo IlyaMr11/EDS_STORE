@@ -7,17 +7,16 @@
 
 import UIKit
 
-protocol HistoryViewProtocol: AnyObject {
-    func success()
-    func failure()
-}
-
 class HistoryView: UIViewController, UserDataViewProtocol {
+    func success() {
+        
+    }
+    
     func saveData() {
         
     }
     
-    func loadData() {
+    func setupData(data: Any) {
         
     }
     
@@ -148,13 +147,3 @@ class HistoryView: UIViewController, UserDataViewProtocol {
     }
 }
 
-extension HistoryView: HistoryViewProtocol {
-    func success() {
-        
-    }
-    
-    func failure() {
-        
-    }
-    
-}

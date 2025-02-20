@@ -41,7 +41,7 @@ class ProfileAssemblyBuilder: ProfileAssemblyBuilderProtocol {
     
 
     func createUserDataModule(router: ProfileRouterProtocol, index: Int) -> UIViewController {
-        let array = [DeliveryView.self, HistoryView.self, PayView.self, NameView.self, PhoneView.self, AddressView.self, NotificationView.self]
+        let array = [DeliveryView.self, HistoryView.self, NameView.self, PhoneView.self, AddressView.self, NotificationView.self]
         let view = array[index].init() as! UserDataViewProtocol
         let model = UserDataModel()
         let presenter = UserDataPresenter(view: view, model: model, router: router)

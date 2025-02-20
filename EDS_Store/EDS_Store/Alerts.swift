@@ -106,6 +106,12 @@ class Alerts {
         return alert
     }()
     
+    lazy var noDataAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Нет данных", message: "Нет данных для отображения", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        alert.addAction(action)
+        return alert
+    }()
 }
 
 let allAlerts = Alerts()
@@ -125,6 +131,7 @@ enum AlertType: String {
     case loginNoFree
     case dataError
     case badConnection
+    case noData
     
     // Вычисляемое свойство для получения соответствующего алерта
     var alert: UIAlertController {
@@ -155,6 +162,8 @@ enum AlertType: String {
             return Alerts.shared.dataErrorAlert
         case .badConnection:
             return Alerts.shared.badConnectionAlert
+        case .noData:
+            return Alerts.shared.noDataAlert
         }
     }
 }

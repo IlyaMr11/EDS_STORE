@@ -56,22 +56,7 @@ class MainProfileModel: MainProfileModelProtocol {
             let document = snapshot.documents[0]
             let data = document.data()
             
-            let name = data["name"] as? String ?? ""
-            let phone = data["phone"] as? String ?? ""
-            let notify = data["notify"] as? Bool ?? false
-            let p = data["purchase"] as? [[String: Any]] ?? [[:]]
-            let address = data["address"] as? [String] ?? []
-            
-            var purchases = [(Product, Int, String)]()
-            for complex in p {
-                let status = complex["status"] as? String ?? ""
-                let count = complex["count"] as? Int ?? 0
-                let pr = complex["product"] as? [String: Any] ?? [:]
-                let product = ProductDecoder.prodcutDecoder(pr)
-                purchases.append((product, count, status))
-            }
-            
-            let userData = UserData(login: login, name: name, purchase: purchases, phone: phone, address: address, notify: notify)
+            let userData = UserDataCoder.decode(data: data)
             PersonData.shared.setUserData(userData)
             completion(nil)
         }

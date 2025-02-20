@@ -20,8 +20,8 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     
     let color1 = UIColor.init(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     let buttonRadius = CGFloat(15)
-    let cellsText = ["Ваши доставки", "История заказов",
-                     "Способы оплаты", "Имя", "Номер телефона", "Адреса", "Уведомления"]
+    let cellsText = ["Ваши доставки", "История заказов", "Имя",
+                     "Номер телефона", "Адреса", "Уведомления"]
     
     var presenter: MainProfilePresenterProtocol?
 
@@ -172,10 +172,6 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupLogo(logoImageView)
         setupWarningLabel(warningLabel)
         setupToSignButton(toSignButton)
-    }
-    
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
     }
     
     
