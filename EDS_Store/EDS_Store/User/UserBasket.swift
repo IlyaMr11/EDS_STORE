@@ -12,21 +12,21 @@ class UserBasket {
     
     private init() {}
     
-    private(set) var currentBasket: [(Product, Int)] = []
+    private(set) var currentBasket: [Position] = UserDefaultsBasket.shared.getData() 
     
-    func addProductToBasket(_ product: Product, count: Int) {
+    func addProductToBasket(_ product: anyProduct, count: Int) {
         for i in 0..<currentBasket.count {
-            let (p, c) = currentBasket[i]
-            if p.name == product.name {
-                currentBasket[i] = (p, c + count)
+            let pr = currentBasket[i].product
+            if pr.name == product.name {
+                currentBasket[i].count += count
                 return
             }
         }
-        currentBasket.append((product, count))
+        currentBasket.append(Position(product: product, count: count))
     }
     
     func changeCount(index: Int, count: Int) {
-        currentBasket[index].1 = count
+        currentBasket[index].count = count
     }
     
     func deleteProduct(index: Int) {

@@ -11,8 +11,9 @@ protocol BagModelProtocol {
     func deleteProduct(index: Int)
     func changeCount(index: Int, count: Int)
     func loadPhoto(urlString: String, completion: @escaping (UIImage?, AlertType?) -> Void)
-    func loadData(completion: @escaping ([(Product, Int)]?, AlertType?) -> Void)
+    func loadData(completion: @escaping ([Position]?, AlertType?) -> Void)
 }
+
 
 class BagModel: BagModelProtocol {
     func changeCount(index: Int, count: Int) {
@@ -44,7 +45,7 @@ class BagModel: BagModelProtocol {
         task.resume()
     }
     
-    func loadData(completion: @escaping ([(Product, Int)]?, AlertType?) -> Void) {
+    func loadData(completion: @escaping ([Position]?, AlertType?) -> Void) {
         if PersonData.shared.currentUser == nil {
             completion(nil, .noUser)
             return

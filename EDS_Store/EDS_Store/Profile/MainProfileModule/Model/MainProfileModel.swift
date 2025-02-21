@@ -66,6 +66,7 @@ class MainProfileModel: MainProfileModelProtocol {
         PersonData.shared.removeUser()
         UserDefaultsData.shared.clearUser()
         UserBasket.shared.removeData()
+        UserDefaultsBasket.shared.clearBasket()
     }
 }
 

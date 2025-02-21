@@ -11,7 +11,7 @@ protocol BagPresenterProtocol {
     init(view: BagViewProtocol, router: BagRouterProtocol, model: BagModelProtocol)
     func addCountProductv(newVal: Int, index: Int)
     func setupData()
-    func setupImages(array: [(Product, Int)])
+    func setupImages(array: [Position])
 }
 
 class BagPresenter: BagPresenterProtocol {
@@ -80,13 +80,13 @@ class BagPresenter: BagPresenterProtocol {
 
     }
     
-    func setupImages(array: [(Product, Int)]) {
+    func setupImages(array: [Position]) {
         DispatchQueue.global().async { [weak self] in
             let group = DispatchGroup()
             var photos: [UIImage] = []
-            for (p, c) in array {
+            for p in array {
                 group.enter()
-                let url = p.picture
+                let url = p.product.picture
                 self?.model.loadPhoto(urlString: url) { [weak self] (image, alert) in
                     if let alert = alert {
                         DispatchQueue.main.async {

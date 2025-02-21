@@ -16,9 +16,4 @@ struct UserData {
     var notify: Bool?
 }
 
-struct Purchase {
-    var product: Product
-    var count: Int
-    var date: Date
-    var status: String
-}
+

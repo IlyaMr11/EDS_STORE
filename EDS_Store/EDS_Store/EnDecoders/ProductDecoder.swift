@@ -40,7 +40,8 @@ class ProductDecoder {
             name: data["name"] as? String ?? "",
             price: data["price"] as? String ?? "",
             productType: data["productType"] as? String ?? "",
-            picture: data["picture"] as? String ?? ""
+            picture: data["picture"] as? String ?? "",
+            someData: [:]
         )
     }
 }

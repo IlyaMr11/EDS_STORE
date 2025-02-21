@@ -8,7 +8,7 @@
 import UIKit
 
 protocol BagViewProtocol: AnyObject {
-    func success(array: [(Product, Int)])
+    func success(array: [Position])
     func failure(alert: AlertType)
     func loadImages(imageArray: [UIImage])
 }
@@ -19,7 +19,7 @@ class BagView: UIViewController, BagViewProtocol {
     private let yPosition: CGFloat = 100
     
     var presenter: BagPresenterProtocol?
-    var bagArray: [(Product, Int)] = []
+    var bagArray: [Position] = []
     var imageArray: [UIImage] = []
     
     lazy var bagTableView: UITableView = {
@@ -93,7 +93,12 @@ class BagView: UIViewController, BagViewProtocol {
         presenter?.setupData()
     }
     
-    func success(array: [(Product, Int)]) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        UserDefaultsBasket.shared.updateBasket()
+    }
+    
+    func success(array: [Position]) {
         self.bagArray = array
         bagTableView.reloadData()
         presenter?.setupImages(array: array)
@@ -199,6 +204,7 @@ extension BagView: UITableViewDelegate & UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: BagTableViewCell.identifier, for: indexPath) as! BagTableViewCell
         cell.configure(with: bagArray[indexPath.row])
         cell.index = indexPath.row
+        cell.delegate = self
         if imageArray.count > indexPath.row {
             cell.loadPhoto(image: imageArray[indexPath.row])
         }
@@ -221,5 +227,21 @@ extension BagView: UITableViewDelegate & UITableViewDataSource {
         UIView.animate(withDuration: 0.3) {
             self.navigationController?.navigationBar.layoutIfNeeded()
         }
+    }
+}
+
+
+extension BagView: BagCellDelegate {
+    func delete(index: Int) {
+        bagArray.remove(at: index)
+        imageArray.remove(at: index)
+        bagTableView.reloadData()
+        UserBasket.shared.deleteProduct(index: index)
+    }
+    
+    func changeValue(index: Int, value: Int) {
+        bagArray[index].count = value
+        bagTableView.reloadData()
+        UserBasket.shared.changeCount(index: index, count: value)
     }
 }
