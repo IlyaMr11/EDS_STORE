@@ -8,38 +8,59 @@
 import UIKit
 
 protocol BagModelProtocol {
-    func deleteProduct(product: Product, user: UserBag)
-    func changeCount(product: Product, count: Int, user: UserBag)
-    func loadPhoto(urlString: String, completion: @escaping (UIImage?) -> Void)
+    func deleteProduct(index: Int)
+    func changeCount(index: Int, count: Int)
+    func loadPhoto(urlString: String, completion: @escaping (UIImage?, AlertType?) -> Void)
+    func loadData(completion: @escaping ([(Product, Int)]?, AlertType?) -> Void)
 }
 
 class BagModel: BagModelProtocol {
-    func changeCount(product: any Product, count: Int, user: UserBag) {
-        
+    func changeCount(index: Int, count: Int) {
+        UserBasket.shared.changeCount(index: index, count: count)
     }
     
-    func loadPhoto(urlString: String, completion: @escaping (UIImage?) -> Void) {
+    
+    func loadPhoto(urlString: String, completion: @escaping (UIImage?, AlertType?) -> Void) {
         guard let url = URL(string: urlString) else {
-            completion(nil)
+            completion(nil, .serverError)
             print("incorrrect url")
             return
         }
         
         let task = URLSession.shared.dataTask(with: url) { data, _, error in
+            if let _ = error {
+                completion(nil, .serverError)
+                return
+            }
+            
             guard let data = data else {
-                completion(nil)
-                print("error downloading data: \(error?.localizedDescription ?? "No description")")
+                completion(nil, .badConnection)
                 return
             }
             DispatchQueue.main.async {
-                completion(UIImage(data: data))
+                completion(UIImage(data: data), nil)
             }
         }
         task.resume()
     }
     
-    func deleteProduct(product: any Product, user: UserBag) {
+    func loadData(completion: @escaping ([(Product, Int)]?, AlertType?) -> Void) {
+        if PersonData.shared.currentUser == nil {
+            completion(nil, .noUser)
+            return
+        }
         
+        if UserBasket.shared.currentBasket.isEmpty {
+            completion(nil, .emptyBasket)
+            return
+        }
+        
+        completion(UserBasket.shared.currentBasket, nil)
+    }
+    
+    
+    func deleteProduct(index: Int) {
+        UserBasket.shared.deleteProduct(index: index)
     }
     
     

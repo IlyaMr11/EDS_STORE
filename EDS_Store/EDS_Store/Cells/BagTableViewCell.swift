@@ -12,6 +12,8 @@ class BagTableViewCell: UITableViewCell {
     var product: (Product, Int)?
     static let identifier = "bagCell"
     
+    var index: Int = 0
+    
     private lazy var backView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
@@ -75,8 +77,8 @@ class BagTableViewCell: UITableViewCell {
     
     private lazy var totalLabel : UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .medium)
-        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.textAlignment = .right
         return label
     }()
 
@@ -110,7 +112,7 @@ class BagTableViewCell: UITableViewCell {
         guard let pr = self.product?.0 else { return }
         priceLabel.text = "Цена: \(pr.price) ₽"
         descriptionLabel.text = pr.name
-        totalLabel.text = "Итоговая стоимость: \(String(product.1 * (Int(pr.price) ?? 0)))₽"
+        totalLabel.text = "Итог:    \(String(product.1 * (Int(pr.price) ?? 0)))₽"
         countLabel.text = String(product.1)
         print(countLabel.text ?? "no text")
     }
@@ -187,16 +189,17 @@ class BagTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.centerYAnchor.constraint(equalTo: stepperStackView.centerYAnchor),
-            label.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -5),
+            label.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -15),
             label.heightAnchor.constraint(equalTo: stepperStackView.heightAnchor),
-            label.leadingAnchor.constraint(greaterThanOrEqualTo: stepperStackView.trailingAnchor) // Исправлено
+            label.leadingAnchor.constraint(equalTo: stepperStackView.trailingAnchor) // Исправлено
         ])
     }
     
     
     @objc func changeVal(_ sender: UIStepper) {
         countLabel.text = String(Int(sender.value))
-        totalLabel.text = "Итоговая стоимость: \(String(Int(sender.value) * (Int(product?.0.price ?? "0") ?? 0)))₽"
+        totalLabel.text = "Итог:    \(String(Int(sender.value) * (Int(product?.0.price ?? "0") ?? 0)))₽"
+        UserBasket.shared.changeCount(index: index, count: Int(sender.value))
         print(sender.value)
     }
 }

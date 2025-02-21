@@ -10,9 +10,15 @@ import Foundation
 struct UserData {
     var login: String
     var name: String?
-    var purchase: [(Product, Int, String)]
+    var purchase: [Purchase]
     var phone: String?
     var address: [String]? = []
     var notify: Bool?
 }
 
+struct Purchase {
+    var product: Product
+    var count: Int
+    var date: Date
+    var status: String
+}

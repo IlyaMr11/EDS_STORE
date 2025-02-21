@@ -65,6 +65,7 @@ class MainProfileModel: MainProfileModelProtocol {
     func signOut() {
         PersonData.shared.removeUser()
         UserDefaultsData.shared.clearUser()
+        UserBasket.shared.removeData()
     }
 }
 
