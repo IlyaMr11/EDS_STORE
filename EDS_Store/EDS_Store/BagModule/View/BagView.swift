@@ -17,6 +17,8 @@ protocol BagViewProtocol: AnyObject {
 class BagView: UIViewController, BagViewProtocol {
     
     private let yPosition: CGFloat = 100
+    var totalPrice: Int = 0
+    var totalCount: Int = 0
     
     var presenter: BagPresenterProtocol?
     var bagArray: [Position] = []
@@ -34,10 +36,12 @@ class BagView: UIViewController, BagViewProtocol {
     
     lazy var finishButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Заказать:", for: .normal)
+        button.setTitle("К оформлению:   \(totalCount) шт;  \(totalPrice)₽", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.backgroundColor = .orange
+        button.layer.cornerRadius = 15
         button.setTitleColor(.white, for: .normal)
-        //button.addTarget(self, action: #selector(finishOrder), for: .touchUpInside)
+        button.addTarget(self, action: #selector(finishOrder), for: .touchUpInside)
         return button
     }()
     
@@ -84,7 +88,6 @@ class BagView: UIViewController, BagViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Корзина"
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -101,6 +104,8 @@ class BagView: UIViewController, BagViewProtocol {
     func success(array: [Position]) {
         self.bagArray = array
         bagTableView.reloadData()
+        countData()
+        updateButton()
         presenter?.setupImages(array: array)
         print(bagArray)
     }
@@ -120,7 +125,6 @@ class BagView: UIViewController, BagViewProtocol {
         default:
             present(alert.alert, animated: true)
         }
-        
     }
     
     func setupUI() {
@@ -128,11 +132,25 @@ class BagView: UIViewController, BagViewProtocol {
         setupFinishButton()
     }
     
+    func countData() {
+        for item in bagArray {
+            totalCount += item.count
+            totalPrice += item.count * (Int(item.product.price) ?? 0)
+        }
+    }
     
     @objc func toHomeVC() {
         self.tabBarController?.selectedIndex = 0
     }
     
+    
+    @objc func finishOrder() {
+        print("hi")
+    }
+    
+    func updateButton() {
+        finishButton.setTitle("К оформлению:   \(totalCount) шт;  \(totalPrice)₽", for: .normal)
+    }
     
     func setupTable() {
         view.addSubview(bagTableView)
@@ -141,11 +159,17 @@ class BagView: UIViewController, BagViewProtocol {
             bagTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             bagTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bagTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bagTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
+            bagTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -70)])
     }
     
     func setupFinishButton() {
-        
+        view.addSubview(finishButton)
+        finishButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            finishButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            finishButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30),
+            finishButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            finishButton.heightAnchor.constraint(equalToConstant: 50)])
     }
     
     func setupEmptyBag() {
@@ -202,8 +226,13 @@ extension BagView: UITableViewDelegate & UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BagTableViewCell.identifier, for: indexPath) as! BagTableViewCell
+        guard indexPath.row < bagArray.count else {
+               // Возвращаем пустую ячейку или ячейку с сообщением об ошибке
+               return cell
+        }
         cell.configure(with: bagArray[indexPath.row])
         cell.index = indexPath.row
+        print(cell.index)
         cell.delegate = self
         if imageArray.count > indexPath.row {
             cell.loadPhoto(image: imageArray[indexPath.row])
@@ -232,14 +261,20 @@ extension BagView: UITableViewDelegate & UITableViewDataSource {
 
 
 extension BagView: BagCellDelegate {
-    func delete(index: Int) {
+    func delete(index: Int, price: Int) {
+        totalCount -= bagArray[index].count
+        totalPrice -= price * bagArray[index].count
+        updateButton()
         bagArray.remove(at: index)
         imageArray.remove(at: index)
         bagTableView.reloadData()
         UserBasket.shared.deleteProduct(index: index)
     }
     
-    func changeValue(index: Int, value: Int) {
+    func changeValue(index: Int, value: Int, price: Int) {
+        totalCount += (value - bagArray[index].count)
+        totalPrice += (price * (value - bagArray[index].count))
+        updateButton()
         bagArray[index].count = value
         bagTableView.reloadData()
         UserBasket.shared.changeCount(index: index, count: value)

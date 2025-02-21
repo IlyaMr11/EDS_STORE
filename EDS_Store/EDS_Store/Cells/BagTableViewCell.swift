@@ -8,8 +8,8 @@
 import UIKit
 
 protocol BagCellDelegate: AnyObject {
-    func delete(index: Int)
-    func changeValue(index: Int, value: Int)
+    func delete(index: Int, price: Int)
+    func changeValue(index: Int, value: Int, price: Int)
 }
 
 class BagTableViewCell: UITableViewCell {
@@ -123,6 +123,7 @@ class BagTableViewCell: UITableViewCell {
         descriptionLabel.text = pr.name
         totalLabel.text = "Итог:    \(String(position.count * (Int(pr.price) ?? 0)))₽"
         countLabel.text = String(position.count)
+        stepper.value = Double(position.count)
         print(countLabel.text ?? "no text")
     }
     
@@ -142,13 +143,13 @@ class BagTableViewCell: UITableViewCell {
     
     @objc func deleteItem() {
         print("delete item")
-        delegate?.delete(index: self.index)
+        delegate?.delete(index: self.index, price: Int(position?.product.price ?? "0") ?? 0)
     }
     
     @objc func changeVal(_ sender: UIStepper) {
         countLabel.text = String(Int(sender.value))
         totalLabel.text = "Итог:    \(String(Int(sender.value) * (Int(position?.product.price ?? "0") ?? 0)))₽"
-        delegate?.changeValue(index: index, value: Int(sender.value))
+        delegate?.changeValue(index: index, value: Int(sender.value), price: Int(position?.product.price ?? "0") ?? 0)
     }
     
     func setupBackView(_ backView: UIView) {
