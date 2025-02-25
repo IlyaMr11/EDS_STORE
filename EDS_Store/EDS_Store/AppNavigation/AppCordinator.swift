@@ -17,10 +17,24 @@ class AppCordinator: CordinatorProtocol {
     var tabBarController: UITabBarController?
     var window: UIWindow?
     
+    static var shared: AppCordinator!
 
     init(window: UIWindow?) {
         self.tabBarController = UITabBarController()
         self.window = window
+        AppCordinator.shared = self // Сохраняем текущий экземпляр в shared
+    }
+    
+    func showProfileModule() {
+        tabBarController?.selectedIndex = 2
+    }
+    
+    func showHomeModule() {
+        tabBarController?.selectedIndex = 0
+    }
+    
+    func showBagModule() {
+        tabBarController?.selectedIndex = 1
     }
     
     func startCordinator() {

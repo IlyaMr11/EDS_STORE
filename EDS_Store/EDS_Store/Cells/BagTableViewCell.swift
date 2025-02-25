@@ -7,10 +7,20 @@
 
 import UIKit
 
+protocol BagCellDelegate: AnyObject {
+    func delete(index: Int, price: Int)
+    func changeValue(index: Int, value: Int, price: Int)
+}
+
 class BagTableViewCell: UITableViewCell {
     
-    var product: (Product, Int)?
+    var position: Position?
     static let identifier = "bagCell"
+    
+    var index: Int = 0
+    weak var delegate: BagCellDelegate?
+    
+    
     
     private lazy var backView: UIView = {
         let view = UIView()
@@ -49,6 +59,7 @@ class BagTableViewCell: UITableViewCell {
         button.backgroundColor = .orange
         button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.tintColor = .white
+        button.addTarget(self, action: #selector(deleteItem), for: .touchUpInside)
         return button
     }()
     
@@ -75,8 +86,8 @@ class BagTableViewCell: UITableViewCell {
     
     private lazy var totalLabel : UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .medium)
-        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.textAlignment = .right
         return label
     }()
 
@@ -105,13 +116,14 @@ class BagTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with product: (Product, Int)) {
-        self.product = product
-        guard let pr = self.product?.0 else { return }
+    func configure(with position: Position) {
+        self.position = position
+        guard let pr = self.position?.product else { return }
         priceLabel.text = "Цена: \(pr.price) ₽"
         descriptionLabel.text = pr.name
-        totalLabel.text = "Итоговая стоимость: \(String(product.1 * (Int(pr.price) ?? 0)))₽"
-        countLabel.text = String(product.1)
+        totalLabel.text = "Итог:    \(String(position.count * (Int(pr.price) ?? 0)))₽"
+        countLabel.text = String(position.count)
+        stepper.value = Double(position.count)
         print(countLabel.text ?? "no text")
     }
     
@@ -128,6 +140,18 @@ class BagTableViewCell: UITableViewCell {
         setupTotalLabel(totalLabel)
     }
 
+    
+    @objc func deleteItem() {
+        print("delete item")
+        delegate?.delete(index: self.index, price: Int(position?.product.price ?? "0") ?? 0)
+    }
+    
+    @objc func changeVal(_ sender: UIStepper) {
+        countLabel.text = String(Int(sender.value))
+        totalLabel.text = "Итог:    \(String(Int(sender.value) * (Int(position?.product.price ?? "0") ?? 0)))₽"
+        delegate?.changeValue(index: index, value: Int(sender.value), price: Int(position?.product.price ?? "0") ?? 0)
+    }
+    
     func setupBackView(_ backView: UIView) {
         contentView.addSubview(backView)
         backView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,16 +211,11 @@ class BagTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.centerYAnchor.constraint(equalTo: stepperStackView.centerYAnchor),
-            label.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -5),
+            label.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -15),
             label.heightAnchor.constraint(equalTo: stepperStackView.heightAnchor),
-            label.leadingAnchor.constraint(greaterThanOrEqualTo: stepperStackView.trailingAnchor) // Исправлено
+            label.leadingAnchor.constraint(equalTo: stepperStackView.trailingAnchor) // Исправлено
         ])
     }
-    
-    
-    @objc func changeVal(_ sender: UIStepper) {
-        countLabel.text = String(Int(sender.value))
-        totalLabel.text = "Итоговая стоимость: \(String(Int(sender.value) * (Int(product?.0.price ?? "0") ?? 0)))₽"
-        print(sender.value)
-    }
 }
+
+

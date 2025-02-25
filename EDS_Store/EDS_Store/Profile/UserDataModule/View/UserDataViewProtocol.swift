@@ -8,10 +8,9 @@
 import UIKit
 
 
-
 protocol UserDataViewProtocol: UIViewController {
     func saveData()
-    func loadData()
+    func setupData(data: Any)
     func success()
     func failure(error: AlertType)
     var presenter: UserDataPresenterProtocol? { get set }

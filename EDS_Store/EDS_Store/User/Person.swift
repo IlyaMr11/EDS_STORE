@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Person {
+struct Person: Codable {
     var login: String
     var password: String
 }
@@ -17,6 +17,8 @@ enum DataAttrs: String {
     case notify = "notify"
     case phone = "phone"
     case address = "address"
+    case history = "history"
+    case delivery = "delivery"
 }
 
 class PersonData {
@@ -26,11 +28,11 @@ class PersonData {
     private(set) var currentUser: Person?
     private init() {}
     
-    func setUser(_ person: Person) {
+    func setUser(_ person: Person?) {
         currentUser = person
     }
     
-    func setUserData(_ userData: UserData) {
+    func setUserData(_ userData: UserData?) {
         self.userData = userData
     }
     
@@ -39,8 +41,14 @@ class PersonData {
         case .name: userData?.name = newValue as? String ?? ""
         case .phone: userData?.phone = newValue as? String ?? ""
         case .notify: userData?.notify = newValue as? Bool ?? false
-        case .address: userData?.address = newValue as? [String] ?? [""]
+        case .address: userData?.address = newValue as? [String] ?? []
+        default: break
         }
+    }
+    
+    func removeUser() {
+        currentUser = nil
+        userData = nil
     }
     
 }

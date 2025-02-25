@@ -8,20 +8,22 @@
 import UIKit
 
 protocol MainProfilePresenterProtocol {
-    init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, model: MainProfileModel)
+    init(view: MainProfileViewProtocol, router: ProfileRouterProtocol, model: MainProfileModelProtocol)
     func tapOnCell(index: Int)
-    func tapOnUserInfo()
+    func setupUser()
     func toSignIn()
     func loadName(_ login: String)
+    func signOut()
 }
 
 class MainProfilePresenter: MainProfilePresenterProtocol {
     
+    
     var router: ProfileRouterProtocol?
     weak var view: MainProfileViewProtocol?
-    let model: MainProfileModel?
+    let model: MainProfileModelProtocol?
     
-    required init(view: MainProfileViewProtocol, router: any ProfileRouterProtocol, model:  MainProfileModel) {
+    required init(view: MainProfileViewProtocol, router: any ProfileRouterProtocol, model:  MainProfileModelProtocol) {
         self.view = view
         self.router = router
         self.model = model
@@ -32,43 +34,49 @@ class MainProfilePresenter: MainProfilePresenterProtocol {
         router?.showUserDataModule(index: index)
     }
     
-    func tapOnUserInfo() {
-        router?.showUserInfoModule()
-    }
-    
     //MARK: - SHOW SIGN IN MODULE
     func toSignIn() {
         router?.showSignInModule()
     }
     
-    //MARK: - LOAD ALL USER DATA
-    func loadName(_ login: String) {
-        model?.loadUserData(login, completion: { [weak self] (userData, error) in
-            if let error = error {
-                switch error {
-                case .serverError:
-                    DispatchQueue.main.async {
-                        self?.view?.failure(alert: AlertType.serverError.alert)
-                    }
-                    return
-                case .noInternet:
-                    DispatchQueue.main.async {
-                        self?.view?.failure(alert: AlertType.serverError.alert)
-                        return
-                    }
-                default:
-                    return
+    func setupUser() {
+        model?.setupUser() { [weak self] alert in
+            if let alert = alert {
+                DispatchQueue.main.async {
+                    self?.view?.failure(alert: alert)
                 }
-            }
-            
-            guard let userData = userData else {
-                print("Error loading user data")
                 return
             }
             
             DispatchQueue.main.async {
-                self?.view?.setupName(userData.name ?? "")
+                self?.view?.success()
             }
-        })
+        }
+    }
+    
+    //MARK: - LOAD ALL USER DATA
+    func loadName(_ login: String) {
+        model?.loadUserData(login) { [weak self] error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self?.view?.failure(alert: error)
+                    print("I push error on View")
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self?.view?.updateName()
+            }
+        }
+    }
+    
+    func signOut() {
+        model?.signOut()
+        DispatchQueue.main.async { [weak self] in
+            let newView = MainProfileView()
+            newView.presenter = self
+            self?.router?.navigationController?.viewControllers[0] = newView
+            self?.view = newView
+        }
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 
 protocol MainHomeViewProtocol: AnyObject {
     func success()
-    func failure()
+    func failure(alert: AlertType)
     func configureTable(productArray: [(Product, Product)])
 }
 
@@ -121,8 +121,8 @@ class MainHomeView: UIViewController, MainHomeViewProtocol {
         NSLayoutConstraint.activate([table.topAnchor.constraint(equalTo: searchView.bottomAnchor, constant: 30), table.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor), table.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor), table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)])
     }
     
-    func failure() {
-        
+    func failure(alert: AlertType) {
+        showAlert(alert: alert.alert)
     }
     
     @objc func searchProduct() {

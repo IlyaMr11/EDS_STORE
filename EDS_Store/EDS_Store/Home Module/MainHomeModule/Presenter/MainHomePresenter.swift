@@ -28,21 +28,22 @@ class MainHomePresenter: MainHomePresenterProtocol {
     }
     
     func showProductData()  {
-        self.model.firebaseService.getProductData { (products, text) in
-            if let text = text {
-                print(text)
+        self.model.firebaseService.getProductData { [weak self] (products, alert) in
+            if let alert = alert {
                 DispatchQueue.main.async {
-                    print("show alert")
+                    self?.view?.failure(alert: alert)
                 }
                 return
             }
                 
             guard let products = products else {
-                print("no data")
+                DispatchQueue.main.async {
+                    self?.view?.failure(alert: .noData)
+                }
                 return
             }
             
-            print("hiii")
+    
             var productArr = [(Product, Product)]()
             for index in stride(from: 0, to: products.count, by: 2) {
                 if index + 1 < products.count {
@@ -52,7 +53,7 @@ class MainHomePresenter: MainHomePresenterProtocol {
             print(products.count)
             
             DispatchQueue.main.async {
-                self.view?.configureTable(productArray: productArr)
+                self?.view?.configureTable(productArray: productArr)
             }
             
         }

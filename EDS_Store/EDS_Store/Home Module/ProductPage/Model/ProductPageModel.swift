@@ -13,8 +13,19 @@ protocol ProductPageModelProtocol {
 
 class ProductPageModel: ProductPageModelProtocol {
     func addProduct(product: any Product) {
-        UserBasket.shared.addProductToBasket(product, count: 1)
-        print(UserBasket.shared.currentBasket)
+        var res: anyProduct?
+        switch product.productType {
+        case "motor":
+            res = anyProduct(from: product as! Motor)
+        case "reducer":
+            res = anyProduct(from: product as! Reducer)
+        default:
+            res = product as? anyProduct
+        }
+        
+        if let res = res {
+            UserBasket.shared.addProductToBasket(res, count: 1)
+        }
     }
     
     

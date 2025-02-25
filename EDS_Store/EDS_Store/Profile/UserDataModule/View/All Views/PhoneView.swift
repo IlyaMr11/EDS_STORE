@@ -36,6 +36,7 @@ class PhoneView: UIViewController, UserDataViewProtocol {
         let textField = UITextField()
         textField.placeholder = "Введите телефон"
         textField.keyboardType = .phonePad
+        textField.font = .systemFont(ofSize: 20, weight: .medium)
         if let phone = PersonData.shared.userData?.phone {
             textField.text = phone
         }
@@ -49,7 +50,7 @@ class PhoneView: UIViewController, UserDataViewProtocol {
         let label = UILabel()
         label.text = "Телефон:"
         label.textColor = .black
-        label.font = .systemFont(ofSize: 19)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
@@ -80,19 +81,20 @@ class PhoneView: UIViewController, UserDataViewProtocol {
         setupAll()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
+        loadData()
     }
 
     func saveData() {
-        if Checker.shared.checkPhone(phoneTextField.text) {
-            presenter?.updateUserData(attr: .phone, data: phoneTextField.text!)
-        } else {
-            showAlert(alert: allAlerts.phoneAlert)
-        }
-        dismiss(animated: true)
+        presenter?.updateUserData(attr: .phone, data: phoneTextField.text ?? "")
     }
     
     func loadData() {
-        
+        presenter?.loadUserData(attr: .phone)
+    }
+    
+    func setupData(data: Any) {
+        let text = data as? String ?? ""
+        phoneTextField.text = text
     }
     
     func success() {
@@ -101,7 +103,12 @@ class PhoneView: UIViewController, UserDataViewProtocol {
     }
     
     func failure(error: AlertType) {
-        
+        switch error {
+        case .dataError:
+            showAlert(alert: AlertType.phone.alert)
+        default:
+            showAlert(alert: error.alert)
+        }
     }
     
     //MARK: - TARGETS
@@ -168,7 +175,7 @@ class PhoneView: UIViewController, UserDataViewProtocol {
     func setupTextField(_ textField: UITextField) {
         phoneView.addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([textField.trailingAnchor.constraint(equalTo: phoneView.trailingAnchor, constant: -10),
+        NSLayoutConstraint.activate([textField.trailingAnchor.constraint(equalTo: phoneView.trailingAnchor, constant: -20),
                                      textField.centerYAnchor.constraint(equalTo: phoneLabel.centerYAnchor),
                                      textField.heightAnchor.constraint(equalToConstant: 40),
                                      textField.leadingAnchor.constraint(equalTo: phoneLabel.trailingAnchor, constant: 30)])
@@ -183,9 +190,6 @@ class PhoneView: UIViewController, UserDataViewProtocol {
                                      button.heightAnchor.constraint(equalTo: phoneView.widthAnchor, multiplier: 0.15)])
     }
     
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true, completion: nil)
-    }
     
 }
 

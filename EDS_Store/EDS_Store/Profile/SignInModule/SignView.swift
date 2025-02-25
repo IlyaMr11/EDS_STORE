@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SignInViewProtocol: UIViewController {
-    func showAlert(_ alert: UIAlertController)
+    func failure(alert: AlertType)
 }
 
 class SignInView: UIViewController, SignInViewProtocol {
@@ -135,7 +135,11 @@ class SignInView: UIViewController, SignInViewProtocol {
         setupAllViews()
         // Do any additional setup after loading the view.
     }
-
+    
+    func failure(alert: AlertType) {
+        showAlert(alert.alert)
+    }
+    
     func setupAllViews() {
         setupLogo(logoImageView)
         setupWelcomLabel(welcomeLabel)
@@ -143,6 +147,11 @@ class SignInView: UIViewController, SignInViewProtocol {
         setupFieldsStackView(fieldsStackView)
         setupButtonsStackView(buttonsStackView)
     }
+    
+    func showAlert(_ alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
     
     //MARK: - SETUP LOGO
     func setupLogo(_ imageView: UIImageView) {
@@ -201,22 +210,6 @@ class SignInView: UIViewController, SignInViewProtocol {
         }
     }
     
-    func showAlert(_ alert: UIAlertController) {
-        present(alert, animated: true)
-    }
-    
-    func checkAllFields() -> Bool {
-        if !Checker.shared.checkEmail(loginTextField.text) {
-            showAlert(allAlerts.emailAlert)
-            return false
-        } else if !Checker.shared.checkPassword(passwordTextField.text) {
-            showAlert(allAlerts.passwordAlert)
-            return false
-        }
-        return true
-    }
-    
-    //MARK: - SHOW ALERTS
     
 }
 
