@@ -11,6 +11,7 @@ protocol ConfirmPresenterProtocol {
     init(view: ConfirmViewProtocol, router: BagRouterProtocol, model: ConfirmModelProtocol)
     func loadData()
     func laodAddress()
+    func createOrder(address: String)
 }
 
 class ConfirmPresenter: ConfirmPresenterProtocol {
@@ -53,6 +54,22 @@ class ConfirmPresenter: ConfirmPresenterProtocol {
             
             DispatchQueue.main.async {
                 self?.view?.setupAddress(array)
+            }
+        }
+    }
+    
+    func createOrder(address: String) {
+        model.createOrder(address: address) { [weak self] (alert) in
+            if let alert = alert {
+                DispatchQueue.main.async {
+                    self?.view?.failure(alert: alert)
+                    return
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self?.router?.navigationController?.popViewController(animated: true)
+                
             }
         }
     }

@@ -46,6 +46,22 @@ class PersonData {
         }
     }
     
+    func createOrder(address: String) {
+        for position in UserBasket.shared.currentBasket {
+            let product = position.product
+            let count = position.count
+            
+            let newPurchase: Purchase = Purchase(
+                product: product,
+                count: count,
+                date: Date(),
+                status: "on track",
+                address: address
+            )
+            userData?.purchase.append(newPurchase)
+        }
+    }
+    
     func removeUser() {
         currentUser = nil
         userData = nil

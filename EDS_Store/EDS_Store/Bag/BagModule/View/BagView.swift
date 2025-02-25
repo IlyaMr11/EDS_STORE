@@ -120,6 +120,7 @@ class BagView: UIViewController, BagViewProtocol {
         imageArray = []
         bagArray = []
         bagTableView.reloadData()
+        updateButton()
         switch alert {
         case .emptyBasket:
            setupEmptyBag()
@@ -134,6 +135,8 @@ class BagView: UIViewController, BagViewProtocol {
     }
     
     func countData() {
+        totalCount = 0
+        totalPrice = 0
         for item in bagArray {
             totalCount += item.count
             totalPrice += item.count * (Int(item.product.price) ?? 0)
@@ -150,6 +153,7 @@ class BagView: UIViewController, BagViewProtocol {
     }
     
     func updateButton() {
+        countData()
         finishButton.setTitle("К оформлению:   \(totalCount) шт;  \(totalPrice)₽", for: .normal)
     }
     

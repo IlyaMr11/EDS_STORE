@@ -127,6 +127,13 @@ class Alerts {
         alert.addAction(action2)
         return alert
     }()
+    
+    lazy var choosePayAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Оплата не выбррана", message: "Выберете способ оплаты", preferredStyle: .alert)
+        let action1 = UIAlertAction(title: "Oк", style: .default)
+        alert.addAction(action1)
+        return alert
+    }()
 }
 
 let allAlerts = Alerts()
@@ -148,6 +155,7 @@ enum AlertType: String {
     case badConnection
     case noData
     case noAddress
+    case choosePay
     
     // Вычисляемое свойство для получения соответствующего алерта
     var alert: UIAlertController {
@@ -182,6 +190,8 @@ enum AlertType: String {
             return Alerts.shared.noDataAlert
         case .noAddress:
             return Alerts.shared.noAddressAlert
+        case .choosePay:
+            return Alerts.shared.choosePayAlert
         }
     }
 }

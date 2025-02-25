@@ -12,4 +12,5 @@ struct Purchase {
     var count: Int
     var date: Date
     var status: String
+    var address: String
 }

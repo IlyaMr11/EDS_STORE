@@ -16,6 +16,7 @@ struct OrderData {
 protocol ConfirmModelProtocol {
     func loadProduct(completion: @escaping (OrderData?, AlertType?) -> Void)
     func loadAddress(completion: @escaping ([String]?, AlertType?) -> Void)
+    func createOrder(address: String, completion: @escaping (AlertType?) -> Void)
 }
 
 
@@ -54,7 +55,7 @@ class ConfirmModel: ConfirmModelProtocol {
             for position in UserBasket.shared.currentBasket {
                 group.enter()
                 let product = position.product, count = position.count
-                total += Int(product.price) ?? 0 * count
+                total += (Int(product.price) ?? 0) * count
                 cnt += count
                 let url = product.picture
                 self?.loadImage(url: url) { (image, alert) in
@@ -88,5 +89,17 @@ class ConfirmModel: ConfirmModelProtocol {
         completion(addresses, nil)
     }
     
+    func createOrder(address: String, completion: @escaping (AlertType?) -> Void) {
+        if address.isEmpty {
+            completion(.serverError)
+            return
+        }
+        
+        PersonData.shared.createOrder(address: address)
+        print(PersonData.shared.userData)
+        UserBasket.shared.removeData()
+        UserDefaultsBasket.shared.clearBasket()
+        completion(nil)
+    }
     
 }

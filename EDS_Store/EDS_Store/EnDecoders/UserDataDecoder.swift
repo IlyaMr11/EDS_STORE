@@ -15,6 +15,7 @@ class UserDataCoder {
         let p = data["purchase"] as? [[String: Any]] ?? [[:]]
         let address = data["address"] as? [String] ?? []
         let login = data["login"] as? String ?? ""
+
         
         var purchases = [Purchase]()
         for complex in p {
@@ -22,9 +23,10 @@ class UserDataCoder {
             let count = complex["count"] as? Int ?? 0
             let pr = complex["product"] as? [String: Any] ?? [:]
             let d = complex["date"] as? TimeInterval ?? 0
+            let adres = complex["aвdress"] as? String ?? ""
             let date = Date(timeIntervalSince1970: d / 1000)
             let product = ProductDecoder.prodcutDecoder(pr)
-            purchases.append(Purchase(product: product, count: count, date: date, status: status))
+            purchases.append(Purchase(product: product, count: count, date: date, status: status, address: adres))
         }
         
         let userData = UserData(login: login, name: name, purchase: purchases, phone: phone, address: address, notify: notify)

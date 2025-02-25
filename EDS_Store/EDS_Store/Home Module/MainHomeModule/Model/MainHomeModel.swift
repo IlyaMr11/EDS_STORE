@@ -32,12 +32,11 @@ class MainHomeModel: MainHomeModelProtocol {
         }
         
         let task = URLSession.shared.dataTask(with: url) { data, _, error in
-            if let error = error {
+            if let _ = error {
                 print("error")
                 completion(nil, .serverError)
                 return
             }
-            
             
             guard let data = data, let image = UIImage(data: data) else {
                 completion(nil, .noData)

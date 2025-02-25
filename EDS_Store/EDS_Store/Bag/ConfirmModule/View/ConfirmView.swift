@@ -21,6 +21,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     var total = 0
     var count = 0
     var addresses: [String] = []
+    var choosePayflag: Bool = false
     
     let labelColor: UIColor = .darkGray
     let chosePay = ["Наличными", "Картой при получении"]
@@ -33,7 +34,8 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     }()
     
     var contentView: UIView!
-    
+    var addressString: UILabel!
+        
     var price: UILabel!
     var titleLabel: UILabel!
     
@@ -55,11 +57,6 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     
     private lazy var addressButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
-        button.setTitle("Добавьте адрес", for: .normal)
-        button.contentHorizontalAlignment = .left
-        button.setTitleColor(.black, for: .normal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
         button.backgroundColor = .white
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(didTapAddressButton), for: .touchUpInside)
@@ -84,6 +81,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         collection.dataSource = self
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.backgroundColor = .clear
+        collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     
@@ -202,8 +200,21 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         let button = UIButton()
         button.backgroundColor = .orange
         button.layer.cornerRadius = 15
+        button.addTarget(self, action: #selector(createOrder), for: .touchUpInside)
         return button
     }()
+    
+    lazy var chooseAdderessAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Адрес доставки", message: nil, preferredStyle: .actionSheet)
+        for adress in addresses {
+            let action = UIAlertAction(title: adress, style: .default) { [weak self] _ in
+                self?.addressString.text = adress
+            }
+            alert.addAction(action)
+        }
+        return alert
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -227,7 +238,19 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     }
     
     @objc func didTapAddressButton() {
-        
+        if addresses.isEmpty {
+            showAlert(alert: AlertType.noAddress.alert)
+        } else {
+            showAlert(alert: chooseAdderessAlert)
+        }
+    }
+    
+    @objc func createOrder() {
+        if choosePayflag && !addresses.isEmpty {
+            presenter?.createOrder(address: addressString.text ?? "")
+        } else {
+            showAlert(alert: AlertType.choosePay.alert)
+        }
     }
     
     func success(order: OrderData) {
@@ -239,7 +262,15 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     }
     
     func failure(alert: AlertType) {
-       showAlert(alert: alert.alert)
+        switch alert {
+        case .noData:
+            images.removeAll()
+            addressButton.setTitle("Добавьте адрес доставки", for: .normal)
+        default :
+            print("dadga")
+        }
+        showAlert(alert: alert.alert)
+    
     }
 
     func setupUI() {
@@ -253,7 +284,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     
     func setupAddress(_ array: [String]) {
         addresses = array
-        addressButton.setTitle("\(addresses[0])", for: .normal)
+        addressString.text = array[0]
     }
     
     func updateUI() {
@@ -297,6 +328,20 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
             addressButton.bottomAnchor.constraint(equalTo: addressView.bottomAnchor, constant: -10),
             addressButton.leftAnchor.constraint(equalTo: addressView.leftAnchor, constant: 10),
             addressButton.rightAnchor.constraint(equalTo: addressView.rightAnchor, constant: -10)])
+        
+        addressString = UILabel()
+        addressString.text = "Добавьте адрес"
+        addressString.textColor = .black
+        addressString.textAlignment = .left
+        addressString.font = .systemFont(ofSize: 20, weight: .bold)
+        
+        addressButton.addSubview(addressString)
+        addressString.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            addressString.centerXAnchor.constraint(equalTo: addressButton.centerXAnchor),
+            addressString.leftAnchor.constraint(equalTo: addressButton.leftAnchor, constant: 15),
+            addressString.centerYAnchor.constraint(equalTo: addressButton.centerYAnchor)])
+
     }
     
     func setupAddress() {
@@ -320,7 +365,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
             collectionView.topAnchor.constraint(equalTo: productLabel.bottomAnchor, constant: 10),
             collectionView.leftAnchor.constraint(equalTo: productView.leftAnchor, constant: 15),
             collectionView.rightAnchor.constraint(equalTo: productView.rightAnchor, constant: -15),
-            collectionView.heightAnchor.constraint(equalToConstant: 150)])
+            collectionView.heightAnchor.constraint(equalToConstant: 160)])
         
     }
     
@@ -497,6 +542,7 @@ extension ConfirmView: UIScrollViewDelegate, UICollectionViewDelegate, UICollect
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        choosePayflag = true
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.layer.borderColor = UIColor.orange.cgColor
             cell.backgroundColor = .white
