@@ -12,6 +12,7 @@ protocol BagRouterProtocol {
     var assemblyBuilder: BagAssemblyBuilderProtocol? { get set }
     init(navigationController: UINavigationController, assemblyBuilder: BagAssemblyBuilderProtocol)
     func initinal()
+    func confirmModule()
 }
 
 class BagRouter: BagRouterProtocol {
@@ -27,8 +28,13 @@ class BagRouter: BagRouterProtocol {
     func initinal() {
         guard let nav = navigationController,
         let bagView = assemblyBuilder?.bagModule(router: self) else { return }
-        nav.pushViewController(bagView, animated: true)
+        nav.viewControllers = [bagView]
     }
     
+    func confirmModule() {
+        guard let nav = navigationController else { return }
+        guard let confirmView = assemblyBuilder?.confirmModule(router: self) else { return }
+        nav.pushViewController(confirmView, animated: true)
+    }
     
 }

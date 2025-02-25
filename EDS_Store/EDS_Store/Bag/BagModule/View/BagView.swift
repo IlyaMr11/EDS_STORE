@@ -94,6 +94,7 @@ class BagView: UIViewController, BagViewProtocol {
         super.viewDidAppear(true)
         setupUI()
         presenter?.setupData()
+        updateButton()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -145,7 +146,7 @@ class BagView: UIViewController, BagViewProtocol {
     
     
     @objc func finishOrder() {
-        print("hi")
+        presenter?.toConfirmModule()
     }
     
     func updateButton() {

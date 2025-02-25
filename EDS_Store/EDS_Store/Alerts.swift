@@ -67,7 +67,11 @@ class Alerts {
     lazy var noUserAlert: UIAlertController = {
         let alert = UIAlertController(title: "Пользователь не авторизован", message: "Войдите в акаунт для того чтобы добавить товар", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel)
+        let action1 = UIAlertAction(title: "Войти в аккаунт", style: .default) { (_) in
+            AppCordinator.shared.showProfileModule()
+        }
         alert.addAction(action)
+        alert.addAction(action1)
         return alert
     }()
     
@@ -112,6 +116,17 @@ class Alerts {
         alert.addAction(action)
         return alert
     }()
+    
+    lazy var noAddressAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Нет адреса", message: "Добавьте адресс в профиле", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel)
+        let action2 = UIAlertAction(title: "Добавить адресс", style: .default) { (_) in
+            AppCordinator.shared.showProfileModule()
+        }
+        alert.addAction(action)
+        alert.addAction(action2)
+        return alert
+    }()
 }
 
 let allAlerts = Alerts()
@@ -132,6 +147,7 @@ enum AlertType: String {
     case dataError
     case badConnection
     case noData
+    case noAddress
     
     // Вычисляемое свойство для получения соответствующего алерта
     var alert: UIAlertController {
@@ -164,6 +180,8 @@ enum AlertType: String {
             return Alerts.shared.badConnectionAlert
         case .noData:
             return Alerts.shared.noDataAlert
+        case .noAddress:
+            return Alerts.shared.noAddressAlert
         }
     }
 }

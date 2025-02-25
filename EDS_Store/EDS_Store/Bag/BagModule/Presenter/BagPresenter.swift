@@ -12,6 +12,7 @@ protocol BagPresenterProtocol {
     func addCountProductv(newVal: Int, index: Int)
     func setupData()
     func setupImages(array: [Position])
+    func toConfirmModule()
 }
 
 class BagPresenter: BagPresenterProtocol {
@@ -31,6 +32,9 @@ class BagPresenter: BagPresenterProtocol {
         
     }
     
+    func toConfirmModule() {
+        router?.confirmModule()
+    }
     
     func setupData() {
         model?.loadData() { [weak self] (data, alert) in
@@ -48,36 +52,6 @@ class BagPresenter: BagPresenterProtocol {
             }
                 
         }
-//        guard !UserBasket.shared.currentBasket.isEmpty else {
-//            let alert = AlertType.emptyBasket.alert
-//            view?.failure(alert: alert)
-//            return }
-//        print("i push data")
-//        let array = UserBasket.shared.currentBasket
-//        view?.success(array: array)
-//        
-//        DispatchQueue.global().async {
-//            var imagesArray: [UIImage] = []
-//            for pr in array {
-//                let group = DispatchGroup()
-//                group.enter()
-//                let urlString = pr.0.picture
-//                self.model.loadPhoto(urlString: urlString) { image in
-//                    guard let image = image else {
-//                        print("Proble")
-//                        return }
-//                    imagesArray.append(image)
-//                    group.leave()
-//                }
-//                group.wait()
-//                
-//            }
-//            
-//            DispatchQueue.main.async {
-//                self.view?.loadImages(imageArray: imagesArray)
-//            }
-//        }
-
     }
     
     func setupImages(array: [Position]) {
