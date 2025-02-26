@@ -95,11 +95,52 @@ class ConfirmModel: ConfirmModelProtocol {
             return
         }
         
+        let date = Date()
+        let group = DispatchGroup()
+        group.enter()
+        pushOrder(address: address, date: date) { alert in
+            if let alert = alert {
+                completion(alert)
+                group.leave()
+                return
+            }
+            group.leave()
+            
+        }
+        group.wait()
+        
         PersonData.shared.createOrder(address: address)
-        print(PersonData.shared.userData)
         UserBasket.shared.removeData()
         UserDefaultsBasket.shared.clearBasket()
         completion(nil)
+    }
+    
+    func pushOrder(address: String, date: Date, completion: @escaping (AlertType?) -> Void) {
+        FireBaseLayer.shared.getDocumentID(login: PersonData.shared.userData?.login ?? "") { (id, alert) in
+            if let alert = alert {
+                completion(alert)
+                return
+            }
+            print("no alert yet")
+            guard id != "" else {
+                completion(.serverError)
+                return
+            }
+            
+            let newPurchases = PurchaseEncoder.encode(address: address,
+                                                      basket: UserBasket.shared.currentBasket,
+                                                      date: date)
+            for purchase in newPurchases {
+                let db = FireBaseLayer.shared.configureFirebase()
+                db.collection("UsersData").document(id).collection("purchase").addDocument(data: purchase) { (error) in
+                    if let _ = error {
+                        completion(.serverError)
+                        return
+                    }
+                }
+            }
+            completion(nil)
+        }
     }
     
 }

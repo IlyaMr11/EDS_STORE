@@ -37,8 +37,6 @@ class MainProfileModel: MainProfileModelProtocol {
                 return
             }
             
-            print("Login: \(login)")
-            
             guard let snapshot = snapshot else {
                 print("Error - snapshot is nil")
                 completion(AlertType.serverError)
@@ -50,15 +48,42 @@ class MainProfileModel: MainProfileModelProtocol {
                 completion(AlertType.serverError)
                 return
             }
-            
-            print("Snapshot documents count: \(snapshot.documents.count)")
-            
+        
             let document = snapshot.documents[0]
             let data = document.data()
             
-            let userData = UserDataCoder.decode(data: data)
-            PersonData.shared.setUserData(userData)
-            completion(nil)
+            FireBaseLayer.shared.getDocumentID(login: login) { (id, alert) in
+                if let alert = alert {
+                    completion(alert)
+                    return
+                }
+                
+                db.collection("UsersData").document(id).collection("purchase").getDocuments { (snapshot, error) in
+                    if let error = error {
+                        print("Error - \(error.localizedDescription)")
+                        completion(.serverError)
+                        return
+                    }
+                    
+                   guard let snapshot = snapshot else {
+                        print("Error - snapshot is nil")
+                        completion(nil)
+                        return
+                    }
+                    
+                    let doc = snapshot.documents
+                    var purchases = [Purchase]()
+                    for position in doc {
+                        let dict = position.data() as [String: Any]
+                        purchases.append(PurchaseDecoder.decode(dict))
+                    }
+                    
+                    var userData = UserDataCoder.decode(data: data)
+                    userData?.purchase = purchases
+                    PersonData.shared.setUserData(userData)
+                    completion(nil)
+                }
+            }
         }
     }
     
@@ -68,6 +93,8 @@ class MainProfileModel: MainProfileModelProtocol {
         UserBasket.shared.removeData()
         UserDefaultsBasket.shared.clearBasket()
     }
+    
+    
 }
 
 

@@ -35,7 +35,7 @@ class ProductDecoder {
             )
     }
     
-    static func prodcutDecoder(_ data: [String: Any]) -> anyProduct {
+    static func productDecode(_ data: [String: Any]) -> anyProduct {
         return anyProduct(
             name: data["name"] as? String ?? "",
             price: data["price"] as? String ?? "",

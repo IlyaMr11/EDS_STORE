@@ -105,7 +105,6 @@ class BagView: UIViewController, BagViewProtocol {
     func success(array: [Position]) {
         self.bagArray = array
         bagTableView.reloadData()
-        countData()
         updateButton()
         presenter?.setupImages(array: array)
         print(bagArray)
@@ -267,21 +266,18 @@ extension BagView: UITableViewDelegate & UITableViewDataSource {
 
 extension BagView: BagCellDelegate {
     func delete(index: Int, price: Int) {
-        totalCount -= bagArray[index].count
-        totalPrice -= price * bagArray[index].count
-        updateButton()
         bagArray.remove(at: index)
         imageArray.remove(at: index)
         bagTableView.reloadData()
+        updateButton()
         UserBasket.shared.deleteProduct(index: index)
     }
     
     func changeValue(index: Int, value: Int, price: Int) {
-        totalCount += (value - bagArray[index].count)
-        totalPrice += (price * (value - bagArray[index].count))
-        updateButton()
         bagArray[index].count = value
         bagTableView.reloadData()
+        updateButton()
+        
         UserBasket.shared.changeCount(index: index, count: value)
     }
 }

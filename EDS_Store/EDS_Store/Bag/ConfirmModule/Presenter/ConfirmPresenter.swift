@@ -59,17 +59,19 @@ class ConfirmPresenter: ConfirmPresenterProtocol {
     }
     
     func createOrder(address: String) {
-        model.createOrder(address: address) { [weak self] (alert) in
-            if let alert = alert {
-                DispatchQueue.main.async {
-                    self?.view?.failure(alert: alert)
-                    return
+        DispatchQueue.global().async { [weak self] in
+            self?.model.createOrder(address: address) {  (alert) in
+                if let alert = alert {
+                    DispatchQueue.main.async {
+                        self?.view?.failure(alert: alert)
+                        return
+                    }
                 }
-            }
-            
-            DispatchQueue.main.async {
-                self?.router?.navigationController?.popViewController(animated: true)
                 
+                DispatchQueue.main.async {
+                    self?.router?.navigationController?.popViewController(animated: true)
+                    
+                }
             }
         }
     }
