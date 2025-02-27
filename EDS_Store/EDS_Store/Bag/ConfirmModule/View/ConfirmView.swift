@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ConfirmViewProtocol: AnyObject {
+protocol ConfirmViewProtocol: UIViewController {
     func success(order: OrderData)
     func failure(alert: AlertType)
     func setupAddress(_ array: [String])
@@ -246,10 +246,12 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     }
     
     @objc func createOrder() {
-        if choosePayflag && !addresses.isEmpty {
-            presenter?.createOrder(address: addressString.text ?? "")
-        } else {
+        if !choosePayflag  {
             showAlert(alert: AlertType.choosePay.alert)
+        } else if addresses.isEmpty {
+            showAlert(alert: AlertType.noAddress.alert)
+        } else {
+            presenter?.createOrder(address: addressString.text ?? "")
         }
     }
     

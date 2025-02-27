@@ -46,7 +46,7 @@ class PersonData {
         }
     }
     
-    func createOrder(address: String) {
+    func createOrder(address: String, date: Date) {
         for position in UserBasket.shared.currentBasket {
             let product = position.product
             let count = position.count
@@ -54,7 +54,7 @@ class PersonData {
             let newPurchase: Purchase = Purchase(
                 product: product,
                 count: count,
-                date: Date(),
+                date: date,
                 status: "on track",
                 address: address
             )

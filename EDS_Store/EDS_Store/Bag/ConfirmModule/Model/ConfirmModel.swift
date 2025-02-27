@@ -21,33 +21,13 @@ protocol ConfirmModelProtocol {
 
 
 class ConfirmModel: ConfirmModelProtocol {
-    func loadImage(url: String, completion: @escaping (UIImage?, AlertType?) -> Void) {
-        if url.isEmpty {
-            completion(nil, .serverError)
-            return
-        }
-        
-        guard let imageURL = URL(string: url) else { completion(nil, .serverError); return}
-        
-        let task = URLSession.shared.dataTask(with: imageURL) { (data, response, error) in
-            if let _ = error {
-                completion(nil, .serverError)
-                return
-            }
-            
-            guard let data = data else { completion(nil, .serverError); return}
-            let image = UIImage(data: data)
-            completion(image, nil)
-        }
-        task.resume()
-    }
     
     func loadProduct(completion: @escaping (OrderData?, AlertType?) -> Void) {
         if UserBasket.shared.currentBasket.count == 0 {
             completion(nil, .emptyBasket)
         }
         
-        DispatchQueue.global().async { [weak self] in
+        DispatchQueue.global().async { 
             var total = 0
             var cnt = 0
             let group = DispatchGroup()
@@ -58,7 +38,7 @@ class ConfirmModel: ConfirmModelProtocol {
                 total += (Int(product.price) ?? 0) * count
                 cnt += count
                 let url = product.picture
-                self?.loadImage(url: url) { (image, alert) in
+                NetworkLayer.loadPhoto(path: url) { (image, alert) in
                     if let alert = alert {
                         completion(nil, alert)
                         group.leave()
@@ -109,7 +89,7 @@ class ConfirmModel: ConfirmModelProtocol {
         }
         group.wait()
         
-        PersonData.shared.createOrder(address: address)
+        PersonData.shared.createOrder(address: address, date: date)
         UserBasket.shared.removeData()
         UserDefaultsBasket.shared.clearBasket()
         completion(nil)
@@ -121,7 +101,7 @@ class ConfirmModel: ConfirmModelProtocol {
                 completion(alert)
                 return
             }
-            print("no alert yet")
+         
             guard id != "" else {
                 completion(.serverError)
                 return

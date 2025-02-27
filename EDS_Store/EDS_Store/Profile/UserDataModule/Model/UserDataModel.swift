@@ -15,7 +15,7 @@ protocol UserDataModelProtocol {
 
 class UserDataModel: UserDataModelProtocol {
     func getUserData(attr: DataAttrs, completion: (Any?) -> Void) {
-        let data = UserDataCoder.encode(attr: attr)
+        let data = UserDataConvertor.getData(attr: attr)
         completion(data)
     }
     

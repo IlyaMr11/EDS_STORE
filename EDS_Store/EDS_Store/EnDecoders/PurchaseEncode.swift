@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseCore
 
 
 class PurchaseEncoder {
@@ -26,10 +27,14 @@ class PurchaseEncoder {
 
 class PurchaseDecoder {
     static func decode(_ data: [String: Any]) -> Purchase {
+        var date1: Date = Date()
+        if let date = data["date"] as? Timestamp {
+            date1 = date.dateValue()
+        }
         return Purchase(
             product: ProductDecoder.productDecode(data["product"] as? [String: Any] ?? [:]),
             count: data["count"] as? Int ?? 0,
-            date: data["date"] as? Date ?? Date(),
+            date: date1,
             status: data["status"] as? String ?? "",
             address: data["address"] as? String ??  "")
     }

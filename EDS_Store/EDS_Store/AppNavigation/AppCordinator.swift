@@ -37,6 +37,12 @@ class AppCordinator: CordinatorProtocol {
         tabBarController?.selectedIndex = 1
     }
     
+    func popToRoot() {
+        if let nav = tabBarController?.selectedViewController as? UINavigationController {
+            nav.popToRootViewController(animated: true)
+        }
+    }
+    
     func startCordinator() {
         tabBarController?.tabBar.tintColor = .orange
         let profileRouter = createProfileModule()

@@ -134,6 +134,15 @@ class Alerts {
         alert.addAction(action1)
         return alert
     }()
+    
+    lazy var createOrderAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Заказ оформлен", message: "Ваш заказ успешно оформлен", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel) {_ in 
+            AppCordinator.shared.popToRoot()
+        }
+        alert.addAction(action)
+        return alert
+    }()
 }
 
 let allAlerts = Alerts()
@@ -156,6 +165,7 @@ enum AlertType: String {
     case noData
     case noAddress
     case choosePay
+    case createOrder
     
     // Вычисляемое свойство для получения соответствующего алерта
     var alert: UIAlertController {
@@ -192,6 +202,8 @@ enum AlertType: String {
             return Alerts.shared.noAddressAlert
         case .choosePay:
             return Alerts.shared.choosePayAlert
+        case .createOrder:
+            return Alerts.shared.createOrderAlert
         }
     }
 }

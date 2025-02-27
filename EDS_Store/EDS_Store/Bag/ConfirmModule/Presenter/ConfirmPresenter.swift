@@ -69,8 +69,7 @@ class ConfirmPresenter: ConfirmPresenterProtocol {
                 }
                 
                 DispatchQueue.main.async {
-                    self?.router?.navigationController?.popViewController(animated: true)
-                    
+                    self?.view?.showAlert(alert: AlertType.createOrder.alert)
                 }
             }
         }

@@ -61,7 +61,7 @@ class BagPresenter: BagPresenterProtocol {
             for p in array {
                 group.enter()
                 let url = p.product.picture
-                self?.model.loadPhoto(urlString: url) { [weak self] (image, alert) in
+                NetworkLayer.loadPhoto(path: url) { (image, alert) in
                     if let alert = alert {
                         DispatchQueue.main.async {
                             self?.view?.failure(alert: alert)

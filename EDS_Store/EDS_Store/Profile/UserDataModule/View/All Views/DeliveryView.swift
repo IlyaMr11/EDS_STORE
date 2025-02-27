@@ -11,13 +11,15 @@ import UIKit
 class DeliveryView: UIViewController, UserDataViewProtocol {
     
     var presenter: (any UserDataPresenterProtocol)?
+    var images = [[UIImage]]()
     
     
+    let identifier = "DeliveryCell"
     //MARK: - CONSTANTS
     let viewRadius = CGFloat(20)
     let buttonRadius = CGFloat(15)
     let color1 = UIColor.init(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.5)
-    
+    var purchases: [[Purchase]] = []
     
     //MARK: - WARNING LABEL
     private lazy var warningLabel: UILabel = {
@@ -78,16 +80,39 @@ class DeliveryView: UIViewController, UserDataViewProtocol {
         return stackView
     }()
     
+    private lazy var deliverTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        tableView.register(DeliveryTableViewCell.self, forCellReuseIdentifier: identifier)
+        return tableView
+    }()
+    
+    
     //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Доставки"
-        setupEmptyDelivery()
+        
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        setupUI()
+    }
+    
+    func setupUI() {
+        presenter?.loadUserData(attr: .delivery)
+    }
     
     func setupEmptyDelivery() {
         setupEmptyDeliveryView(emptyDeliveryView)
+    }
+    
+    func setupImages(_ array: [[UIImage]]) {
+        images = array
+        setupTableView()
     }
     
     func saveData() {
@@ -95,29 +120,64 @@ class DeliveryView: UIViewController, UserDataViewProtocol {
     }
     
     func setupData(data: Any) {
+        if let array = data as? [[UIImage]] {
+            setupImages(array)
+            return
+        }
         
+        if let array = data as? [Date: [Purchase]] {
+            purchases = sortData(map: array)
+            success()
+            presenter?.loadPhoto(array: purchases)
+        }
+    }
+    
+    
+    func sortData(map: [Date: [Purchase]]) -> [[Purchase]] {
+        let keys = map.keys.sorted()
+        var pur = [[Purchase]]()
+        for i in keys {
+            if let v = map[i] {
+                pur.append(v)
+            }
+        }
+        return pur
     }
     
     func failure(error: AlertType) {
-        
+        showAlert(alert: error.alert)
     }
     
     func success() {
+        deliverTableView.reloadData()
+    }
+    
+    //MARK: - TARGETS
+    @objc func toHomeVC() {
+        self.tabBarController?.selectedIndex = 0
+    }
+    
+    func setupTableView() {
+        view.addSubview(deliverTableView)
+        deliverTableView.translatesAutoresizingMaskIntoConstraints = false
         
+        NSLayoutConstraint.activate([
+            deliverTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            deliverTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            deliverTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            deliverTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)])
     }
     
     func setupHomeVCButton(_ button: UIButton) {
         emptyDeliveryView.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([button.topAnchor.constraint(equalTo: delivertStackView.bottomAnchor, constant: 20),                              button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                     button.heightAnchor.constraint(equalToConstant: 50),
-                                     button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.6)])
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: delivertStackView.bottomAnchor, constant: 20),
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            button.heightAnchor.constraint(equalToConstant: 50),
+            button.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.6)])
     }
       
-    //MARK: - TARGETS
-    @objc func toHomeVC() {
-        self.tabBarController?.selectedIndex = 0
-    }
     
     //MARK: - SETUP BACK VIEW
     func setupEmptyDeliveryView(_ emptyView: UIView) {
@@ -150,3 +210,21 @@ class DeliveryView: UIViewController, UserDataViewProtocol {
     
 }
 
+extension DeliveryView: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return purchases.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as! DeliveryTableViewCell
+        cell.configure(purchases[indexPath.row])
+        if indexPath.row < images.count {
+            cell.setupImage(images[indexPath.row])
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 410
+    }
+}

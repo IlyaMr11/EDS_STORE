@@ -66,7 +66,13 @@ class ProfileRouter: ProfileRouterProtocol {
     func showUserDataModule(index: Int) {
         if let navigationController = navigationController {
             guard let userDataView = profileAssemblyBuilder?.createUserDataModule(router: self, index: index) else {return}
-            navigationController.showDetailViewController(userDataView, sender: nil)
+            switch index {
+            case 0...1:
+                navigationController.pushViewController(userDataView, animated: true)
+            default:
+                navigationController.showDetailViewController(userDataView, sender: nil)
+            }
+            
         }
     }
     

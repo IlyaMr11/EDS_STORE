@@ -19,40 +19,5 @@ class UserDataCoder {
         return userData
     }
     
-    static func encode(attr: DataAttrs) -> Any? {
-        switch attr {
-        case .name:
-            return PersonData.shared.userData?.name
-        case .phone:
-            return PersonData.shared.userData?.phone
-        case .notify:
-            return PersonData.shared.userData?.notify
-        case .address:
-            return PersonData.shared.userData?.address
-        case .history:
-            guard let purchases = PersonData.shared.userData?.purchase else {
-                return nil
-            }
-            
-            var data = [Purchase]()
-            for p in purchases {
-                if p.status == "done" {
-                    data.append(p)
-                }
-            }
-            return data
-        case .delivery:
-            guard let purchases = PersonData.shared.userData?.purchase else {
-                return nil
-            }
-            
-            var data = [Purchase]()
-            for p in purchases {
-                if p.status == "on track" {
-                    data.append(p)
-                }
-            }
-            return data
-        }
-    }
+        
 }

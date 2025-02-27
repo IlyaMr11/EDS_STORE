@@ -66,7 +66,7 @@ class MainHomePresenter: MainHomePresenterProtocol {
     func setupPicture(_ proudcts: (Product, Product), cell: MainHomeTableViewCell) {
         let path1 = proudcts.0.picture
         let path2 = proudcts.1.picture
-        model.loadPhoto(path: path1) { (image, text) in
+        NetworkLayer.loadPhoto(path: path1) { (image, text) in
             if let text = text {
                 print(text)
                 return
@@ -81,7 +81,8 @@ class MainHomePresenter: MainHomePresenterProtocol {
             }
             
         }
-        model.loadPhoto(path: path2) { (image, text) in
+        
+        NetworkLayer.loadPhoto(path: path2) { (image, text) in
             if let text = text {
                 print(text)
                 return
