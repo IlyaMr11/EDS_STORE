@@ -61,7 +61,12 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Товар"
+        self.view.backgroundColor = .white
         self.navigationItem.largeTitleDisplayMode = .never
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setupAll()
     }
     

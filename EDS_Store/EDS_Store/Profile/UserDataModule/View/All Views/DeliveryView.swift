@@ -94,11 +94,11 @@ class DeliveryView: UIViewController, UserDataViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Доставки"
-        
+        view.backgroundColor = .white
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setupUI()
     }
     
@@ -126,6 +126,10 @@ class DeliveryView: UIViewController, UserDataViewProtocol {
         }
         
         if let array = data as? [Date: [Purchase]] {
+            if array.isEmpty {
+                setupEmptyDelivery()
+                return
+            }
             purchases = sortData(map: array)
             success()
             presenter?.loadPhoto(array: purchases)
