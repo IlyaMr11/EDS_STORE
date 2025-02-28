@@ -57,7 +57,6 @@ class AppCordinator: CordinatorProtocol {
         
         //MARK: - WARNING
         tabBarController?.viewControllers = [homeNav, bagNav, profileNav]
-        
     }
     
     func createProfileModule() -> ProfileRouterProtocol {

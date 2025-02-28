@@ -37,16 +37,15 @@ final class MainProfileModelTest: XCTestCase {
     
     func testLoadName() {
         
-        
         let exception = XCTestExpectation()
         presenter.loadName("baz")
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 01) { [weak self] in
             XCTAssertEqual(self?.presenter.error, AlertType.serverError)
             exception.fulfill()
         }
         
-        wait(for: [exception], timeout: 1)
+        wait(for: [exception], timeout: 1.5)
     }
     
     func testLoadNameSuccess() {

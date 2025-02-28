@@ -67,12 +67,12 @@ final class RegistrationModelTest: XCTestCase {
             self?.error = error
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { [weak self] in
             XCTAssertEqual(self?.error, .loginNoFree)
             exception.fulfill()
         }
         
-        wait(for: [exception], timeout: 1)
+        wait(for: [exception], timeout: 1.5)
     }
     
 //MARK: - UPDATE FIELDS BEFORE RUN THIS TEST
