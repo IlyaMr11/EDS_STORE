@@ -44,11 +44,13 @@ class AppCordinator: CordinatorProtocol {
     }
     
     func updateBadgeValue(_ count: Int) {
-        if count <= 0 {
-            tabBarController?.tabBar.items?[1].badgeValue = nil
-            return
+        DispatchQueue.main.async { [weak self] in
+            if count <= 0 {
+                self?.tabBarController?.tabBar.items?[1].badgeValue = nil
+                return
+            }
+            self?.tabBarController?.tabBar.items?[1].badgeValue = String(count)
         }
-        tabBarController?.tabBar.items?[1].badgeValue = String(count)
     }
     
     func startCordinator() {

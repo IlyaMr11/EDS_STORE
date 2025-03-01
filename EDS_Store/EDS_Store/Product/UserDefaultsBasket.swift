@@ -24,9 +24,11 @@ class UserDefaultsBasket {
     func getData() -> [Position] {
         if let basketData = defaults.data(forKey: key) {
             if let bag = try? JSONDecoder().decode([Position].self, from: basketData) {
+                AppCordinator.shared.updateBadgeValue(bag.count)
                 return bag
             }
         }
+        
         return []
     }
     
