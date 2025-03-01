@@ -42,6 +42,8 @@ class BagView: UIViewController, BagViewProtocol {
         button.layer.cornerRadius = 15
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(finishOrder), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -81,6 +83,7 @@ class BagView: UIViewController, BagViewProtocol {
         button.titleLabel?.textAlignment = .center
         button.layer.cornerRadius = buttonRadius
         button.addTarget(self, action: #selector(toHomeVC), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -143,7 +146,9 @@ class BagView: UIViewController, BagViewProtocol {
     }
     
     @objc func toHomeVC() {
+        ButtonAnimations.shared.comeback(sender: toHomeVCButton)
         self.tabBarController?.selectedIndex = 0
+        
     }
     
     

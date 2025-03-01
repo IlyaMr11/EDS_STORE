@@ -55,6 +55,8 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         button.layer.cornerRadius = 17
         button.titleLabel?.font = .systemFont(ofSize: 23, weight: .medium)
         button.addTarget(self, action: #selector(addProduct(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     

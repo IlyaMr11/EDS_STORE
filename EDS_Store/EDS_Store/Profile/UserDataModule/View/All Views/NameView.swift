@@ -61,6 +61,8 @@ class NameView: UIViewController, UserDataViewProtocol {
         button.setTitle("Cохранить имя", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(safeName), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -70,6 +72,8 @@ class NameView: UIViewController, UserDataViewProtocol {
         button.imageView?.contentMode = .scaleAspectFit
         button.setImage(UIImage(named: "back"), for: .normal)
         button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     

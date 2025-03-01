@@ -40,6 +40,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         label.textColor = .gray
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -47,9 +48,13 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     private lazy var toSignButton: UIButton = {
         let button = UIButton()
         button.setTitle("Войти или зарегистрироваться", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.backgroundColor = .orange
         button.layer.cornerRadius = buttonRadius
         button.addTarget(self, action: #selector(toSignVC(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     

@@ -12,6 +12,7 @@ protocol BagCellDelegate: AnyObject {
     func changeValue(index: Int, value: Int, price: Int)
 }
 
+
 class BagTableViewCell: UITableViewCell {
     
     var position: Position?
@@ -21,7 +22,7 @@ class BagTableViewCell: UITableViewCell {
     weak var delegate: BagCellDelegate?
     
     
-    
+    //MARK: - BACK VIEW
     private lazy var backView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
@@ -29,6 +30,7 @@ class BagTableViewCell: UITableViewCell {
         return view
     }()
     
+    //MARK: - PRODUCT IMAGE
     lazy var productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 8
@@ -37,6 +39,7 @@ class BagTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    //MARK: - STEPPER
     private lazy var stepper: UIStepper = {
         let stepper = UIStepper()
         stepper.value = 1
@@ -53,6 +56,7 @@ class BagTableViewCell: UITableViewCell {
         return stepper
     }()
     
+    //MARK: DELETE BUTTON
     private lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 5
@@ -63,6 +67,7 @@ class BagTableViewCell: UITableViewCell {
         return button
     }()
     
+    //MARK: - COUNT LABEL
     private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -71,6 +76,7 @@ class BagTableViewCell: UITableViewCell {
         return label
     }()
     
+    //MARK: - DESCRIPTION LABEL
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -78,12 +84,14 @@ class BagTableViewCell: UITableViewCell {
         return label
     }()
     
+    //MARK: - PRICE LABEL
     private lazy var priceLabel : UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
+    //MARK: - TOTAL LABEL
     private lazy var totalLabel : UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .medium)
@@ -91,7 +99,7 @@ class BagTableViewCell: UITableViewCell {
         return label
     }()
 
-    
+    //MARK: - STACK VIEWS
     lazy var stepperStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [self.stepper, self.countLabel])
         stackView.axis = .horizontal
@@ -116,6 +124,7 @@ class BagTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - COFIGURE CELL
     func configure(with position: Position) {
         self.position = position
         guard let pr = self.position?.product else { return }
@@ -131,6 +140,7 @@ class BagTableViewCell: UITableViewCell {
         productImageView.image = image
     }
     
+    //MARK: - SETUP UI
     func setupUI() {
         setupBackView(backView)
         setupImageView(productImageView)
@@ -140,7 +150,7 @@ class BagTableViewCell: UITableViewCell {
         setupTotalLabel(totalLabel)
     }
 
-    
+    //MARK: - TARGETS
     @objc func deleteItem() {
         print("delete item")
         delegate?.delete(index: self.index, price: Int(position?.product.price ?? "0") ?? 0)
@@ -152,6 +162,7 @@ class BagTableViewCell: UITableViewCell {
         delegate?.changeValue(index: index, value: Int(sender.value), price: Int(position?.product.price ?? "0") ?? 0)
     }
     
+    //MARK: - SETUP AND CONSTRAINTS
     func setupBackView(_ backView: UIView) {
         contentView.addSubview(backView)
         backView.translatesAutoresizingMaskIntoConstraints = false

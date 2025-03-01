@@ -201,6 +201,8 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         button.backgroundColor = .orange
         button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(createOrder), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     

@@ -10,7 +10,9 @@ import UIKit
 class AddressTableViewCell: UITableViewCell {
     
     var numberLabel = UILabel()
+    
     var adressTF = UITextField()
+    
     static let identifier = "adressCell"
 
     override func awakeFromNib() {
@@ -39,6 +41,7 @@ class AddressTableViewCell: UITableViewCell {
         setupNumber()
     }
     
+    //MARK: - CONFIGURE ADDRESS
     func setupAdress() {
         adressTF.placeholder = "Новый Адресс"
         adressTF.textColor = .black
@@ -52,6 +55,7 @@ class AddressTableViewCell: UITableViewCell {
         contentView.addSubview(adressTF)
     }
     
+    //MARK: - CONFIGURE NUMBER
     func setupNumber() {
         numberLabel.font = .systemFont(ofSize: 20, weight: .medium)
         numberLabel.textAlignment = .left
@@ -60,10 +64,12 @@ class AddressTableViewCell: UITableViewCell {
         contentView.addSubview(numberLabel)
     }
     
+    
     func setupNumber(number: Int) {
         numberLabel.text = "Адрес № \(number+1)"
     }
     
+    //MARK: - SETUP ADDRESS
     func setupAddress(address: String) {
         adressTF.text = address
     }

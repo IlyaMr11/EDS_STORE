@@ -23,18 +23,26 @@ class UserBasket {
             }
         }
         currentBasket.append(Position(product: product, count: count))
+        updateBadge()
     }
     
     func changeCount(index: Int, count: Int) {
         currentBasket[index].count = count
+        updateBadge()
     }
     
     func deleteProduct(index: Int) {
         currentBasket.remove(at: index)
+        updateBadge()
     }
     
     func removeData() {
         currentBasket = []
+        updateBadge()
+    }
+    
+    func updateBadge() {
+        AppCordinator.shared.updateBadgeValue(currentBasket.count)
     }
 }
 

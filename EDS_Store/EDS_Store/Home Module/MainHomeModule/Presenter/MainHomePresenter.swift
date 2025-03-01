@@ -79,7 +79,6 @@ class MainHomePresenter: MainHomePresenterProtocol {
                     cell.product1 = proudcts.0
                 }
             }
-            
         }
         
         NetworkLayer.loadPhoto(path: path2) { (image, text) in

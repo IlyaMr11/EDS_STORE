@@ -39,6 +39,8 @@ class NotificationView: UIViewController, UserDataViewProtocol {
         button.setTitle("Cохранить настройки", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(safeNotification), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -67,6 +69,8 @@ class NotificationView: UIViewController, UserDataViewProtocol {
         button.imageView?.contentMode = .scaleAspectFit
         button.setImage(UIImage(named: "back"), for: .normal)
         button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
