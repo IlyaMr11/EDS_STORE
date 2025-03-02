@@ -96,6 +96,7 @@ class BagView: UIViewController, BagViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Корзина"
+        view.backgroundColor = .systemBackground
     }
     
     override func viewDidAppear(_ animated: Bool) {

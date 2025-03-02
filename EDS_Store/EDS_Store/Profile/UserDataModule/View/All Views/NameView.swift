@@ -41,6 +41,7 @@ class NameView: UIViewController, UserDataViewProtocol {
         textField.delegate = self
         textField.textAlignment = .right
         textField.font = .systemFont(ofSize: 20, weight: .medium)
+        textField.textColor = .black
         return textField
     }()
     

@@ -9,6 +9,7 @@ import UIKit
 
 class ProductCollectionViewCell: UICollectionViewCell {
     
+    //MARK: - UI ELEMENTS
     var backView: UIView!
     
     var productImageView: UIImageView!
@@ -18,9 +19,6 @@ class ProductCollectionViewCell: UICollectionViewCell {
     var priceLabel: UILabel!
     
     var countLabel: UILabel!
-    
-    
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,13 +30,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {
-        setupBackView()
-        setupProductImageView()
-        setupNameLabel()
-        setupPriceLabel()
-        setupCountLabel()
-    }
+    //MARK: - METHOD
     
     func configure(_ purchase: Purchase) {
         let count = purchase.count
@@ -48,7 +40,19 @@ class ProductCollectionViewCell: UICollectionViewCell {
         priceLabel.text = "\(product.price) ₽"
     }
     
-    func setupBackView() {
+    //MARK: - PRIVATE METHODS
+    
+    private func setupUI() {
+        setupBackView()
+        setupProductImageView()
+        setupNameLabel()
+        setupPriceLabel()
+        setupCountLabel()
+    }
+    
+    //MARK: - SETUP CONSTRAINTS
+    
+    private func setupBackView() {
         backView = UIView()
         backView.backgroundColor = .systemBackground
         backView.layer.cornerRadius = 10
@@ -65,11 +69,11 @@ class ProductCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func setupProductImageView() {
+    private func setupProductImageView() {
         productImageView = UIImageView()
         productImageView.contentMode = .scaleAspectFit
         productImageView.clipsToBounds = true
-        productImageView.layer.cornerRadius = 10
+        productImageView.layer.cornerRadius = layerRadius.medium
         productImageView.backgroundColor = .white
         
         backView.addSubview(productImageView)
@@ -83,7 +87,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func setupNameLabel() {
+    private func setupNameLabel() {
         nameLabel = UILabel()
         nameLabel.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         nameLabel.numberOfLines = 0
@@ -100,7 +104,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
             nameLabel.heightAnchor.constraint(equalToConstant: 20)])
     }
     
-    func setupPriceLabel() {
+    private func setupPriceLabel() {
         priceLabel = UILabel()
         priceLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         priceLabel.textColor = .black
@@ -118,7 +122,7 @@ class ProductCollectionViewCell: UICollectionViewCell {
             
     }
     
-    func setupCountLabel() {
+    private func setupCountLabel() {
         countLabel = UILabel()
         countLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         countLabel.textColor = .black
