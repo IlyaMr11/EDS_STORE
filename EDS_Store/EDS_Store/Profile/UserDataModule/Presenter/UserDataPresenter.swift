@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import UIKit
 
 protocol UserDataPresenterProtocol {
-    func loadUserData(data: Any)
+    func loadUserData(attr: DataAttrs)
     func updateUserData(attr: DataAttrs, data: Any)
+    func loadPhoto(array: [[Purchase]])
     init(view: UserDataViewProtocol, model: UserDataModelProtocol,  router: ProfileRouterProtocol)
 }
 
@@ -27,8 +29,20 @@ class UserDataPresenter: UserDataPresenterProtocol {
     }
     
     
-    func loadUserData(data: Any) {
-        
+    func loadUserData(attr: DataAttrs) {
+        model?.getUserData(attr: attr) { [weak self]  data in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    self?.view?.failure(error: .dataError)
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self?.view?.setupData(data: data)
+                print(data)
+            }
+        }
     }
         
     func updateUserData(attr: DataAttrs, data: Any) {
@@ -45,5 +59,40 @@ class UserDataPresenter: UserDataPresenterProtocol {
         }
     }
     
-        
+    func loadPhoto(array: [[Purchase]]) {
+        DispatchQueue.global().async { [weak self] in
+            
+            var imagesMatrix = [[UIImage]]()
+            let group = DispatchGroup()
+            for ar in array {
+                var list = [UIImage]()
+                for pur in ar {
+                    let url = pur.product.picture
+                    group.enter()
+                    NetworkLayer.loadPhoto(path: url) { (image, alert) in
+                        if let alert = alert {
+                            DispatchQueue.main.async {
+                                self?.view?.failure(error: alert)
+                                group.leave()
+                                return
+                            }
+                        }
+                        
+                        if let image = image {
+                            list.append(image)
+                        }
+                        group.leave()
+                    }
+                }
+                group.wait()
+                imagesMatrix.append(list)
+                print(list)
+            }
+            
+            group.wait()
+            DispatchQueue.main.async {
+                self?.view?.setupData(data: imagesMatrix)
+            }
+        }
+    }
 }

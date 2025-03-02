@@ -85,6 +85,8 @@ class MainHomeTableViewCell: UITableViewCell {
         button.setImage(UIImage(systemName: "basket"), for: .normal)
         button.tag = 0
         button.addTarget(self, action: #selector(pressProduct(_:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -96,6 +98,7 @@ class MainHomeTableViewCell: UITableViewCell {
         button.setImage(UIImage(systemName: "basket")?.withTintColor(.white), for: .normal)
         button.tag = 1
         button.addTarget(self, action: #selector(pressProduct(_:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     

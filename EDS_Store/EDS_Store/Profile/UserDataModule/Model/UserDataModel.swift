@@ -8,14 +8,15 @@
 import Foundation
 
 protocol UserDataModelProtocol {
-    func getUserData()
+    func getUserData(attr: DataAttrs, completion: @escaping (Any?) -> Void)
     func saveUserData(attr: DataAttrs, value: Any, completion: @escaping (AlertType?) -> Void )
 }
 
 
 class UserDataModel: UserDataModelProtocol {
-    func getUserData() {
-        
+    func getUserData(attr: DataAttrs, completion: (Any?) -> Void) {
+        let data = UserDataConvertor.getData(attr: attr)
+        completion(data)
     }
     
     func isDataValid(attr: DataAttrs, value: Any) -> Bool {

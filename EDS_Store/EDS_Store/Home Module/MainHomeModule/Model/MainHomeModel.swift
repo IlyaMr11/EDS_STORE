@@ -10,7 +10,6 @@ import UIKit
 protocol MainHomeModelProtocol {
     init(firebaseService: HomeFirebaseServiceProtocol)
     var firebaseService:  HomeFirebaseServiceProtocol { get }
-    func loadPhoto(path: String, completion: @escaping (UIImage?, String?) -> Void)
 }
 
 class MainHomeModel: MainHomeModelProtocol {
@@ -20,32 +19,4 @@ class MainHomeModel: MainHomeModelProtocol {
         self.firebaseService = firebaseService
     }
     
-    func loadPhoto(path: String, completion: @escaping (UIImage?, String?) -> Void) {
-        if path.isEmpty {
-            completion(nil, "empty path")
-            return
-        }
-        
-        guard let url = URL(string: path) else {
-            completion(nil, "incorrect url")
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) { data, _, error in
-            if let error = error {
-                print("error")
-                completion(nil, error.localizedDescription)
-                return
-            }
-        
-            guard let data = data, let image = UIImage(data: data) else {
-                completion(nil, "incorrect data")
-                return
-            }
-            
-            completion(image, nil)
-            return
-        }
-        task.resume()
-    }
 }

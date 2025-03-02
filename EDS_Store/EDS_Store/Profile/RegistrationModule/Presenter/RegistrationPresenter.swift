@@ -19,8 +19,6 @@ class RegistrationPresenter: RegistrationPresenterProtocol {
     weak var view: RegistrationViewProtocol?
     var router: ProfileRouterProtocol?
     let model: RegistrationModelProtocol!
-    let alerts: [UIAlertController] = [AlertType.password.alert, AlertType.email.alert,
-                                       AlertType.userName.alert, AlertType.confirmPassword.alert]
     
     required init(view: RegistrationViewProtocol, router: ProfileRouterProtocol, model: RegistrationModelProtocol) {
         self.view = view
@@ -29,33 +27,21 @@ class RegistrationPresenter: RegistrationPresenterProtocol {
     }
     
     func registerUser(_ fields: Fields) {
-        let number = model.checkFields(fields: fields)
-        if number > -1 {
-            view?.failure(alert: alerts[number])
-        } else {
-            model.createUser(login: fields.login, password: fields.password, completion: { [weak self] error in
-                
-                switch error {
-                case .loginNoFree:
-                    DispatchQueue.main.async {
-                        self?.view?.failure(alert: AlertType.loginNoFree.alert)
-                    }
-                case .serverError:
-                    DispatchQueue.main.async {
-                        self?.view?.failure(alert: AlertType.serverError.alert)
-                    }
-                case .success:
-                    DispatchQueue.main.async {
-                        self?.view?.success()
-                    }
+        model.createUser(fields: fields) { [weak self] error in
+            guard let error = error else {
+                DispatchQueue.main.async {
+                    self?.view?.success()
                 }
-            })
-            
+                return
+            }
+                
+            DispatchQueue.main.async {
+                self?.view?.failure(alert: error.alert)
+            }
         }
     }
     
     func toSignIn() {
-        print("fuck")
         router?.navigationController?.popViewController(animated: true)
     }
 }

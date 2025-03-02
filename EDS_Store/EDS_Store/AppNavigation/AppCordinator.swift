@@ -17,12 +17,46 @@ class AppCordinator: CordinatorProtocol {
     var tabBarController: UITabBarController?
     var window: UIWindow?
     
+    static var shared: AppCordinator!
 
     init(window: UIWindow?) {
         self.tabBarController = UITabBarController()
         self.window = window
+        AppCordinator.shared = self // Сохраняем текущий экземпляр в shared
     }
     
+    //MARK: - SHOW MODULES
+    func showProfileModule() {
+        tabBarController?.selectedIndex = 2
+    }
+    
+    func showHomeModule() {
+        tabBarController?.selectedIndex = 0
+    }
+    
+    func showBagModule() {
+        tabBarController?.selectedIndex = 1
+    }
+    
+    //MARK: - POP TO ROOT
+    func popToRoot() {
+        if let nav = tabBarController?.selectedViewController as? UINavigationController {
+            nav.popToRootViewController(animated: true)
+        }
+    }
+    
+    //MARK: - UPDATE BADGE
+    func updateBadgeValue(_ count: Int) {
+        DispatchQueue.main.async { [weak self] in
+            if count <= 0 {
+                self?.tabBarController?.tabBar.items?[1].badgeValue = nil
+                return
+            }
+            self?.tabBarController?.tabBar.items?[1].badgeValue = String(count)
+        }
+    }
+    
+    //MARK: - START COORDINATOR
     func startCordinator() {
         tabBarController?.tabBar.tintColor = .orange
         let profileRouter = createProfileModule()
@@ -37,9 +71,9 @@ class AppCordinator: CordinatorProtocol {
         
         //MARK: - WARNING
         tabBarController?.viewControllers = [homeNav, bagNav, profileNav]
-        
     }
     
+    //MARK: - CREATE MODULS
     func createProfileModule() -> ProfileRouterProtocol {
         let profileNavigationController = UINavigationController()
         profileNavigationController.title = "Профиль"

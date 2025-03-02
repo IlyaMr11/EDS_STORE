@@ -12,27 +12,28 @@ import FirebaseDatabase
 protocol ProfileNetworkServiceProtocol {
     func getUserData(collection: String, docName: String, completion: @escaping (Person?) -> Void)
     func setUserData()
-    func isUserExist(login: String, password: String, completion: @escaping (Bool, String?) -> Void)
+    func isUserExist(login: String, password: String, completion: @escaping (AlertType?) -> Void)
 }
 
 class ProfileNetworkService:  ProfileNetworkServiceProtocol {
     
     static let shared = ProfileNetworkService()
     
-    func isUserExist(login: String, password: String, completion: @escaping (Bool, String?) -> Void) {
+    func isUserExist(login: String, password: String, completion: @escaping (AlertType?) -> Void) {
         let db = FireBaseLayer.shared.configureFirebase()
-        print("h")
+
+        
         db.collection("Users").whereField("login", isEqualTo: login).getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error - \(error.localizedDescription)")
-                completion(false, "Server error")
+                completion(AlertType.serverError)
                 return
             }
-            print("g")
+            
             
             guard let documents = querySnapshot?.documents, !documents.isEmpty else {
                 print("User not found")
-                completion(false, "User not found")
+                completion(AlertType.userNotFound)
                 return
             }
             
@@ -41,11 +42,11 @@ class ProfileNetworkService:  ProfileNetworkServiceProtocol {
             
             if pass == password {
                 print("correct")
-                completion(true, nil)
+                completion(nil)
                 return
             } else {
                 print("wrong password")
-                completion(false, "Wrong password")
+                completion(AlertType.password)
                 return
             }
         }

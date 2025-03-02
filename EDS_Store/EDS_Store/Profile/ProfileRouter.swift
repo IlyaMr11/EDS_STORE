@@ -12,9 +12,8 @@ protocol ProfileRouterProtocol {
     func popView()
     func showSignInModule()
     func showRegistrationModule()
-    func showUserInfoModule()
     var navigationController: UINavigationController? { get }
-    var AssemblyBuilder: ProfileAssemblyBuilderProtocol? { get }
+    var assemblyBuilder: ProfileAssemblyBuilderProtocol? { get }
     func initinal()
     func popToRoot()
     func showUserDataModule(index: Int)
@@ -23,7 +22,7 @@ protocol ProfileRouterProtocol {
 class ProfileRouter: ProfileRouterProtocol {
     
     
-    var AssemblyBuilder: ProfileAssemblyBuilderProtocol?
+    var assemblyBuilder: ProfileAssemblyBuilderProtocol?
     var navigationController: UINavigationController?
     
     var profileAssemblyBuilder: ProfileAssemblyBuilderProtocol?
@@ -63,17 +62,17 @@ class ProfileRouter: ProfileRouterProtocol {
         }
     }
     
-    func showUserInfoModule() {
-        if let navigationController = navigationController {
-            guard let userInfoView = profileAssemblyBuilder?.createUserInfoModule(router: self) else {return}
-            navigationController.pushViewController(userInfoView, animated: true)
-        }
-    }
     
     func showUserDataModule(index: Int) {
         if let navigationController = navigationController {
             guard let userDataView = profileAssemblyBuilder?.createUserDataModule(router: self, index: index) else {return}
-            navigationController.showDetailViewController(userDataView, sender: nil)
+            switch index {
+            case 0...1:
+                navigationController.pushViewController(userDataView, animated: true)
+            default:
+                navigationController.showDetailViewController(userDataView, sender: nil)
+            }
+            
         }
     }
     

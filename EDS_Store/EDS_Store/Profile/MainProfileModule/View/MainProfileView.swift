@@ -10,8 +10,8 @@ import UIKit
 protocol MainProfileViewProtocol: AnyObject {
     func success()
     func updateName()
-    func failure(alert: UIAlertController?)
-    func setupName(_ name: String)
+    func failure(alert: AlertType)
+    var presenter: MainProfilePresenterProtocol? { get set }
 }
 
 class MainProfileView: UIViewController, MainProfileViewProtocol {
@@ -20,8 +20,8 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     
     let color1 = UIColor.init(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     let buttonRadius = CGFloat(15)
-    let cellsText = ["Ваши доставки", "История заказов",
-                     "Способы оплаты", "Имя", "Номер телефона", "Адреса", "Уведомления"]
+    let cellsText = ["Ваши доставки", "История заказов", "Имя",
+                     "Номер телефона", "Адреса", "Уведомления"]
     
     var presenter: MainProfilePresenterProtocol?
 
@@ -40,6 +40,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         label.textColor = .gray
         label.textAlignment = .center
         label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -47,9 +48,13 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     private lazy var toSignButton: UIButton = {
         let button = UIButton()
         button.setTitle("Войти или зарегистрироваться", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.backgroundColor = .orange
         button.layer.cornerRadius = buttonRadius
         button.addTarget(self, action: #selector(toSignVC(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -98,6 +103,15 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         return tableView
     }()
     
+    //MARK: - EXIT BUTTON
+    private lazy var exitButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("выйти", for: .normal)
+        button.addTarget(self, action: #selector(signOut(sender:)), for: .touchUpInside)
+        button.tintColor = .red
+        return button
+    }()
+    
     //MARK: - VIEW DID LOAD
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,14 +129,7 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
     
     //MARK: - CHOOSE VIEW
     func setupViews() {
-        if PersonData.shared.currentUser != nil {
-            success()
-            print("ura")
-        } else {
-            print("faile i call")
-            failure()
-        }
-             
+        presenter?.setupUser()
     }
     
     //MARK: - TARGETS
@@ -130,17 +137,16 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         ButtonAnimations.growSize(layer: sender.layer)
         presenter?.toSignIn()
     }
-    
-    //MARK: - SHOULD REMOVE
-    @objc func userInfoVC() {
-        presenter?.tapOnUserInfo()
-    }
+
     
     //MARK: - SETUP BEFORE SIGN
-    func failure(alert: UIAlertController? = nil) {
-        setupLogo(logoImageView)
-        setupWarningLabel(warningLabel)
-        setupToSignButton(toSignButton)
+    func failure(alert: AlertType) {
+        switch alert {
+        case .noUser:
+            noUser()
+        default:
+            showAlert(alert: alert.alert)
+        }
     }
     
     //MARK: - SETUP AFTER SIGN
@@ -149,26 +155,50 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         setupUserInfoButton(userInfoButton)
         setupNameLabel(nameLabel)
         setupProfileTableView(profileTableView)
+        configureNavBar()
         loadName()
     }
     
-    
-    func setupName(_ name: String) {
-        print("I setup name")
-        nameLabel.text = name
-    }
-    
     func updateName() {
-        print("i Update name")
         if let name = PersonData.shared.userData?.name {
             nameLabel.text = name
         }
+    }
+    
+    func configureNavBar() {
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: exitButton)
     }
     
     func loadName() {
         presenter?.loadName(PersonData.shared.currentUser?.login ?? "")
     }
     
+    func noUser() {
+        setupLogo(logoImageView)
+        setupWarningLabel(warningLabel)
+        setupToSignButton(toSignButton)
+    }
+    
+    
+    @objc func signOut(sender: UIButton) {
+        ButtonAnimations.growSize(layer: sender.layer)
+        let alert =  exitAlert()
+        showAlert(alert: alert)
+    }
+    
+    
+    func exitAlert() -> UIAlertController {
+        let alert = UIAlertController(title: "Выход", message: "Вы точно хотите выйти из аккаунта?", preferredStyle: .alert)
+        let exit = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
+            self?.presenter?.signOut()
+        }
+        
+        let cancel = UIAlertAction(title: "Нет остаться", style: .cancel)
+        alert.addAction(exit)
+        alert.addAction(cancel)
+        return alert
+    }
+        
     //MARK: - SETUP LOGO
     func setupLogo(_ imageView: UIImageView) {
         view.addSubview(imageView)
@@ -220,7 +250,6 @@ class MainProfileView: UIViewController, MainProfileViewProtocol {
         NSLayoutConstraint.activate([tableView.topAnchor.constraint(equalTo: grayView.bottomAnchor, constant: 45),
                                      tableView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor), tableView.widthAnchor.constraint(equalToConstant: view.bounds.width), tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)])
     }
-
 }
 
 
@@ -241,7 +270,7 @@ extension MainProfileView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return view.frame.height / 10
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
