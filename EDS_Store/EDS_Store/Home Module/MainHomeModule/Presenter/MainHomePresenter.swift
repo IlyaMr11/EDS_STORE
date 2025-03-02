@@ -27,45 +27,47 @@ class MainHomePresenter: MainHomePresenterProtocol {
         self.view = view
     }
     
+    //MARK: - SHOW PRODUCT DATA
     func showProductData()  {
-        self.model.firebaseService.getProductData { (products, text) in
-            if let text = text {
-                print(text)
+        self.model.firebaseService.getProductData { [weak self] (products, alert) in
+            if let alert = alert {
                 DispatchQueue.main.async {
-                    print("show alert")
+                    self?.view?.failure(alert: alert)
                 }
                 return
             }
                 
             guard let products = products else {
-                print("no data")
+                DispatchQueue.main.async {
+                    self?.view?.failure(alert: .noData)
+                }
                 return
             }
             
-            print("hiii")
+    
             var productArr = [(Product, Product)]()
-            for index in stride(from: 0, to: products.count, by: 2) {
-                if index + 1 < products.count {
-                    productArr.append((products[index], products[index + 1]))
-                }
+            for index in stride(from: 1, to: products.count, by: 2) {
+                productArr.append((products[index], products[index + 1]))
             }
             print(products.count)
             
             DispatchQueue.main.async {
-                self.view?.configureTable(productArray: productArr)
+                self?.view?.configureTable(productArray: productArr)
             }
             
         }
     }
     
+    //MARK: - SHOW PRODUCT DETAIL
     func showProductDetail(_ product: Product, _ image: UIImage) {
         router?.showProductDetails(product: product, image: image)
     }
     
+    //MARK: - SETUP PICTUTRE
     func setupPicture(_ proudcts: (Product, Product), cell: MainHomeTableViewCell) {
         let path1 = proudcts.0.picture
         let path2 = proudcts.1.picture
-        model.loadPhoto(path: path1) { (image, text) in
+        NetworkLayer.loadPhoto(path: path1) { (image, text) in
             if let text = text {
                 print(text)
                 return
@@ -78,9 +80,9 @@ class MainHomePresenter: MainHomePresenterProtocol {
                     cell.product1 = proudcts.0
                 }
             }
-            
         }
-        model.loadPhoto(path: path2) { (image, text) in
+        
+        NetworkLayer.loadPhoto(path: path2) { (image, text) in
             if let text = text {
                 print(text)
                 return

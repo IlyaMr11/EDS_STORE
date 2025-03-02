@@ -7,11 +7,22 @@
 
 import UIKit
 
+protocol BagCellDelegate: AnyObject {
+    func delete(index: Int, price: Int)
+    func changeValue(index: Int, value: Int, price: Int)
+}
+
+
 class BagTableViewCell: UITableViewCell {
     
-    var product: (Product, Int)?
+    var position: Position?
     static let identifier = "bagCell"
     
+    var index: Int = 0
+    weak var delegate: BagCellDelegate?
+    
+    
+    //MARK: - BACK VIEW
     private lazy var backView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
@@ -19,6 +30,7 @@ class BagTableViewCell: UITableViewCell {
         return view
     }()
     
+    //MARK: - PRODUCT IMAGE
     lazy var productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 8
@@ -27,6 +39,7 @@ class BagTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    //MARK: - STEPPER
     private lazy var stepper: UIStepper = {
         let stepper = UIStepper()
         stepper.value = 1
@@ -43,15 +56,18 @@ class BagTableViewCell: UITableViewCell {
         return stepper
     }()
     
+    //MARK: DELETE BUTTON
     private lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 5
         button.backgroundColor = .orange
         button.setImage(UIImage(systemName: "trash"), for: .normal)
         button.tintColor = .white
+        button.addTarget(self, action: #selector(deleteItem), for: .touchUpInside)
         return button
     }()
     
+    //MARK: - COUNT LABEL
     private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -60,6 +76,7 @@ class BagTableViewCell: UITableViewCell {
         return label
     }()
     
+    //MARK: - DESCRIPTION LABEL
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -67,20 +84,22 @@ class BagTableViewCell: UITableViewCell {
         return label
     }()
     
+    //MARK: - PRICE LABEL
     private lazy var priceLabel : UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
+    //MARK: - TOTAL LABEL
     private lazy var totalLabel : UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .medium)
-        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.textAlignment = .right
         return label
     }()
 
-    
+    //MARK: - STACK VIEWS
     lazy var stepperStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [self.stepper, self.countLabel])
         stackView.axis = .horizontal
@@ -105,13 +124,15 @@ class BagTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with product: (Product, Int)) {
-        self.product = product
-        guard let pr = self.product?.0 else { return }
+    //MARK: - COFIGURE CELL
+    func configure(with position: Position) {
+        self.position = position
+        guard let pr = self.position?.product else { return }
         priceLabel.text = "Цена: \(pr.price) ₽"
         descriptionLabel.text = pr.name
-        totalLabel.text = "Итоговая стоимость: \(String(product.1 * (Int(pr.price) ?? 0)))₽"
-        countLabel.text = String(product.1)
+        totalLabel.text = "Итог:    \(String(position.count * (Int(pr.price) ?? 0)))₽"
+        countLabel.text = String(position.count)
+        stepper.value = Double(position.count)
         print(countLabel.text ?? "no text")
     }
     
@@ -119,6 +140,7 @@ class BagTableViewCell: UITableViewCell {
         productImageView.image = image
     }
     
+    //MARK: - SETUP UI
     func setupUI() {
         setupBackView(backView)
         setupImageView(productImageView)
@@ -128,6 +150,19 @@ class BagTableViewCell: UITableViewCell {
         setupTotalLabel(totalLabel)
     }
 
+    //MARK: - TARGETS
+    @objc func deleteItem() {
+        print("delete item")
+        delegate?.delete(index: self.index, price: Int(position?.product.price ?? "0") ?? 0)
+    }
+    
+    @objc func changeVal(_ sender: UIStepper) {
+        countLabel.text = String(Int(sender.value))
+        totalLabel.text = "Итог:    \(String(Int(sender.value) * (Int(position?.product.price ?? "0") ?? 0)))₽"
+        delegate?.changeValue(index: index, value: Int(sender.value), price: Int(position?.product.price ?? "0") ?? 0)
+    }
+    
+    //MARK: - SETUP AND CONSTRAINTS
     func setupBackView(_ backView: UIView) {
         contentView.addSubview(backView)
         backView.translatesAutoresizingMaskIntoConstraints = false
@@ -187,16 +222,11 @@ class BagTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.centerYAnchor.constraint(equalTo: stepperStackView.centerYAnchor),
-            label.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -5),
+            label.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -15),
             label.heightAnchor.constraint(equalTo: stepperStackView.heightAnchor),
-            label.leadingAnchor.constraint(greaterThanOrEqualTo: stepperStackView.trailingAnchor) // Исправлено
+            label.leadingAnchor.constraint(equalTo: stepperStackView.trailingAnchor) // Исправлено
         ])
     }
-    
-    
-    @objc func changeVal(_ sender: UIStepper) {
-        countLabel.text = String(Int(sender.value))
-        totalLabel.text = "Итоговая стоимость: \(String(Int(sender.value) * (Int(product?.0.price ?? "0") ?? 0)))₽"
-        print(sender.value)
-    }
 }
+
+

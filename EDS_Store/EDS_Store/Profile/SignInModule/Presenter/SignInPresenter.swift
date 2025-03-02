@@ -29,35 +29,24 @@ class SignInPresenter: SignInPresenterProtocol {
     }
     
     func toMainProfile(login: String, password: String) {
-        DispatchQueue.global().async {
-            let (bool, text) = self.model.isUserDefine(login: login, password: password)
-            print(bool)
-            if bool {
+        model.isUserDefine(login: login, password: password) { [weak self] alert in
+            if let alert = alert {
                 DispatchQueue.main.async {
-                    PersonData.shared.setUser(Person(login: login, password: password))
-                    print("main async here")
-                    self.router?.initinal()
+                    self?.view?.failure(alert: alert)
                 }
-            } else {
-                switch text {
-                case "Wrong password":
-                    DispatchQueue.main.async {
-                        self.view?.showAlert(allAlerts.wrongPasswordAlert)
-                    }
-                    break
-                case "User not found":
-                    DispatchQueue.main.async {
-                        self.view?.showAlert(allAlerts.noUserAlert)
-                    }
-                case "Server error":
-                    DispatchQueue.main.async {
-                        self.view?.showAlert(allAlerts.serverErrorAlert)
-                    }
-                default:
-                    print("error")
-                }
+                return
             }
+            
+            DispatchQueue.main.async {
+                self?.router?.initinal()
+            }
+            
         }
+        
+           
+               
+            
+          
     }
     
 }

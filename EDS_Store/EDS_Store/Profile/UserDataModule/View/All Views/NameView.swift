@@ -12,8 +12,6 @@ class NameView: UIViewController, UserDataViewProtocol {
     var presenter: (any UserDataPresenterProtocol)?
     
 
-    //MARK: - DELEGATE AND CONSTANTS
-    weak var delegate: UpdateUserDataDelegate?
     let viewRadius = CGFloat(20)
 //    let showStyle = 
     
@@ -42,6 +40,8 @@ class NameView: UIViewController, UserDataViewProtocol {
         textField.text = PersonData.shared.userData?.name
         textField.delegate = self
         textField.textAlignment = .right
+        textField.font = .systemFont(ofSize: 20, weight: .medium)
+        textField.textColor = .black
         return textField
     }()
     
@@ -50,7 +50,7 @@ class NameView: UIViewController, UserDataViewProtocol {
         let label = UILabel()
         label.text = "Имя:"
         label.textColor = .black
-        label.font = .systemFont(ofSize: 19)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         return label
     }()
     
@@ -62,6 +62,8 @@ class NameView: UIViewController, UserDataViewProtocol {
         button.setTitle("Cохранить имя", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(safeName), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -71,6 +73,8 @@ class NameView: UIViewController, UserDataViewProtocol {
         button.imageView?.contentMode = .scaleAspectFit
         button.setImage(UIImage(named: "back"), for: .normal)
         button.addTarget(self, action: #selector(closeView), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -79,15 +83,19 @@ class NameView: UIViewController, UserDataViewProtocol {
         super.viewDidLoad()
         setupNameView()
         setupAll()
+        loadData()
         // Do any additional setup after loading the view.
     }
     
+    func setupData(data: Any) {
+        
+    }
     func saveData() {
         presenter?.updateUserData(attr: .name, data: nameTextField.text ?? "")
     }
     
     func loadData() {
-        
+        presenter?.loadUserData(attr: .name)
     }
     
     func success() {
@@ -110,9 +118,7 @@ class NameView: UIViewController, UserDataViewProtocol {
         saveData()
     }
     
-    func showAlert(alert: UIAlertController) {
-        present(alert, animated: true)
-    }
+
     
     //MARK: - CLOSE VIEW PRESS
     @objc func closeView() {
@@ -175,7 +181,7 @@ class NameView: UIViewController, UserDataViewProtocol {
     func setupTextField(_ textField: UITextField) {
         nameView.addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([textField.trailingAnchor.constraint(equalTo: nameView.trailingAnchor, constant: -10),
+        NSLayoutConstraint.activate([textField.trailingAnchor.constraint(equalTo: nameView.trailingAnchor, constant: -20),
                                      textField.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
                                      textField.heightAnchor.constraint(equalToConstant: 40),
                                      textField.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 30)])

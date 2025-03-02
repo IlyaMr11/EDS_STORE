@@ -55,12 +55,20 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         button.layer.cornerRadius = 17
         button.titleLabel?.font = .systemFont(ofSize: 23, weight: .medium)
         button.addTarget(self, action: #selector(addProduct(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Товар"
+        self.view.backgroundColor = .white
+        self.navigationItem.largeTitleDisplayMode = .never
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         setupAll()
     }
     
@@ -85,10 +93,10 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         view.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             imageView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10),
-            imageView.heightAnchor.constraint(equalToConstant: 350)
+            imageView.heightAnchor.constraint(equalToConstant: view.frame.height * 0.35)
         ])
     }
 
@@ -98,7 +106,7 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: productImage.bottomAnchor, constant: 10),
             label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            label.heightAnchor.constraint(equalToConstant: 50),
+            label.heightAnchor.constraint(equalToConstant: 40),
             label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15)
         ])
     }
@@ -120,8 +128,8 @@ class ProductPageView: UIViewController, ProductPageViewProtocol {
             NSLayoutConstraint.activate([
                 button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5),
                 button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                button.heightAnchor.constraint(equalToConstant: 50),
-                button.widthAnchor.constraint(equalToConstant: 250)])
+                button.heightAnchor.constraint(equalToConstant: view.frame.width*0.12),
+                button.widthAnchor.constraint(equalToConstant: view.frame.width*0.7)])
     }
     
 }

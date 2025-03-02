@@ -8,7 +8,7 @@
 import UIKit
 
 protocol SignInViewProtocol: UIViewController {
-    func showAlert(_ alert: UIAlertController)
+    func failure(alert: AlertType)
 }
 
 class SignInView: UIViewController, SignInViewProtocol {
@@ -17,8 +17,13 @@ class SignInView: UIViewController, SignInViewProtocol {
     //radiuses
     let borderRadius = CGFloat(30)
     let buttonsRadius = CGFloat(15)
+    var textIsHidden = false
     
     var presenter: SignInPresenterProtocol?
+    
+    private var loginView = UIView()
+    
+    private var passwordView = UIView()
     
     //MARK: - LOGO
     private lazy var logoImageView: UIImageView = {
@@ -26,6 +31,8 @@ class SignInView: UIViewController, SignInViewProtocol {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    
+    var eyeButton = UIButton()
     
     //MARK: - LABEL
     private lazy var welcomeLabel: UILabel = {
@@ -42,7 +49,7 @@ class SignInView: UIViewController, SignInViewProtocol {
     //MARK: BORDER
     private lazy var borderView: UIView = {
         let view = UIView()
-        view.layer.borderWidth = 2.5
+        view.layer.borderWidth = 3
         view.layer.borderColor = UIColor.black.cgColor
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = borderRadius
@@ -54,9 +61,6 @@ class SignInView: UIViewController, SignInViewProtocol {
         let textField = UITextField()
         textField.placeholder = "Логин"
         textField.borderStyle = .none
-        textField.layer.cornerRadius = buttonsRadius
-        textField.layer.borderWidth = 1.5
-        textField.layer.borderColor = UIColor.orange.cgColor
         textField.keyboardType = .emailAddress
         textField.clearButtonMode = .whileEditing
         textField.delegate = self
@@ -67,9 +71,6 @@ class SignInView: UIViewController, SignInViewProtocol {
         let textField = UITextField()
         textField.placeholder = "Пароль"
         textField.borderStyle = .none
-        textField.layer.cornerRadius = buttonsRadius
-        textField.layer.borderWidth = 1.5
-        textField.layer.borderColor = UIColor.orange.cgColor
         //textField.isSecureTextEntry = true
         textField.clearButtonMode = .whileEditing
         textField.delegate = self
@@ -84,6 +85,8 @@ class SignInView: UIViewController, SignInViewProtocol {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = buttonsRadius
         button.addTarget(self, action: #selector(toProfile(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -94,6 +97,8 @@ class SignInView: UIViewController, SignInViewProtocol {
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = buttonsRadius
         button.addTarget(self, action: #selector(toRegistration(sender: )), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
+        button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
@@ -107,16 +112,7 @@ class SignInView: UIViewController, SignInViewProtocol {
         return label
     }()
     
-    //MARK: - StackViews
-    private lazy var fieldsStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [loginTextField, passwordTextField])
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        stackView.distribution = .fillEqually
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
+    //MARK: - StackView
     private lazy var buttonsStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [siginButton, orLabel, registrationButton])
         stackView.axis = .vertical
@@ -135,21 +131,31 @@ class SignInView: UIViewController, SignInViewProtocol {
         setupAllViews()
         // Do any additional setup after loading the view.
     }
-
+    
+    func failure(alert: AlertType) {
+        showAlert(alert.alert)
+    }
+    
     func setupAllViews() {
         setupLogo(logoImageView)
         setupWelcomLabel(welcomeLabel)
         setupBorder(borderView)
-        setupFieldsStackView(fieldsStackView)
         setupButtonsStackView(buttonsStackView)
+        setupLoginView()
+        setupPasswordView()
     }
+    
+    func showAlert(_ alert: UIAlertController) {
+        present(alert, animated: true)
+    }
+    
     
     //MARK: - SETUP LOGO
     func setupLogo(_ imageView: UIImageView) {
         view.addSubview(imageView)
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.45).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 25).isActive = true
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.frame.height / 37).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.125).isActive = true
     }
     
@@ -170,21 +176,89 @@ class SignInView: UIViewController, SignInViewProtocol {
         border.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.825).isActive = true
     }
     
-    //MARK: SETUP StackViews
-    func setupFieldsStackView(_ stackView: UIStackView) {
-        view.addSubview(stackView)
-        stackView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 15).isActive = true
-        stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.16).isActive = true
-        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
-    }
-    
+    //MARK: SETUP StackView
     func setupButtonsStackView(_ stackView: UIStackView) {
         view.addSubview(stackView)
         stackView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.225).isActive = true
         stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7).isActive = true
+        stackView.rightAnchor.constraint(equalTo: borderView.rightAnchor, constant: -20).isActive = true
         stackView.bottomAnchor.constraint(equalTo: borderView.bottomAnchor, constant: -15).isActive = true
+    }
+    
+    func setupLoginView() {
+        loginView.layer.cornerRadius = buttonsRadius
+        loginView.backgroundColor = .systemGray6
+        loginView.layer.borderWidth = 2
+        loginView.layer.borderColor = UIColor.orange.cgColor
+        
+        view.addSubview(loginView)
+        loginView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loginView.topAnchor.constraint(equalTo: borderView.topAnchor, constant: 15),
+            loginView.rightAnchor.constraint(equalTo: borderView.rightAnchor, constant: -20),
+            loginView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.075),
+            loginView.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: 20)
+            ])
+        setupLoginTextField()
+    }
+    
+    func setupPasswordView() {
+        passwordView.layer.cornerRadius = buttonsRadius
+        passwordView.backgroundColor = .systemGray6
+        passwordView.layer.borderWidth = 2
+        passwordView.layer.borderColor = UIColor.orange.cgColor
+        
+        
+        view.addSubview(passwordView)
+        passwordView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            passwordView.topAnchor.constraint(equalTo: loginView.bottomAnchor, constant: 20),
+            passwordView.rightAnchor.constraint(equalTo: borderView.rightAnchor, constant: -20),
+            passwordView.leftAnchor.constraint(equalTo: borderView.leftAnchor, constant: 20),
+            passwordView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.075)
+        ])
+        
+        setupPasswordTextField()
+        setupEyeButton()
+    }
+    
+    func setupLoginTextField() {
+        loginView.addSubview(loginTextField)
+        loginTextField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            loginTextField.topAnchor.constraint(equalTo: loginView.topAnchor, constant: 5),
+            loginTextField.leadingAnchor.constraint(equalTo: loginView.leadingAnchor, constant: 10),
+            loginView.trailingAnchor.constraint(equalTo: loginTextField.trailingAnchor, constant: 10),
+            loginTextField.bottomAnchor.constraint(equalTo: loginView.bottomAnchor, constant: -5)
+        ])
+    }
+    
+    func setupPasswordTextField() {
+        passwordView.addSubview(passwordTextField)
+        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            passwordTextField.topAnchor.constraint(equalTo: passwordView.topAnchor, constant: 5),
+            passwordTextField.leadingAnchor.constraint(equalTo: passwordView.leadingAnchor, constant: 10),
+            passwordTextField.trailingAnchor.constraint(equalTo: passwordView.trailingAnchor, constant: -90),
+            passwordTextField.bottomAnchor.constraint(equalTo: passwordView.bottomAnchor, constant: -5)
+        ])
+    }
+    
+    func setupEyeButton() {
+        eyeButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        eyeButton.layer.cornerRadius = 5
+        eyeButton.backgroundColor = .white
+        eyeButton.tintColor = .black
+        eyeButton.addTarget(self, action: #selector(showPassword), for: .touchUpInside)
+        passwordView.addSubview(eyeButton)
+        
+        eyeButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            eyeButton.centerYAnchor.constraint(equalTo: passwordView.centerYAnchor),
+            eyeButton.trailingAnchor.constraint(equalTo: passwordView.trailingAnchor, constant: -10),
+            eyeButton.topAnchor.constraint(equalTo: passwordView.topAnchor, constant: 10),
+            eyeButton.leadingAnchor.constraint(equalTo: passwordTextField.trailingAnchor, constant: 20)
+        ])
     }
     
     
@@ -201,22 +275,12 @@ class SignInView: UIViewController, SignInViewProtocol {
         }
     }
     
-    func showAlert(_ alert: UIAlertController) {
-        present(alert, animated: true)
+    @objc func showPassword() {
+        textIsHidden.toggle()
+        passwordTextField.isSecureTextEntry = textIsHidden
+        let imageName = textIsHidden ? "eye" : "eye.slash"
+        eyeButton.setImage(UIImage(systemName: imageName), for: .normal)
     }
-    
-    func checkAllFields() -> Bool {
-        if !Checker.shared.checkEmail(loginTextField.text) {
-            showAlert(allAlerts.emailAlert)
-            return false
-        } else if !Checker.shared.checkPassword(passwordTextField.text) {
-            showAlert(allAlerts.passwordAlert)
-            return false
-        }
-        return true
-    }
-    
-    //MARK: - SHOW ALERTS
     
 }
 
