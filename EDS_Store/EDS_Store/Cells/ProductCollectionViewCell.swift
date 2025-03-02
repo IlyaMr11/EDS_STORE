@@ -46,7 +46,6 @@ class ProductCollectionViewCell: UICollectionViewCell {
         nameLabel.text = product.name
         countLabel.text = "\(count) шт."
         priceLabel.text = "\(product.price) ₽"
-        print(priceLabel.text)
     }
     
     func setupBackView() {

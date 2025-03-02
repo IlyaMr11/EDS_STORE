@@ -16,6 +16,8 @@ protocol ConfirmViewProtocol: UIViewController {
 
 class ConfirmView: UIViewController, ConfirmViewProtocol {
     
+    //MARK: - PROPERTIES
+    
     var presenter: ConfirmPresenterProtocol?
     var images: [UIImage] = []
     var total = 0
@@ -23,26 +25,28 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     var addresses: [String] = []
     var choosePayflag: Bool = false
     
-    let labelColor: UIColor = .darkGray
     let chosePay = ["Наличными", "Картой при получении"]
+    
+    //MARK: - UI ELEMENTS
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.delegate = self
-//        scrollView.isDirectionalLockEnabled = false
         return scrollView
     }()
     
     var contentView: UIView!
+    
     var addressString: UILabel!
         
     var price: UILabel!
+    
     var titleLabel: UILabel!
     
     private lazy var addressView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = layerRadius.large
         return view
     }()
     
@@ -51,14 +55,14 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         label.text = "Адрес доставки"
         label.font = .systemFont(ofSize: 20, weight: .medium)
         label.textAlignment = .center
-        label.textColor = labelColor
+        label.textColor = appColors.darkGray
         return label
     }()
     
     private lazy var addressButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 10
+        button.backgroundColor = appColors.mainBackground
+        button.layer.cornerRadius = layerRadius.medium
         button.addTarget(self, action: #selector(didTapAddressButton), for: .touchUpInside)
         return button
     }()
@@ -66,7 +70,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     private lazy var productView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = layerRadius.large
         return view
     }()
     
@@ -90,14 +94,14 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         label.text = "Товары"
         label.font = .systemFont(ofSize: 20, weight: .medium)
         label.textAlignment = .center
-        label.textColor = labelColor
+        label.textColor = appColors.darkGray
         return label
     }()
     
     private lazy var paymentView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGray5
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = layerRadius.large
         return view
     }()
     
@@ -106,7 +110,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         label.text = "Спопсоб оплаты"
         label.font = .systemFont(ofSize: 20, weight: .medium)
         label.textAlignment = .center
-        label.textColor = labelColor
+        label.textColor = appColors.darkGray
         return label
     }()
     
@@ -124,7 +128,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     private lazy var totalView: UIView = {
        let view = UIView()
         view.backgroundColor = .systemGray5
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = layerRadius.large
         return view
     }()
     
@@ -133,7 +137,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         label.text = "Итого"
         label.font = .systemFont(ofSize: 20, weight: .medium)
         label.textAlignment = .left
-        label.textColor = labelColor
+        label.textColor = appColors.darkGray
         return label
     }()
     
@@ -141,7 +145,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         let label = UILabel()
         label.text = "Доставка"
         label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.textColor = labelColor
+        label.textColor = appColors.darkGray
         return label
     }()
     
@@ -149,7 +153,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         let label = UILabel()
         label.text = "\(count) товара на сумму"
         label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.textColor = labelColor
+        label.textColor = appColors.darkGray
         return label
     }()
     
@@ -199,7 +203,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     private lazy var orderButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .orange
-        button.layer.cornerRadius = 15
+        button.layer.cornerRadius = layerRadius.large
         button.addTarget(self, action: #selector(createOrder), for: .touchUpInside)
         button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
         button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
@@ -217,6 +221,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         return alert
     }()
     
+    //MARK: - LIFE CYCLE
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -231,14 +236,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         loadAddress()
     }
     
-    func loadProducts() {
-        presenter?.loadData()
-    }
-    
-    func loadAddress() {
-        presenter?.laodAddress()
-    }
-    
+    //MARK: - TARGETS
     @objc func didTapAddressButton() {
         if addresses.isEmpty {
             showAlert(alert: AlertType.noAddress.alert)
@@ -256,6 +254,8 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
             presenter?.createOrder(address: addressString.text ?? "")
         }
     }
+    
+    //MARK: - PROTOCOL METHOD
     
     func success(order: OrderData) {
         images = order.images
@@ -277,7 +277,22 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     
     }
 
-    func setupUI() {
+    private func loadProducts() {
+        presenter?.loadData()
+    }
+    
+    private func loadAddress() {
+        presenter?.laodAddress()
+    }
+    
+    func setupAddress(_ array: [String]) {
+        addresses = array
+        addressString.text = array[0]
+    }
+    
+    //MARK: - PRIVATE METHODS
+    
+    private func setupUI() {
         setupScrollView()
         createContentView()
         setupAddress()
@@ -286,19 +301,16 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         setupTotal()
     }
     
-    func setupAddress(_ array: [String]) {
-        addresses = array
-        addressString.text = array[0]
-    }
-    
-    func updateUI() {
+    private func updateUI() {
         productPrice.text = "\(total) ₽"
         totalPrice.text = "\(total) ₽"
         productTotal.text = "\(count) товаров на сумму"
         price.text = "\(total) ₽"
     }
     
-    func setupScrollView() {
+    //MARK: - CONSRTAINTS
+    
+    private func setupScrollView() {
         view.addSubview(scrollView)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -307,7 +319,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
                     scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
     }
     
-    func createContentView() {
+    private func createContentView() {
         contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(contentView)
@@ -322,7 +334,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         ])
     }
     
-    func configAdress() {
+    private func configAdress() {
         setupLabel(parent: addressView, label: addressLabel)
         
         addressView.addSubview(addressButton)
@@ -348,7 +360,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
 
     }
     
-    func setupAddress() {
+    private func setupAddress() {
         contentView.addSubview(addressView)
         addressView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -360,7 +372,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         configAdress()
     }
     
-    func configProduct() {
+    private func configProduct() {
         setupLabel(parent: productView, label: productLabel)
         
         productView.addSubview(collectionView)
@@ -373,7 +385,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         
     }
     
-    func setupProduct() {
+    private func setupProduct() {
         contentView.addSubview(productView)
         productView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -385,7 +397,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         configProduct()
     }
     
-    func configPayement() {
+    private func configPayement() {
         setupLabel(parent: paymentView, label: paymentLabel)
         
         contentView.addSubview(payTable)
@@ -397,7 +409,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
             payTable.heightAnchor.constraint(equalToConstant: 100)])
     }
     
-    func setupPayment() {
+    private func setupPayment() {
         contentView.addSubview(paymentView)
         paymentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -409,7 +421,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         configPayement()
     }
     
-    func setupLabel(parent: UIView, label: UILabel) {
+    private func setupLabel(parent: UIView, label: UILabel) {
         parent.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -419,7 +431,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
             label.heightAnchor.constraint(equalToConstant: 30)])
     }
     
-    func configTotal() {
+    private func configTotal() {
         totalView.addSubview(totalStack)
         totalStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -438,7 +450,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
             priceStack.heightAnchor.constraint(equalToConstant: 100)])
     }
     
-    func setupTotal() {
+    private func setupTotal() {
         contentView.addSubview(totalView)
         totalView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -451,7 +463,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
         configButton()
     }
     
-    func configButton() {
+    private func configButton() {
         totalView.addSubview(orderButton)
         orderButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -490,6 +502,7 @@ class ConfirmView: UIViewController, ConfirmViewProtocol {
     }
 }
 
+//MARK: - ESXTENSIONS
 
 extension ConfirmView: UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -538,8 +551,8 @@ extension ConfirmView: UIScrollViewDelegate, UICollectionViewDelegate, UICollect
         ])
         
         // Настраиваем скругление углов
-        cell.layer.cornerRadius = 8
-        cell.contentView.layer.cornerRadius = 8
+        cell.layer.cornerRadius = layerRadius.semiSmall
+        cell.contentView.layer.cornerRadius = layerRadius.semiSmall
         cell.clipsToBounds = true
         
         return cell

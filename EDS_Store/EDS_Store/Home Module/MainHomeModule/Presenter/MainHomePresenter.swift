@@ -27,6 +27,7 @@ class MainHomePresenter: MainHomePresenterProtocol {
         self.view = view
     }
     
+    //MARK: - SHOW PRODUCT DATA
     func showProductData()  {
         self.model.firebaseService.getProductData { [weak self] (products, alert) in
             if let alert = alert {
@@ -45,10 +46,8 @@ class MainHomePresenter: MainHomePresenterProtocol {
             
     
             var productArr = [(Product, Product)]()
-            for index in stride(from: 0, to: products.count, by: 2) {
-                if index + 1 < products.count {
-                    productArr.append((products[index], products[index + 1]))
-                }
+            for index in stride(from: 1, to: products.count, by: 2) {
+                productArr.append((products[index], products[index + 1]))
             }
             print(products.count)
             
@@ -59,10 +58,12 @@ class MainHomePresenter: MainHomePresenterProtocol {
         }
     }
     
+    //MARK: - SHOW PRODUCT DETAIL
     func showProductDetail(_ product: Product, _ image: UIImage) {
         router?.showProductDetails(product: product, image: image)
     }
     
+    //MARK: - SETUP PICTUTRE
     func setupPicture(_ proudcts: (Product, Product), cell: MainHomeTableViewCell) {
         let path1 = proudcts.0.picture
         let path2 = proudcts.1.picture

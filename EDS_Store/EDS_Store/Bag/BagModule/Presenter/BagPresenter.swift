@@ -9,13 +9,14 @@ import UIKit
 
 protocol BagPresenterProtocol {
     init(view: BagViewProtocol, router: BagRouterProtocol, model: BagModelProtocol)
-    func addCountProductv(newVal: Int, index: Int)
     func setupData()
     func setupImages(array: [Position])
     func toConfirmModule()
 }
 
 class BagPresenter: BagPresenterProtocol {
+    
+    //MARK: - PROPERTIES
     
     let model: BagModelProtocol!
     var view: BagViewProtocol?
@@ -26,11 +27,8 @@ class BagPresenter: BagPresenterProtocol {
         self.model = model
         self.router = router
     }
-    
-    
-    func addCountProductv(newVal: Int, index: Int) {
-        
-    }
+
+    //MARK: - PROTOCOL METHODS
     
     func toConfirmModule() {
         router?.confirmModule()
@@ -58,9 +56,11 @@ class BagPresenter: BagPresenterProtocol {
         DispatchQueue.global().async { [weak self] in
             let group = DispatchGroup()
             var photos: [UIImage] = []
+            
             for p in array {
                 group.enter()
                 let url = p.product.picture
+                
                 NetworkLayer.loadPhoto(path: url) { (image, alert) in
                     if let alert = alert {
                         DispatchQueue.main.async {
@@ -75,7 +75,9 @@ class BagPresenter: BagPresenterProtocol {
                     group.leave()
                 }
             }
+            
             group.wait()
+            
             DispatchQueue.main.async {
                 self?.view?.loadImages(imageArray: photos)
             }

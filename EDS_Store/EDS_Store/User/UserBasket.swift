@@ -14,6 +14,7 @@ class UserBasket {
     
     private(set) var currentBasket: [Position] = UserDefaultsBasket.shared.getData() 
     
+    //MARK: - ADD PRODUCT
     func addProductToBasket(_ product: anyProduct, count: Int) {
         for i in 0..<currentBasket.count {
             let pr = currentBasket[i].product
@@ -26,6 +27,7 @@ class UserBasket {
         updateBadge()
     }
     
+    //MARK: - CHANGE VALUES
     func changeCount(index: Int, count: Int) {
         currentBasket[index].count = count
         updateBadge()
@@ -41,6 +43,7 @@ class UserBasket {
         updateBadge()
     }
     
+    //MARK: - UPDATE BADGE VALUE
     func updateBadge() {
         AppCordinator.shared.updateBadgeValue(currentBasket.count)
     }

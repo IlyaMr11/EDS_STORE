@@ -25,6 +25,7 @@ class AppCordinator: CordinatorProtocol {
         AppCordinator.shared = self // Сохраняем текущий экземпляр в shared
     }
     
+    //MARK: - SHOW MODULES
     func showProfileModule() {
         tabBarController?.selectedIndex = 2
     }
@@ -37,12 +38,14 @@ class AppCordinator: CordinatorProtocol {
         tabBarController?.selectedIndex = 1
     }
     
+    //MARK: - POP TO ROOT
     func popToRoot() {
         if let nav = tabBarController?.selectedViewController as? UINavigationController {
             nav.popToRootViewController(animated: true)
         }
     }
     
+    //MARK: - UPDATE BADGE
     func updateBadgeValue(_ count: Int) {
         DispatchQueue.main.async { [weak self] in
             if count <= 0 {
@@ -53,6 +56,7 @@ class AppCordinator: CordinatorProtocol {
         }
     }
     
+    //MARK: - START COORDINATOR
     func startCordinator() {
         tabBarController?.tabBar.tintColor = .orange
         let profileRouter = createProfileModule()
@@ -69,6 +73,7 @@ class AppCordinator: CordinatorProtocol {
         tabBarController?.viewControllers = [homeNav, bagNav, profileNav]
     }
     
+    //MARK: - CREATE MODULS
     func createProfileModule() -> ProfileRouterProtocol {
         let profileNavigationController = UINavigationController()
         profileNavigationController.title = "Профиль"

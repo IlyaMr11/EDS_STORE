@@ -27,7 +27,7 @@ class ConfigureTabBar {
         // Применяем настройки к стандартному и скроллящемуся состоянию
         UITabBar.appearance().standardAppearance = appearance
         
-        // Если вы используете компактный режим (например, на iPhone в ландшафтной ориентации)
+        
         if #available(iOS 15.0, *) {
             UITabBar.appearance().scrollEdgeAppearance = appearance
         }

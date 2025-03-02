@@ -22,6 +22,8 @@ protocol ConfirmModelProtocol {
 
 class ConfirmModel: ConfirmModelProtocol {
     
+    //MARK: - PROTOCOL METHODS
+    
     func loadProduct(completion: @escaping (OrderData?, AlertType?) -> Void) {
         if UserBasket.shared.currentBasket.count == 0 {
             completion(nil, .emptyBasket)
@@ -32,12 +34,15 @@ class ConfirmModel: ConfirmModelProtocol {
             var cnt = 0
             let group = DispatchGroup()
             var arrayImages: [UIImage] = []
+            
             for position in UserBasket.shared.currentBasket {
                 group.enter()
+                
                 let product = position.product, count = position.count
                 total += (Int(product.price) ?? 0) * count
                 cnt += count
                 let url = product.picture
+                
                 NetworkLayer.loadPhoto(path: url) { (image, alert) in
                     if let alert = alert {
                         completion(nil, alert)

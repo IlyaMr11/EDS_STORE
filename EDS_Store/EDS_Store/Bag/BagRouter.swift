@@ -17,6 +17,8 @@ protocol BagRouterProtocol {
 
 class BagRouter: BagRouterProtocol {
     
+    //MARK: - PROPERTIES
+    
     var assemblyBuilder: (any BagAssemblyBuilderProtocol)?
     var navigationController: UINavigationController?
     
@@ -24,6 +26,8 @@ class BagRouter: BagRouterProtocol {
         self.assemblyBuilder = assemblyBuilder
         self.navigationController = navigationController
     }
+    
+    //MARK: - PROTOCOL METHODS
     
     func initinal() {
         guard let nav = navigationController,

@@ -15,6 +15,9 @@ protocol ConfirmPresenterProtocol {
 }
 
 class ConfirmPresenter: ConfirmPresenterProtocol {
+    
+    //MARK: - PROTPERTIES
+    
     weak var view: ConfirmViewProtocol?
     var router: BagRouterProtocol?
     let model: ConfirmModelProtocol
@@ -24,6 +27,8 @@ class ConfirmPresenter: ConfirmPresenterProtocol {
         self.router = router
         self.model = model
     }
+    
+    //MARK: - PROTOCOL METHODS
     
     func loadData() {
         model.loadProduct() { [weak self] (order, alert) in

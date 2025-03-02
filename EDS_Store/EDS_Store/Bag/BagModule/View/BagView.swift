@@ -16,6 +16,8 @@ protocol BagViewProtocol: AnyObject {
 
 class BagView: UIViewController, BagViewProtocol {
     
+    //MARK: - PROPERTIES
+    
     private let yPosition: CGFloat = 100
     var totalPrice: Int = 0
     var totalCount: Int = 0
@@ -24,7 +26,9 @@ class BagView: UIViewController, BagViewProtocol {
     var bagArray: [Position] = []
     var imageArray: [UIImage] = []
     
-    lazy var bagTableView: UITableView = {
+    //MARK: - UI ELEMENTS
+    
+    private lazy var bagTableView: UITableView = {
         let table = UITableView()
         table.delegate = self
         table.dataSource = self
@@ -33,13 +37,13 @@ class BagView: UIViewController, BagViewProtocol {
         return table
     }()
     
-    
-    lazy var finishButton: UIButton = {
+
+    private lazy var finishButton: UIButton = {
         let button = UIButton()
         button.setTitle("К оформлению:   \(totalCount) шт;  \(totalPrice)₽", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        button.backgroundColor = .orange
-        button.layer.cornerRadius = 15
+        button.backgroundColor = appColors.main
+        button.layer.cornerRadius = layerRadius.large
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(finishOrder), for: .touchUpInside)
         button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.comeback(sender:)), for: .touchUpInside)
@@ -47,7 +51,6 @@ class BagView: UIViewController, BagViewProtocol {
         return button
     }()
     
-    let buttonRadius = CGFloat(15)
     
     private lazy var emptyBagImageView: UIImageView = {
         let imageView = UIImageView()
@@ -61,7 +64,7 @@ class BagView: UIViewController, BagViewProtocol {
         label.text = "В корзине пусто"
         label.font = .boldSystemFont(ofSize: 25)
         label.textAlignment = .center
-        label.textColor = .black
+        label.textColor = appColors.defaultBlack
         return label
     }()
     
@@ -79,14 +82,16 @@ class BagView: UIViewController, BagViewProtocol {
         button.setTitle("Начать покупки", for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .orange
+        button.backgroundColor = appColors.main
         button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = buttonRadius
+        button.layer.cornerRadius = layerRadius.large
         button.addTarget(self, action: #selector(toHomeVC), for: .touchUpInside)
         button.addTarget(ButtonAnimations.shared, action: #selector(ButtonAnimations.littleAndAlpha(sender:)), for: .touchDown)
         return button
     }()
     
+    
+    //MARK: - LIFE CYCLE
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,6 +110,19 @@ class BagView: UIViewController, BagViewProtocol {
         UserDefaultsBasket.shared.updateBasket()
     }
     
+    //MARK: - TARGETS
+    
+    @objc func toHomeVC() {
+        ButtonAnimations.shared.comeback(sender: toHomeVCButton)
+        self.tabBarController?.selectedIndex = 0
+        
+    }
+    
+    @objc func finishOrder() {
+        presenter?.toConfirmModule()
+    }
+    
+    //MARK: - PROTOCOL METHODS
     func success(array: [Position]) {
         self.bagArray = array
         bagTableView.reloadData()
@@ -131,12 +149,14 @@ class BagView: UIViewController, BagViewProtocol {
         }
     }
     
-    func setupUI() {
+    //MARK: - PRIVATE METHODS
+    
+    private func setupUI() {
         setupTable()
         setupFinishButton()
     }
     
-    func countData() {
+    private func countData() {
         totalCount = 0
         totalPrice = 0
         for item in bagArray {
@@ -145,23 +165,30 @@ class BagView: UIViewController, BagViewProtocol {
         }
     }
     
-    @objc func toHomeVC() {
-        ButtonAnimations.shared.comeback(sender: toHomeVCButton)
-        self.tabBarController?.selectedIndex = 0
-        
-    }
-    
-    
-    @objc func finishOrder() {
-        presenter?.toConfirmModule()
-    }
-    
-    func updateButton() {
+    private func updateButton() {
         countData()
         finishButton.setTitle("К оформлению:   \(totalCount) шт;  \(totalPrice)₽", for: .normal)
     }
     
-    func setupTable() {
+    private func setupEmptyBag() {
+        setupEmptyBagImageView(emptyBagImageView)
+        setupEmptyBagLabel(emptyBagLabel)
+        setupHintLabel(hintLabel)
+        setupToHomeVCButton(toHomeVCButton)
+    }
+    
+    //MARK: - CONSTRAINTS
+    
+    private func setupEmptyBagImageView(_ imageView: UIImageView) {
+        view.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -15),
+                                     imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                                     imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.2),
+                                     imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.5)])
+    }
+    
+    private func setupTable() {
         view.addSubview(bagTableView)
         bagTableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -171,7 +198,7 @@ class BagView: UIViewController, BagViewProtocol {
             bagTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -70)])
     }
     
-    func setupFinishButton() {
+    private func setupFinishButton() {
         view.addSubview(finishButton)
         finishButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -181,24 +208,7 @@ class BagView: UIViewController, BagViewProtocol {
             finishButton.heightAnchor.constraint(equalToConstant: 50)])
     }
     
-    func setupEmptyBag() {
-        setupEmptyBagImageView(emptyBagImageView)
-        setupEmptyBagLabel(emptyBagLabel)
-        setupHintLabel(hintLabel)
-        setupToHomeVCButton(toHomeVCButton)
-    }
-    
-    
-    func setupEmptyBagImageView(_ imageView: UIImageView) {
-        view.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -15),
-                                     imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                                     imageView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.2),
-                                     imageView.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.5)])
-    }
-    
-    func setupEmptyBagLabel(_ label: UILabel) {
+    private func setupEmptyBagLabel(_ label: UILabel) {
         view.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: emptyBagImageView.bottomAnchor, constant: 10),
@@ -207,7 +217,7 @@ class BagView: UIViewController, BagViewProtocol {
                                      label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.6)])
     }
     
-    func setupHintLabel(_ label: UILabel) {
+    private func setupHintLabel(_ label: UILabel) {
         view.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([label.topAnchor.constraint(equalTo: emptyBagLabel.bottomAnchor, constant: 10),
@@ -216,7 +226,7 @@ class BagView: UIViewController, BagViewProtocol {
                                      label.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.7)])
     }
     
-    func setupToHomeVCButton(_ button: UIButton) {
+    private func setupToHomeVCButton(_ button: UIButton) {
         view.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([button.topAnchor.constraint(equalTo: hintLabel.bottomAnchor, constant:  15),
@@ -227,6 +237,8 @@ class BagView: UIViewController, BagViewProtocol {
 
     
 }
+
+//MARK: - EXTENSIONS
 
 extension BagView: UITableViewDelegate & UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
